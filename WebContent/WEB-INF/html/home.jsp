@@ -12,6 +12,7 @@
       <jsp:directive.include file="footer.jsp" />
     </jsp:attribute>
     <jsp:body>
-        <p>Body</p>
+        Bienvenue ${currentUser.getFirstname()}
+        <p>Page d'accueil</p>
     </jsp:body>
 </t:genericpage>
