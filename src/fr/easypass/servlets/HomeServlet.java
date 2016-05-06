@@ -46,6 +46,8 @@ public class HomeServlet extends HttpServlet {
 				this.login(request, response);
 			} else if (uri.contains("/logout")) {
 				this.logout(request, response);
+			} else if (uri.contains("/test")) {
+				this.test(request, response);
 			} else {
 				response.getWriter().append("Index");
 			}
@@ -118,5 +120,11 @@ public class HomeServlet extends HttpServlet {
 	private User getCurrentUser(HttpServletRequest request){
 		return (User) request.getSession().getAttribute("user");
 	}
+	
+	private void test(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+	}
+	
+	
 
 }
