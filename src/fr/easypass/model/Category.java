@@ -2,13 +2,10 @@ package fr.easypass.model;
 
 import java.util.HashSet;
 
-
-public class Group {
+public class Category {
 	
 	private String nom;
-	private String description;
 	private String logo;
-	private HashSet<User> users;
 	private HashSet<Password> passwords;
 	
 	public String getNom() {
@@ -19,14 +16,6 @@ public class Group {
 		this.nom = nom;
 	}
 	
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 	public String getLogo() {
 		return logo;
 	}
@@ -35,30 +24,20 @@ public class Group {
 		this.logo = logo;
 	}
 	
-	public void addUser(User user){
-		this.users.add(user);
-	}
-	
-	public void removeUser(User user){
-		this.users.remove(user);
-	}
-	
-	public HashSet<User> getUsers(){
-		return this.users;
-	}
-	
 	public void addPassword(Password password){
 		this.passwords.add(password);
-		password.setOwner(this);
+		password.setCategory(this);
 	}
 	
 	public void removePassword(Password password){
 		this.passwords.remove(password);
-		password.setOwner(null);
+		password.setCategory(null);
 	}
 	
 	public HashSet<Password> getPasswords(){
 		return this.passwords;
 	}
+	
+	
 
 }
