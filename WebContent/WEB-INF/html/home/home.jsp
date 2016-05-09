@@ -6,10 +6,10 @@
       Easypass - Accueil
     </jsp:attribute>
     <jsp:attribute name="header">
-      <jsp:directive.include file="header.jsp" />
+      <jsp:directive.include file="../header.jsp" />
     </jsp:attribute>
     <jsp:attribute name="footer">
-      <jsp:directive.include file="footer.jsp" />
+      <jsp:directive.include file="../footer.jsp" />
     </jsp:attribute>
     <jsp:body>
         Bienvenue ${currentUser.getFirstname()}
