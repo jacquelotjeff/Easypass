@@ -14,7 +14,7 @@ import fr.easypass.model.User;
 /**
  * Servlet implementation class HelloServlet
  */
-@WebServlet(name = "HomeServlet", description = "Home Servlet", urlPatterns = { "/home"})
+@WebServlet(name = "HomeServlet", description = "Home Servlet", urlPatterns = {"", "/admin"})
 public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
@@ -36,9 +36,10 @@ public class HomeServlet extends HttpServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains("/home")) {
-            this.home(request, response);
+        if (uri.contains("/admin")) {
+            this.admin(request, response);
         } else {
+            this.home(request, response);
             response.getWriter().append("Index");
         }
         response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -63,9 +64,14 @@ public class HomeServlet extends HttpServlet {
 
         return;
     }
+    
+    private void admin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-    private void test(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        //User test = this.getCurrentUser(request);
+        //request.setAttribute("currentUser", test);
+        request.getRequestDispatcher("/WEB-INF/html/home/admin.jsp").forward(request, response);
 
+        return;
     }
 
 }

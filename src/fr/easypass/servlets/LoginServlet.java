@@ -17,9 +17,11 @@ import fr.easypass.model.User;
  */
 @WebServlet(name = "LoginServlet",  description = "Login Servlet", urlPatterns = {"/login", "/logout"})
 public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private UserManager userManager = new UserManager();/**
     
+    private static final long serialVersionUID = 1L;
+    private UserManager userManager = new UserManager();
+    
+    /**
      * @see HttpServlet#HttpServlet()
      */
     public LoginServlet() {
