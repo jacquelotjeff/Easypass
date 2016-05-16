@@ -108,6 +108,21 @@ public class UserServlet extends HttpServlet {
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
+        String username  = request.getParameter("username"); 
+        if (username == null) {
+            response.sendRedirect(UserServlet.baseURL + "/liste");
+            return;
+        }
+      
+        //Simulating database request  
+        final User user = this.userManager.getUser(username);
+        
+        if (user == null) {
+            response.sendRedirect(UserServlet.baseURL + "/liste");
+            return;
+        }
+        
+        request.setAttribute("user", user);
         request.getRequestDispatcher(UserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
 
         return;

@@ -3,14 +3,11 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<t:genericpage>
+<t:genericadminpage>
     <jsp:attribute name="title">
       Easypass - Liste des utilisateurs
     </jsp:attribute>
     <jsp:body>
-      <div class="jumbotron">
-      </div>
-      <div class="container">
         <h1>Exemple liste des utilisateurs</h1>
         <table class="table table-striped table-hover table-users">
             <thead>
@@ -24,7 +21,7 @@
                     <th>#</th>
                 </tr>
             </thead>
-
+    
             <tbody>
                 <c:forEach var="user" items="${users}">
                     <tr>
@@ -35,13 +32,15 @@
                         <c:url value="voir" var="showURL">
                             <c:param name="username"   value="${user.getUsername()}" />
                         </c:url>
-                        <td><a class="btn btn-success" href='<c:out value="${showURL}"></c:out>'>Voir</a></td>
-                        <td><a class="btn btn-default" href="#">Editer</a></td>
+                        <td><a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a></td>
+                        <c:url value="editer" var="editURL">
+                            <c:param name="username"   value="${user.getUsername()}" />
+                        </c:url>
+                        <td><a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a></td>
                         <td><a class="btn btn-danger" href="#">Supprimer</a></td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-      </div>
     </jsp:body>
-</t:genericpage>
+</t:genericadminpage>
