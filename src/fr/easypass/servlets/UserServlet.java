@@ -2,7 +2,6 @@ package fr.easypass.servlets;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,19 +24,12 @@ public class UserServlet extends HttpServlet {
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/user";
     public final UserManager userManager = new UserManager();
-    
-    public HashMap<String, String> routes = new HashMap<>();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public UserServlet() {
         super();
-        routes.put("list", UserServlet.urlPrefix + "/liste");
-        routes.put("create", UserServlet.urlPrefix + "/creer");
-        routes.put("show", UserServlet.urlPrefix + "/voir");
-        routes.put("edit", UserServlet.urlPrefix + "/editer");
-        routes.put("delete", UserServlet.urlPrefix + "/supprimer");
     }
     
     /**
@@ -75,6 +67,11 @@ public class UserServlet extends HttpServlet {
     }
 
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    	
+    	HashMap<String, User> users = userManager.getUsers();
+    	
+    	request.setAttribute("users", users.values());
+    	
         request.getRequestDispatcher("/WEB-INF/html/user/list.jsp").forward(request, response);
 
         return;
