@@ -4,7 +4,8 @@ import java.util.HashSet;
 
 
 public class User {
-	
+    
+    private Integer id;
 	private String firstname;
 	private String lastname;
 	private String username;
@@ -12,6 +13,14 @@ public class User {
 	private String email;
 	private HashSet<Group> groups;
 	private HashSet<Password> passwords;
+	
+	public Integer getId() {
+        return id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
 	
 	public String getFirstname() {
 		return firstname;
