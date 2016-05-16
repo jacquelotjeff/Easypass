@@ -1,12 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:genericadminpage>
     <jsp:attribute name="title">
-      Easypass - Création d'un utilisateur
+      Easypass - Ajout d'un utilisateur
     </jsp:attribute>
     <jsp:body>
-        Création d'un utilisateur
-        <jsp:directive.include file="form.jsp" />
+        <h1>Ajout d'un utilisateur</h1>
+        <jsp:include page="form.jsp"/>
     </jsp:body>
 </t:genericadminpage>

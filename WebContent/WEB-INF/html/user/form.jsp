@@ -13,5 +13,5 @@
         <input type="password" name="password" class="form-control" value="">
     </div>
     <br />
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="submit" class="btn btn-default">Enregistrer</button>
 </form>
