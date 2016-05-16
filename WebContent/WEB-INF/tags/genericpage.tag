@@ -1,6 +1,6 @@
 <%@tag description="Overall Page template" pageEncoding="UTF-8"%>
 <%@attribute name="title" fragment="true" %>
-<%@taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+
 <!doctype html>
 <html>
   <head>
@@ -13,9 +13,7 @@
   </head>
   <body>
     <%@ include file="../html/header.jsp" %>
-    <div id="body">
-      <jsp:doBody/>
-    </div>
+        <jsp:doBody/>
     <%@ include file="../html/footer.jsp" %>
   </body>
 </html>
