@@ -16,6 +16,7 @@ public class UserManager {
 		HashMap<String, User> users = new HashMap<>();
 		User user = new User();
 		
+		user.setId(1);
 		user.setFirstname("Adrien");
 		user.setLastname("Turcey");
 		user.setEmail("adrienturcey@outlook.com");
@@ -26,6 +27,7 @@ public class UserManager {
 		
 		User user1 = new User();
         
+		user.setId(2);
         user1.setFirstname("Jonathan");
         user1.setLastname("Cholet");
         user1.setEmail("jonathancholet@gmail.com");

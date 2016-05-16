@@ -79,14 +79,20 @@ public class UserServlet extends HttpServlet {
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
-        if (request.getParameter("userId") == null) {
+        String username  = request.getParameter("username"); 
+        if (username == null) {
             response.sendRedirect(UserServlet.baseURL + "/liste");
             return;
         }
       
-        final Integer userId = Integer.parseInt(request.getParameter("userId"));
         //Simulating database request  
-        final User user = this.userManager.getUser(userId.toString());
+        final User user = this.userManager.getUser(username);
+        
+        if (user == null) {
+            response.sendRedirect(UserServlet.baseURL + "/liste");
+            return;
+        }
+        
         request.setAttribute("user", user);
         request.getRequestDispatcher(UserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 

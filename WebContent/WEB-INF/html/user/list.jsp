@@ -32,7 +32,10 @@
                         <td>${user.getLastname()}</td>
                         <td>${user.getFirstname()}</td>
                         <td>${user.getEmail()}</td>
-                        <td><a class="btn btn-success" href="#">Voir</a></td>
+                        <c:url value="voir" var="showURL">
+                            <c:param name="username"   value="${user.getUsername()}" />
+                        </c:url>
+                        <td><a class="btn btn-success" href='<c:out value="${showURL}"></c:out>'>Voir</a></td>
                         <td><a class="btn btn-default" href="#">Editer</a></td>
                         <td><a class="btn btn-danger" href="#">Supprimer</a></td>
                     </tr>
