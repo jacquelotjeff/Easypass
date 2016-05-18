@@ -15,7 +15,7 @@ import fr.easypass.model.User;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.urlPrefix + "/liste",
+@WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.urlPrefix + "",
         UserServlet.urlPrefix + "/voir", UserServlet.urlPrefix + "/editer", UserServlet.urlPrefix + "/creer", UserServlet.urlPrefix + "/supprimer" })
 public class UserServlet extends HttpServlet {
     
@@ -40,18 +40,16 @@ public class UserServlet extends HttpServlet {
         
         final String uri = request.getRequestURI();
         
-        if (uri.contains("/liste")) {
-            this.list(request, response);
-        } else if (uri.contains("/voir")) {
+        if (uri.contains(urlPrefix + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains("/creer")) {
+        } else if (uri.contains(urlPrefix + "/creer")) {
             this.create(request, response);
-        } else if (uri.contains("/editer")) {
+        } else if (uri.contains(urlPrefix + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains("/supprimer")) {
+        } else if (uri.contains(urlPrefix + "/supprimer")) {
             this.delete(request, response);
         } else {
-            response.getWriter().append("Index");
+            this.list(request, response);
         }
 
     }
