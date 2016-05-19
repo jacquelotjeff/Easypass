@@ -1,6 +1,8 @@
 package fr.easypass.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class Group {
 
@@ -8,15 +10,25 @@ public class Group {
     private String description;
     private String logo;
     private HashSet<User> users;
+    private List<String> usersNames;
     private HashSet<User> administrators;
+    private List<String> administratorsNames;
     private HashSet<Password> passwords;
+    private List<String> passwordsNames;
     private HashSet<Category> categories;
+    private List<String> categoriesNames;
 
     public Group() {
         this.users = new HashSet<User>();
         this.passwords = new HashSet<Password>();
         this.administrators = new HashSet<User>();
         this.categories = new HashSet<Category>();
+        
+        this.usersNames = new ArrayList<String>();
+        this.administratorsNames = new ArrayList<String>();
+        this.passwordsNames = new ArrayList<String>();
+        this.categoriesNames = new ArrayList<String>();
+        
     }
 
     public String getName() {
@@ -92,6 +104,40 @@ public class Group {
 
     public HashSet<Password> getPasswords() {
         return this.passwords;
+    }
+    
+  //TODO Retirer lorsque qu'une base de données sera mises en place
+    /* Provisoire permet de stocker les listes sans faire planter */
+    public void addUserName(String userName) {
+        this.usersNames.add(userName);
+    }
+    
+    public List<String> getUsersNames(){
+        return this.usersNames;
+    }
+    
+    public void addAdministratorName(String userName) {
+        this.administratorsNames.add(userName);
+    }
+    
+    public List<String> getAdministratorsNames(String administratorName) {
+        return this.administratorsNames;
+    }
+    
+    public void addPasswordName(String password) {
+        this.passwordsNames.add(password);
+    }
+    
+    public List<String> getPasswordsNames(){
+        return this.passwordsNames;
+    }
+    
+    public void addCategoryName(String category) {
+        this.categoriesNames.add(category);
+    }
+    
+    public List<String> getCategoriesNames(){
+        return this.categoriesNames;
     }
 
 }

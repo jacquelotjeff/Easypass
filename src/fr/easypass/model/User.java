@@ -1,6 +1,8 @@
 package fr.easypass.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class User {
 
@@ -11,14 +13,21 @@ public class User {
     private String password;
     private String email;
     private HashSet<Group> groups;
+    private List<String> groupsNames;
     private HashSet<Password> passwords;
+    private List<String> passwordsNames;
     private HashSet<Category> categories;
+    private List<String> categoriesNames;
 
     // Constructor
     public User() {
         this.groups = new HashSet<Group>();
         this.passwords = new HashSet<Password>();
         this.categories = new HashSet<Category>();
+        
+        this.groupsNames = new ArrayList<String>();
+        this.passwordsNames = new ArrayList<String>();
+        this.categoriesNames = new ArrayList<String>();
     }
 
     public Integer getId() {
@@ -80,7 +89,7 @@ public class User {
     public HashSet<Group> getGroups() {
         return this.groups;
     }
-
+    
     public void addCategory(Category category) {
         this.categories.add(category);
         category.setOwner(this);
@@ -106,5 +115,32 @@ public class User {
 
     public HashSet<Password> getPasswords() {
         return this.passwords;
+    }
+    
+    
+    //TODO Retirer lorsque qu'une base de données sera mises en place
+    /* Provisoire permet de stocker les listes sans faire planter */
+    public void addGroupName(String group) {
+        this.groupsNames.add(group);
+    }
+    
+    public List<String> getGroupsNames(){
+        return this.groupsNames;
+    }
+    
+    public void addPasswordName(String password) {
+        this.passwordsNames.add(password);
+    }
+    
+    public List<String> getPasswordsNames(){
+        return this.passwordsNames;
+    }
+    
+    public void addCategoryName(String category) {
+        this.categoriesNames.add(category);
+    }
+    
+    public List<String> getCategoriesNames(){
+        return this.categoriesNames;
     }
 }

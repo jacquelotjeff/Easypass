@@ -6,6 +6,12 @@ import fr.easypass.model.Group;
 import fr.easypass.model.User;
 
 public class UserManager {
+    
+    private HashMap<String, User> users;
+    
+    public UserManager(){
+        this.users = createUsers();
+    }
 
     private static String[][] getDatas() {
 
@@ -44,9 +50,8 @@ public class UserManager {
      * 
      * @return
      */
-    public HashMap<String, User> getUsers() {
+    private HashMap<String, User> createUsers() {
         
-        GroupManager groupManager = new GroupManager();
         HashMap<String, User> users = new HashMap<>();
         Integer cnt = 1;
 
@@ -57,23 +62,25 @@ public class UserManager {
             user.setLastname(userInfos[1]);
             user.setEmail(userInfos[2]);
             user.setUsername(userInfos[3]);
-            user.setPassword(userInfos[3]);
+            user.setPassword(userInfos[4]);
             
-            String[] groupNames = userInfos[4].split(",");
-            
-            //TODO Réussir  à ajouter les de la perosnne sans que ça plante.
-            /*
-            for (String groupName : groupNames) {
-                Group group = groupManager.getGroup(groupName);
-                user.addGroup(group);
+            if (userInfos.length > 5) {
+                String[] groupNames = userInfos[5].split("\\,");
+                //Pouvoir stocker directmeent l'objet du groupe
+                for (String groupName : groupNames) {
+                    user.addGroupName(groupName);
+                }
             }
-            */
 
             users.put(user.getUsername(), user);
         }
 
         return users;
 
+    }
+    
+    public HashMap<String, User> getUsers(){
+        return this.users;
     }
 
     /**
@@ -107,7 +114,7 @@ public class UserManager {
      * @return
      */
     public User getUser(String username) {
-        return this.getUsers().get(username);
+        return this.users.get(username);
     }
 
 }

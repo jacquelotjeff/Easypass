@@ -14,6 +14,7 @@
                 <tr>
                     <th>Nom</th>
                     <th>Description</th>
+                    <th>Utilisateurs</th>
                     <th>Logo</th>
                     <th>#</th>
                     <th>#</th>
@@ -26,6 +27,11 @@
                     <tr>
                         <td>${group.getName()}</td>
                         <td>${group.getDescription()}</td>
+                        <td>
+                            <c:forEach var="username" items="${group.getUsersNames()}">
+                            ${username},
+                            </c:forEach>
+                        </td>
                         <td>${group.getLogo()}</td>
                         <c:url value="voir" var="showURL">
                             <c:param name="groupname"   value="${group.getName()}" />

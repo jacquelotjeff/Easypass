@@ -15,7 +15,8 @@
                     <th>Utilisateur</th>
                     <th>Nom</th>
                     <th>Prenom</th>
-                    <th>E-mail</th>
+                    <th>Email</th>
+                    <th>Groupes</th>
                     <th>#</th>
                     <th>#</th>
                     <th>#</th>
@@ -29,6 +30,11 @@
                         <td>${user.getLastname()}</td>
                         <td>${user.getFirstname()}</td>
                         <td>${user.getEmail()}</td>
+                        <td>
+                            <c:forEach var="groupname" items="${user.getGroupsNames()}">
+                              ${groupname},  
+                            </c:forEach>
+                        </td>
                         <c:url value="voir" var="showURL">
                             <c:param name="username"   value="${user.getUsername()}" />
                         </c:url>

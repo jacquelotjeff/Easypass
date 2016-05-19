@@ -1,6 +1,8 @@
 package fr.easypass.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class Category {
 
@@ -8,9 +10,12 @@ public class Category {
     private String logo;
     private Object owner;
     private HashSet<Password> passwords;
+    private List<String> passwordsNames;
 
     public Category() {
         this.passwords = new HashSet<Password>();
+        
+        this.passwordsNames = new ArrayList<String>();
     }
 
     public String getNom() {
@@ -49,6 +54,15 @@ public class Category {
 
     public HashSet<Password> getPasswords() {
         return this.passwords;
+    }
+    
+    //TODO a retirer lorsque la base sera mis en place
+    public void addPasswordName(String password) {
+        this.passwordsNames.add(password);
+    }
+    
+    public List<String> getPasswordsNames(){
+        return this.passwordsNames;
     }
 
 }

@@ -2,9 +2,17 @@ package fr.easypass.db;
 
 import java.util.HashMap;
 
+
 import fr.easypass.model.Group;
 
 public class GroupManager {
+    
+    private HashMap<String, Group> groups;
+    
+    public GroupManager()
+    {
+        this.groups = createGroups();
+    }
 
     private static String[][] getDatas() {
 
@@ -33,9 +41,8 @@ public class GroupManager {
         return datas;
     }
     
-    public HashMap<String, Group> getGroups() {
+    private HashMap<String, Group> createGroups() {
         
-        UserManager userManager = new UserManager();
         
         HashMap<String, Group> groups = new HashMap<>();
          
@@ -45,25 +52,29 @@ public class GroupManager {
             group.setName(groupInfos[0]);
             group.setDescription(groupInfos[1]);
             group.setLogo(groupInfos[2]);
-               
+            
             //Add group users
-            String[] members = groupInfos[3].split("|");
+            String[] members = groupInfos[3].split("\\|");
             
             for (String username : members) {
-                group.addUser(userManager.getUser(username));
+                group.addUserName(username);
             }
             
             //Add group administrators
-            String[] administrators = groupInfos[4].split("|");
+            String[] administrators = groupInfos[4].split("\\|");
             
             for (String username : administrators) {
-                group.addAdministrator(userManager.getUser(username));
+                group.addAdministratorName(username);
             }
             
             groups.put(group.getName(), group);
         }
         
         return groups;
+    }
+    
+    public HashMap<String, Group> getGroups() {
+        return this.groups;
     }
     
     /**
@@ -73,8 +84,7 @@ public class GroupManager {
      * @return
      */
     public Group getGroup(String groupname) {
-        HashMap<String, Group> groups = getGroups(); 
-        return groups.get(groupname);
+        return this.groups.get(groupname);
     }
 
 }
