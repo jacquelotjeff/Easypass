@@ -36,11 +36,11 @@
                             </c:forEach>
                         </td>
                         <c:url value="voir" var="showURL">
-                            <c:param name="username"   value="${user.getUsername()}" />
+                            <c:param name="userId"   value="${user.getId()}" />
                         </c:url>
                         <td><a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a></td>
                         <c:url value="editer" var="editURL">
-                            <c:param name="username"   value="${user.getUsername()}" />
+                            <c:param name="userId"   value="${user.getId()}" />
                         </c:url>
                         <td><a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a></td>
                         <td><a class="btn btn-danger" href="#">Supprimer</a></td>

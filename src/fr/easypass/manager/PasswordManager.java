@@ -1,9 +1,10 @@
-package fr.easypass.db;
+package fr.easypass.manager;
 
 import java.util.HashMap;
+
+import fr.easypass.manager.UserManager;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
-import fr.easypass.db.UserManager;
 
 public class PasswordManager {
 

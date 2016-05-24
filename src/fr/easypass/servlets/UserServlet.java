@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.easypass.db.UserManager;
+import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
 
 /**
@@ -66,7 +66,7 @@ public class UserServlet extends HttpServlet {
 
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     	
-    	HashMap<String, User> users = userManager.getUsers();
+    	HashMap<Integer, User> users = userManager.getUsers();
     	
     	request.setAttribute("users", users.values());
     	
@@ -77,17 +77,18 @@ public class UserServlet extends HttpServlet {
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
-        String username  = request.getParameter("username"); 
-        if (username == null) {
-            response.sendRedirect(UserServlet.baseURL + "/liste");
+        Integer userId  = Integer.parseInt(request.getParameter("userId")); 
+        
+        if (userId == null) {
+            response.sendRedirect(UserServlet.baseURL + UserServlet.urlPrefix);
             return;
         }
       
         //Simulating database request  
-        final User user = this.userManager.getUser(username);
+        final User user = this.userManager.getUser(userId);
         
         if (user == null) {
-            response.sendRedirect(UserServlet.baseURL + "/liste");
+            response.sendRedirect(UserServlet.baseURL + UserServlet.urlPrefix);
             return;
         }
         
@@ -106,14 +107,14 @@ public class UserServlet extends HttpServlet {
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
-        String username  = request.getParameter("username"); 
-        if (username == null) {
+        Integer userId  = Integer.parseInt(request.getParameter("userId")); 
+        if (userId == null) {
             response.sendRedirect(UserServlet.baseURL + "/liste");
             return;
         }
       
         //Simulating database request  
-        final User user = this.userManager.getUser(username);
+        final User user = this.userManager.getUser(userId);
         
         if (user == null) {
             response.sendRedirect(UserServlet.baseURL + "/liste");
