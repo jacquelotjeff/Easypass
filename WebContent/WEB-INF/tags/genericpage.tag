@@ -1,5 +1,5 @@
-<%@tag description="Overall Page template" pageEncoding="UTF-8"%>
-<%@attribute name="title" fragment="true" %>
+<%@ tag description="Overall Page template" pageEncoding="UTF-8"%>
+<%@ attribute name="title" fragment="true" %>
 
 <!doctype html>
 <html>
@@ -13,6 +13,8 @@
   </head>
   <body>
     <%@ include file="../html/header.jsp" %>
+        <div class="jumbotron"></div>
+        <%@ include file="../html/flash.jsp" %>
         <jsp:doBody/>
     <%@ include file="../html/footer.jsp" %>
   </body>
