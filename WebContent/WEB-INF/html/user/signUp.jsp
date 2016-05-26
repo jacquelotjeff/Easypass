@@ -2,12 +2,16 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<t:genericadminpage>
+<t:genericpage>
     <jsp:attribute name="title">
-      Easypass - Ajout d'un mot de passe
+      Easypass - Inscription
     </jsp:attribute>
     <jsp:body>
-        <h1>Ajout d'un mot de passe</h1>
-        <jsp:include page="form.jsp"/>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Inscription</h1>
+                <jsp:include page="form.jsp"/>
+            </div>
+        </div>
     </jsp:body>
-</t:genericadminpage>
+</t:genericpage>

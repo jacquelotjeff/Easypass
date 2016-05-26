@@ -1,4 +1,4 @@
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <form action="login" method="POST">
     <div class="form-group">
         <label for="title">Titre pour le mot  de passe : </label>

@@ -1,7 +1,7 @@
-<%@page import="fr.easypass.model.User"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="fr.easypass.model.User"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:genericadminpage>
     <jsp:attribute name="title">
@@ -30,24 +30,39 @@
                         <td>${user.getLastname()}</td>
                         <td>${user.getFirstname()}</td>
                         <td>${user.getEmail()}</td>
+                        
                         <td>
                             <c:forEach var="groupname" items="${user.getGroupsNames()}">
                               ${groupname},  
                             </c:forEach>
                         </td>
-                        <c:url value="voir" var="showURL">
-                            <c:param name="username"   value="${user.getUsername()}" />
-                        </c:url>
-                        <td><a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a></td>
-                        <c:url value="editer" var="editURL">
-                            <c:param name="username"   value="${user.getUsername()}" />
-                        </c:url>
-                        <td><a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a></td>
-                        <td><a class="btn btn-danger" href="#">Supprimer</a></td>
+                        
+                        <td>
+                            <c:url value="utilisateurs/voir" var="showURL">
+                                <c:param name="userId"   value="${user.getId()}" />
+                            </c:url>
+                            <a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a>
+                        </td>
+                        
+                        <td>
+                            <c:url value="utilisateurs/editer" var="editURL">
+                                <c:param name="userId"   value="${user.getId()}" />
+                            </c:url>
+                            <a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a>
+                        </td>
+                        
+                        <td>
+                            <c:url value="utilisateurs/supprimer" var="deleteURL">
+                                <c:param name="userId"   value="${user.getId()}" />
+                            </c:url>
+                            <form action="${deleteURL}" method="POST">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-        <a href="creer" class="btn btn-primary">Créer</a>
+        <a href="/easypass/inscription" class="btn btn-primary">Créer</a>
     </jsp:body>
 </t:genericadminpage>

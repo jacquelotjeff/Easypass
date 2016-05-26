@@ -1,9 +1,10 @@
-package fr.easypass.db;
+package fr.easypass.manager;
 
 import java.util.HashMap;
+
+import fr.easypass.manager.UserManager;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
-import fr.easypass.db.UserManager;
 
 public class PasswordManager {
 
@@ -13,18 +14,19 @@ public class PasswordManager {
      * @return
      */
     public HashMap<String, Password> getPasswords() {
-
+    	
+    	//TODO request from database
         HashMap<String, Password> passwords = new HashMap<>();
         Password password = new Password();
         UserManager userManager = new UserManager();
 
-        User owner = userManager.getUser("aturcey");
+        //User owner = userManager.getUser("aturcey");
 
         password.setNom("allocine");
         password.setSiteUrl("allocine.fr");
         password.setPassword("patatedeforain");
         password.setInformations("mot de passe pour allocine");
-        password.setOwner(owner);
+        //password.setOwner(owner);
 
         passwords.put(password.getNom(), password);
 

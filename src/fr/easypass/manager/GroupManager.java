@@ -1,4 +1,4 @@
-package fr.easypass.db;
+package fr.easypass.manager;
 
 import java.util.HashMap;
 

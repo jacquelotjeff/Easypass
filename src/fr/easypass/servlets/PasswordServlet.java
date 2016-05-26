@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.easypass.db.PasswordManager;
+import fr.easypass.manager.PasswordManager;
 import fr.easypass.model.Password;
 
 /**
