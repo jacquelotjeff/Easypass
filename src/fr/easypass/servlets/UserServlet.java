@@ -175,6 +175,9 @@ public class UserServlet extends HttpServlet {
 			if (success == 0) {
 				session.setAttribute("alertClass", "alert-danger");
 				session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être supprimé.");
+			} else {
+				session.setAttribute("alertClass", "alert-success");
+				session.setAttribute("alertMessage", "L'utilisateur a bien été supprimé.");
 			}
 			
 		} else {

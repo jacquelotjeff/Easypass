@@ -63,6 +63,6 @@
                 </c:forEach>
             </tbody>
         </table>
-        <a href="utilisateurs/creer" class="btn btn-primary">Créer</a>
+        <a href="/easypass/inscription" class="btn btn-primary">Créer</a>
     </jsp:body>
 </t:genericadminpage>
