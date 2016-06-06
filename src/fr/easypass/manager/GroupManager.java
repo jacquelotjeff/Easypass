@@ -1,81 +1,66 @@
 package fr.easypass.manager;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 
 import fr.easypass.model.Group;
+import fr.easypass.model.User;
 
 public class GroupManager {
     
-    private HashMap<String, Group> groups;
+    private HashMap<Integer, Group> groups;
     
     public GroupManager()
     {
-        this.groups = createGroups();
-    }
-
-    private static String[][] getDatas() {
-
-        String[][] datas = { 
-                { 
-                    "Blog moto", 
-                    "Groupe des personnes présente sur le blog Moto",
-                    "http://icons.iconarchive.com/icons/icons8/android/512/Transport-Motorcycle-icon.png", 
-                    "aturcey|jcholet|jjacquelot|ykeoxay|anguyen|Hadown42|Afterviout65|Duritat", 
-                    "aturcey|jcholet|jjacquelot|ykeoxay|anguyen"
-                    // TODO Mot de passes à associer
-                    // TODO Catégories à associer
-                },
-                { 
-                    "Bricolage", 
-                    "Applications liées aux bricolage",
-                    "http://freeflaticons.com/wp-content/uploads/2014/09/hammer-copy-1410948738nk4g8.png",
-                    "aturcey|jcholet|jjacquelot|ykeoxay|anguyen",
-                    "aturcey"
-                    // TODO Mot de passes à associer
-                    // TODO Catégories à associer
-                },
-
-        };
-
-        return datas;
     }
     
-    private HashMap<String, Group> createGroups() {
-        
-        
-        HashMap<String, Group> groups = new HashMap<>();
-         
-        for (String[] groupInfos : getDatas()) {
-            Group group = new Group();
-            
-            group.setName(groupInfos[0]);
-            group.setDescription(groupInfos[1]);
-            group.setLogo(groupInfos[2]);
-            
-            //Add group users
-            String[] members = groupInfos[3].split("\\|");
-            
-            for (String username : members) {
-                group.addUserName(username);
-            }
-            
-            //Add group administrators
-            String[] administrators = groupInfos[4].split("\\|");
-            
-            for (String username : administrators) {
-                group.addAdministratorName(username);
-            }
-            
-            groups.put(group.getName(), group);
-        }
-        
-        return groups;
+    public HashMap<Integer, Group> getGroups() {
+		//Resetting the Hashmap (Prevent from caching groups into)
+		this.groups = new HashMap<>();
+		
+		Connection conn = ConnectorManager.getConnection();
+
+		try {
+			
+			//Not prepared statement
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * from groups;");
+
+			while (rs.next()) {
+				
+				Group group = this.createFromResultSet(rs);
+				groups.put(group.getId(), group);
+
+			}
+
+			rs.close();
+			stmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return groups;
     }
     
-    public HashMap<String, Group> getGroups() {
-        return this.groups;
-    }
+    /**
+	 * Return a created Group object from a ResultSet
+	 * 
+	 * @return
+	 * @param ResultSet rs
+	 * @throws SQLException
+	 */
+	public Group createFromResultSet(ResultSet rs) throws SQLException {
+
+		Group group = new Group();
+		return group;
+
+	}
     
     /**
      * Return Group object if existing into data

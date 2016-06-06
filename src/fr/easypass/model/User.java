@@ -12,22 +12,15 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private HashSet<Group> groups;
-    private List<String> groupsNames;
-    private HashSet<Password> passwords;
-    private List<String> passwordsNames;
-    private HashSet<Category> categories;
-    private List<String> categoriesNames;
+    private List<Integer> groups;
+    private List<Integer> passwords;
+    private List<Integer> categories;
 
     // Constructor
     public User() {
-        this.groups = new HashSet<Group>();
-        this.passwords = new HashSet<Password>();
-        this.categories = new HashSet<Category>();
-        
-        this.groupsNames = new ArrayList<String>();
-        this.passwordsNames = new ArrayList<String>();
-        this.categoriesNames = new ArrayList<String>();
+        this.groups = new ArrayList<Integer>();
+        this.passwords = new ArrayList<Integer>();
+        this.categories = new ArrayList<Integer>();
     }
 
     public Integer getId() {
@@ -78,69 +71,27 @@ public class User {
         this.email = email;
     }
 
-    public void addGroup(Group group) {
-        this.groups.add(group);
+    public void addGroup(Integer groupId) {
+        this.groups.add(groupId);
     }
 
-    public void removeGroup(Group group) {
-        this.groups.remove(group);
-    }
-
-    public HashSet<Group> getGroups() {
+    public List<Integer> getGroups() {
         return this.groups;
     }
     
-    public void addCategory(Category category) {
-        this.categories.add(category);
-        category.setOwner(this);
+    public void addCategory(Integer categoryId) {
+        this.categories.add(categoryId);
     }
 
-    public void removeCategory(Category category) {
-        this.categories.remove(category);
-    }
-
-    public HashSet<Category> getCategories() {
+    public List<Integer> getCategories() {
         return this.categories;
     }
 
-    public void addPassword(Password password) {
-        this.passwords.add(password);
-        password.setOwner(this);
+    public void addPassword(Integer passwordId) {
+        this.passwords.add(passwordId);
     }
 
-    public void removePassword(Password password) {
-        this.passwords.remove(password);
-        password.setOwner(null);
-    }
-
-    public HashSet<Password> getPasswords() {
+    public List<Integer> getPasswords() {
         return this.passwords;
-    }
-    
-    
-    //TODO Retirer lorsque qu'une base de données sera mises en place
-    /* Provisoire permet de stocker les listes sans faire planter */
-    public void addGroupName(String group) {
-        this.groupsNames.add(group);
-    }
-    
-    public List<String> getGroupsNames(){
-        return this.groupsNames;
-    }
-    
-    public void addPasswordName(String password) {
-        this.passwordsNames.add(password);
-    }
-    
-    public List<String> getPasswordsNames(){
-        return this.passwordsNames;
-    }
-    
-    public void addCategoryName(String category) {
-        this.categoriesNames.add(category);
-    }
-    
-    public List<String> getCategoriesNames(){
-        return this.categoriesNames;
     }
 }

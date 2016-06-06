@@ -2,16 +2,14 @@ package fr.easypass.model;
 
 public class Password {
 	
+	private Integer id;
 	private String nom;
 	private String siteUrl;
 	private String password;
 	private String informations;
-	private Object owner;
-	private Category category;
-	private Integer ownerType;
-	
-	public final Integer OWNER_TYPE_GROUP = 0;
-	public final Integer OWNER_TYPE_USER = 1;
+	private Integer category;
+	private Integer ownerUser;
+	private Integer ownerGroup;
 	
 	public String getNom() {
 		return nom;
@@ -45,53 +43,28 @@ public class Password {
 		this.informations = informations;
 	}
 	
-	public void setOwner(Object owner){
-				
-		if(owner instanceof Group){
-			
-			this.ownerType = this.OWNER_TYPE_GROUP;
-			Group group = (Group) owner;
-			
-			//If the password not exists in the Group
-			if(!group.getPasswords().contains(this)){
-				group.addPassword(this);
-			}
-			
-		} else {
-			
-			this.ownerType = this.OWNER_TYPE_USER;
-			User user = (User) owner;
-			
-			//If the password not exists in the User
-			if(!user.getPasswords().contains(this)){
-				user.addPassword(this);
-			}
-			
-		}
-		
-		this.owner = owner;
-		
+	public void setOwnerUser(Integer userId){
+		this.ownerUser = userId;
 	}
 	
-	public Object getOwner(){
-		return this.owner;
+	public Integer getOwnerUser(){
+		return this.ownerUser;
 	}
 	
-	public Integer getOwnerType(){
-		return this.ownerType;
+	public void setOwnerGroup(Integer groupId){
+		this.ownerGroup = groupId;
+	}
+	
+	public Integer getOwnerGroup(){
+		return this.ownerGroup;
 	}
 
-	public Category getCategory() {
+	public Integer getCategory() {
 		return category;
 	}
 
-	public void setCategory(Category category) {
-		
-		this.category = category;
-		
-		if(!category.getPasswords().contains(this)){
-			category.addPassword(this);
-		}
+	public void setCategory(Integer categoryId) {
+		this.category = categoryId;
 	}	
 	
 }

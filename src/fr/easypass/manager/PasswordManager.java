@@ -1,5 +1,9 @@
 package fr.easypass.manager;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 import fr.easypass.manager.UserManager;
@@ -7,6 +11,8 @@ import fr.easypass.model.Password;
 import fr.easypass.model.User;
 
 public class PasswordManager {
+	
+	HashMap<Integer, Password> passwords;
 
     /**
      * Return list of Users
@@ -15,22 +21,33 @@ public class PasswordManager {
      */
     public HashMap<String, Password> getPasswords() {
     	
-    	//TODO request from database
-        HashMap<String, Password> passwords = new HashMap<>();
-        Password password = new Password();
-        UserManager userManager = new UserManager();
+		//Resetting the Hashmap (Prevent from caching users into)
+		this.passwords = new HashMap<>();
+		
+		Connection conn = ConnectorManager.getConnection();
 
-        //User owner = userManager.getUser("aturcey");
+		try {
+			
+			//Not prepared statement
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * from passwords;");
 
-        password.setNom("allocine");
-        password.setSiteUrl("allocine.fr");
-        password.setPassword("patatedeforain");
-        password.setInformations("mot de passe pour allocine");
-        //password.setOwner(owner);
+			while (rs.next()) {
+				
+				Password password = this.createFromResultSet(rs);
+				passwords.put(password.getId(), password);
 
-        passwords.put(password.getNom(), password);
+			}
 
-        return passwords;
+			rs.close();
+			stmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return passwords;
 
     }
 
