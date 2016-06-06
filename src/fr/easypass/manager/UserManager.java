@@ -1,5 +1,6 @@
 package fr.easypass.manager;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.model.User;
 
@@ -25,8 +26,9 @@ public class UserManager {
 	 * Return list of Users from database
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public HashMap<Integer, User> getUsers() {
+	public HashMap<Integer, User> getUsers() throws IOException {
 		
 		//Resetting the Hashmap (Prevent from caching users into)
 		this.users = new HashMap<>();
@@ -97,14 +99,14 @@ public class UserManager {
 	 * @param userId
 	 * @param request
 	 * @return
+	 * @throws IOException 
 	 */
-	public Integer editUser(HttpServletRequest request) {
+	public Integer editUser(HttpServletRequest request) throws IOException {
 
 		String userIdParam = request.getParameter("userId");
-		if (!NumberUtils.isParsable(userIdParam)) {
+		if (!NumberUtils.isNumber(userIdParam)) {
 			return 0;
 		} else {
-
 			// TODO Validation for parameters
 			String username = request.getParameter("username");
 			String firstname = request.getParameter("firstname");
@@ -113,7 +115,6 @@ public class UserManager {
 			String email = request.getParameter("email");
 
 			try {
-
 				Connection conn = ConnectorManager.getConnection();
 				PreparedStatement stmt;
 
@@ -143,16 +144,15 @@ public class UserManager {
 		}
 	}
 
-	public Integer deleteUser(HttpServletRequest request) {
+	public Integer deleteUser(HttpServletRequest request) throws IOException {
 
 		String userIdParam = request.getParameter("userId");
-		if (!NumberUtils.isParsable(userIdParam)) {
+		if (!NumberUtils.isNumber(userIdParam)) {
 
 			return 0;
 		} else {
 
 			try {
-
 				Connection conn = ConnectorManager.getConnection();
 				PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE id=?");
 				
@@ -179,8 +179,9 @@ public class UserManager {
 	 * 
 	 * @param username
 	 * @return
+	 * @throws IOException 
 	 */
-	public Boolean checkLogin(String username) {
+	public Boolean checkLogin(String username) throws IOException {
 		HashMap<Integer, User> users = this.getUsers();
 		return users.containsKey(username);
 	}
@@ -191,8 +192,9 @@ public class UserManager {
 	 * @param username
 	 * @param password
 	 * @return
+	 * @throws IOException 
 	 */
-	public Boolean checkLoginWithPassword(String username, String password) {
+	public Boolean checkLoginWithPassword(String username, String password) throws IOException {
 		HashMap<Integer, User> users = this.getUsers();
 		User user = users.get(username);
 		return (user.getPassword().equals(password));
@@ -203,16 +205,15 @@ public class UserManager {
 	 * 
 	 * @param userId
 	 * @return
+	 * @throws IOException 
 	 */
-	public User getUser(HttpServletRequest request) {
+	public User getUser(HttpServletRequest request) throws IOException {
 		
 		String userIdParam = request.getParameter("userId");
-		if (!NumberUtils.isParsable(userIdParam)) {
+		if (!NumberUtils.isNumber(userIdParam)) {
 			return null;
 		} else {
-
 			try {
-
 				Connection conn = ConnectorManager.getConnection();
 				PreparedStatement stmt;
 
@@ -238,9 +239,7 @@ public class UserManager {
 				e.printStackTrace();
 				return null;
 			}
-
 		}
-
 	}
 
 	/**
@@ -262,7 +261,6 @@ public class UserManager {
 		user.setEmail(rs.getString("email"));
 
 		return user;
-
 	}
 
 }
