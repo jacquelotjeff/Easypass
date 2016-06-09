@@ -82,7 +82,24 @@ public class GroupServlet extends HttpServlet {
     }
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return;
+    	
+		//Getting the HTTPSession to pass Flash Message
+		HttpSession session = request.getSession();
+		
+		final Group group = this.groupManager.getGroup(request);
+
+		if (group == null) {
+			
+			session.setAttribute("alertClass", "alert-danger");
+			session.setAttribute("alertMessage", "Le groupe n'existe pas");
+			response.sendRedirect(GroupServlet.baseURL);
+			return;
+		}
+
+		request.setAttribute("group", group);
+		request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+        
+		return;
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -119,12 +136,68 @@ public class GroupServlet extends HttpServlet {
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        return;
+
+    	HttpSession session = request.getSession();
+		final String method = request.getMethod();
+
+		if (method == "GET") {
+			
+			final Group group = this.groupManager.getGroup(request);
+
+			if (group == null) {
+				response.sendRedirect(GroupServlet.baseURL);
+				return;
+			}
+			
+			final HashMap<Integer, User> users = userManager.getUsers();
+			request.setAttribute("users", users.values());
+			request.setAttribute("group", group);
+			request.setAttribute("formAction", "editer");
+			request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+
+		} else {
+
+			final Integer success = this.groupManager.editGroup(request);
+
+			if (success == 1) {
+				session.setAttribute("alertClass", "alert-success");
+				session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+				response.sendRedirect(GroupServlet.baseURL);
+			} else {
+				session.setAttribute("alertClass", "alert-danger");
+				session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+				response.sendRedirect(GroupServlet.baseURL);
+			}
+
+		}
+
+		return;
+
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // request.getRequestDispatcher("/WEB-INF/html/user/list.jsp").forward(request,
-        // response);
+    	
+    	HttpSession session = request.getSession();
+		final String method = request.getMethod();
+
+		if (method == "POST") {
+			
+			final Integer success = this.groupManager.deleteGroup(request);
+			
+			if (success == 0) {
+				session.setAttribute("alertClass", "alert-danger");
+				session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
+			} else {
+				session.setAttribute("alertClass", "alert-success");
+				session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
+			}
+			
+		} else {
+			session.setAttribute("alertClass", "alert-danger");
+			session.setAttribute("alertMessage", "Accès interdit");
+		}
+		
+		response.sendRedirect(GroupServlet.baseURL);
 
         return;
     }

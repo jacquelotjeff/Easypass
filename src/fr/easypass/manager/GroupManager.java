@@ -10,13 +10,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.model.Group;
+import fr.easypass.model.User;
+import fr.easypass.servlets.UserServlet;
 
 public class GroupManager {
     
     private Map<Integer, Group> groups;
+    
+    private static final String TABLE_NAME = "groups";
+    private static final String TABLE_NAME_REL_USERS = "user_group";
     
     private static final String COL_ID = "id"; 
     private static final String COL_NAME = "name";
@@ -41,7 +51,7 @@ public class GroupManager {
 			
 			//Not prepared statement
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * from groups;");
+			ResultSet rs = stmt.executeQuery("SELECT * from " + GroupManager.TABLE_NAME + ";");
 
 			while (rs.next()) {
 				
@@ -76,7 +86,11 @@ public class GroupManager {
 			//On commence par insérer les groupe dans la table en récupérant son nouvel identifiant.
 			Connection conn = ConnectorManager.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(
-					"INSERT INTO groups("+ GroupManager.COL_NAME + "," + GroupManager.COL_DESCRIPTION + "," + GroupManager.COL_LOGO + ") values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO groups("+ GroupManager.COL_NAME + 
+					"," + GroupManager.COL_DESCRIPTION + 
+					"," + GroupManager.COL_LOGO + 
+					") values(?,?,?)", Statement.RETURN_GENERATED_KEYS
+			);
 
 			stmt.setString(1, name);
 			stmt.setString(2, description);
@@ -108,30 +122,103 @@ public class GroupManager {
 		
 	}
     
+    public Integer editGroup(HttpServletRequest request) throws IOException{
+    	
+    	String groupIdParam = request.getParameter("groupId");
+		if (!NumberUtils.isNumber(groupIdParam)) {
+			
+			return 0;
+			
+		} else {
+			
+			Integer groupId = Integer.parseInt(groupIdParam);
+			
+			String name = request.getParameter(GroupManager.COL_NAME);
+			String description = request.getParameter(GroupManager.COL_DESCRIPTION);
+			String logo = request.getParameter(GroupManager.COL_LOGO);
+			String[] users = request.getParameterValues("users");
+
+			String[] admins = null;
+
+			try {
+				Connection conn = ConnectorManager.getConnection();
+				PreparedStatement stmt;
+
+				stmt = conn.prepareStatement("UPDATE " + GroupManager.TABLE_NAME + 
+				" SET " + GroupManager.COL_NAME + "=?, " +
+				GroupManager.COL_DESCRIPTION + "=?, " +
+				GroupManager.COL_LOGO + "=? WHERE id=?;");
+
+				stmt.setString(1, name);
+				stmt.setString(2, description);
+				stmt.setString(3, logo);
+				stmt.setInt(4, groupId);
+
+				Integer number = stmt.executeUpdate();
+				stmt.close();
+				conn.close();
+				
+				//On met à jour les données du groupes
+				this.updateGroupUsers(groupId, users, admins);
+
+				return number;
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return 0;
+			}
+
+		}
+    	
+    }
+    
+    public Integer deleteGroup(HttpServletRequest request) throws IOException {
+
+		String groupIdParam = request.getParameter("groupId");
+		if (!NumberUtils.isNumber(groupIdParam)) {
+
+			return 0;
+		} else {
+			
+			final Integer groupId = Integer.parseInt(groupIdParam);
+			this.deleteGroupUsers(groupId);
+
+			try {
+				Connection conn = ConnectorManager.getConnection();
+				PreparedStatement stmt = conn.prepareStatement("DELETE FROM " + GroupManager.TABLE_NAME + " WHERE " + GroupManager.COL_ID + "=?");
+				
+				stmt.setInt(1, groupId);
+
+				Integer number = stmt.executeUpdate();
+				stmt.close();
+				conn.close();
+
+				return number;
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+				return 0;
+			}
+		}
+
+	}
+
+    
     private Integer updateGroupUsers(Integer groupId, String[] users, String[] admins) throws IOException
     {	
     	//First remove all relations with the group
-    	try {
-			Connection conn = ConnectorManager.getConnection();
-			PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_group WHERE "+GroupManager.COL_REL_USERS_GROUP_ID+"=?");
-			
-			stmt.setInt(1, groupId);
-
-			stmt.executeUpdate();
-			stmt.close();
-			conn.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
-		}
-    	
+    	this.deleteGroupUsers(groupId);    	
     	//Adding the new relations.
     	try {
 
 			Connection conn = ConnectorManager.getConnection();
 			PreparedStatement stmt = conn.prepareStatement(
-					"INSERT INTO user_group("+ GroupManager.COL_REL_USERS_USER_ID + "," + GroupManager.COL_REL_USERS_ADMIN + "," + GroupManager.COL_REL_USERS_GROUP_ID + ") values(?,?,?)");
+					"INSERT INTO user_group("+ GroupManager.COL_REL_USERS_USER_ID + 
+					"," + GroupManager.COL_REL_USERS_ADMIN + 
+					"," + GroupManager.COL_REL_USERS_GROUP_ID + 
+					") values(?,?,?)"
+			);
 			
 			conn.setAutoCommit(false);
 			
@@ -159,14 +246,75 @@ public class GroupManager {
     	
     }
     
+    private Integer deleteGroupUsers(Integer groupId) throws IOException{
+    	
+    	Integer number = 0;
+    	
+    	try {
+			Connection conn = ConnectorManager.getConnection();
+			
+			PreparedStatement stmt = conn.prepareStatement(
+					"DELETE FROM " + GroupManager.TABLE_NAME_REL_USERS + 
+					" WHERE " + GroupManager.COL_REL_USERS_GROUP_ID + "=?"
+			);
+			
+			stmt.setInt(1, groupId);
+
+			number = stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+    	
+    	return number; 
+
+    	
+    }
+    
     /**
      * Return Group object if existing into data
      * 
      * @param groupname
      * @return
+     * @throws IOException 
      */
-    public Group getGroup(String groupname) {
-        return this.groups.get(groupname);
+    public Group getGroup(HttpServletRequest request) throws IOException {
+    	
+    	String groupIdParam = request.getParameter("groupId");
+		if (!NumberUtils.isNumber(groupIdParam)) {
+			return null;
+		} else {
+			try {
+				Connection conn = ConnectorManager.getConnection();
+				PreparedStatement stmt;
+
+				stmt = conn.prepareStatement("SELECT * from groups WHERE id=?");
+
+				final Integer groupId = Integer.parseInt(request.getParameter("groupId").toString());
+				stmt.setInt(1, groupId);
+
+				ResultSet rs = stmt.executeQuery();
+				
+				Group group = null;
+				while (rs.next()) {
+					group = this.createFromResultSet(rs);
+				}
+						
+				rs.close();
+				stmt.close();
+				conn.close();
+
+				return group;
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
     }
     	
     /**

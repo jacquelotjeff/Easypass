@@ -27,15 +27,22 @@
                         <td>${group.getName()}</td>
                         <td>${group.getDescription()}</td>
                         <td>${group.getLogo()}</td>
-                        <c:url value="voir" var="showURL">
-                            <c:param name="groupname"   value="${group.getName()}" />
+                        <c:url value="groupes/voir" var="showURL">
+                            <c:param name="groupId"   value="${group.getId()}" />
                         </c:url>
                         <td><a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a></td>
-                        <c:url value="editer" var="editURL">
-                            <c:param name="groupname"   value="${group.getName()}" />
+                        <c:url value="groupes/editer" var="editURL">
+                            <c:param name="groupId"   value="${group.getId()}" />
                         </c:url>
                         <td><a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a></td>
-                        <td><a class="btn btn-danger" href="#">Supprimer</a></td>
+                        <td>
+                            <c:url value="groupes/supprimer" var="deleteURL">
+                                <c:param name="groupId"   value="${group.getId()}" />
+                            </c:url>
+                            <form action="${deleteURL}" method="POST">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
