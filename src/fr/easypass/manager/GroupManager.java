@@ -1,26 +1,39 @@
 package fr.easypass.manager;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 
 import fr.easypass.model.Group;
-import fr.easypass.model.User;
 
 public class GroupManager {
     
-    private HashMap<Integer, Group> groups;
+    private Map<Integer, Group> groups;
+    
+    private static final String COL_ID = "id"; 
+    private static final String COL_NAME = "name";
+    private static final String COL_DESCRIPTION = "description";
+    private static final String COL_LOGO = "logo";
+    
+    private static final String COL_REL_USERS_USER_ID = "user_id";
+    private static final String COL_REL_USERS_ADMIN = "admin";
+    private static final String COL_REL_USERS_GROUP_ID = "group_id";
     
     public GroupManager()
     {
     }
     
-    public HashMap<Integer, Group> getGroups() {
+    public Map<Integer, Group> getGroups() throws IOException {
 		//Resetting the Hashmap (Prevent from caching groups into)
-		this.groups = new HashMap<>();
+		this.groups = new HashMap<Integer, Group>();
 		
 		Connection conn = ConnectorManager.getConnection();
 
@@ -48,19 +61,103 @@ public class GroupManager {
 		return groups;
     }
     
-    /**
-	 * Return a created Group object from a ResultSet
-	 * 
-	 * @return
-	 * @param ResultSet rs
-	 * @throws SQLException
-	 */
-	public Group createFromResultSet(ResultSet rs) throws SQLException {
+    public Integer insertGroup(HttpServletRequest request) {
 
-		Group group = new Group();
-		return group;
+    	// TODO Validation for parameters
+		String name = request.getParameter(GroupManager.COL_NAME);
+		String description = request.getParameter(GroupManager.COL_DESCRIPTION);
+		String logo = request.getParameter(GroupManager.COL_LOGO);
+		String[] users = request.getParameterValues("users");
+		//TODO get the administrators
+		String[] admins = null;
 
+		try {
+			
+			//On commence par insérer les groupe dans la table en récupérant son nouvel identifiant.
+			Connection conn = ConnectorManager.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(
+					"INSERT INTO groups("+ GroupManager.COL_NAME + "," + GroupManager.COL_DESCRIPTION + "," + GroupManager.COL_LOGO + ") values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
+			stmt.setString(1, name);
+			stmt.setString(2, description);
+			stmt.setString(3, logo);
+			
+			stmt.executeUpdate();
+			
+			//Récupération de son identifiant puis on met à jour les relations utilisateurs.
+			 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+		            if (generatedKeys.next()) {
+		                this.updateGroupUsers(generatedKeys.getInt(1), users, admins);
+		            }
+		            else {
+		                throw new SQLException("Creating group failed, no ID obtained.");
+		            }
+		     }
+			 
+			 stmt.close();
+			 conn.close();
+			 
+			 return 1;
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return 0;
+		}
+		
 	}
+    
+    private Integer updateGroupUsers(Integer groupId, String[] users, String[] admins) throws IOException
+    {	
+    	//First remove all relations with the group
+    	try {
+			Connection conn = ConnectorManager.getConnection();
+			PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_group WHERE "+GroupManager.COL_REL_USERS_GROUP_ID+"=?");
+			
+			stmt.setInt(1, groupId);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+    	
+    	//Adding the new relations.
+    	try {
+
+			Connection conn = ConnectorManager.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(
+					"INSERT INTO user_group("+ GroupManager.COL_REL_USERS_USER_ID + "," + GroupManager.COL_REL_USERS_ADMIN + "," + GroupManager.COL_REL_USERS_GROUP_ID + ") values(?,?,?)");
+			
+			conn.setAutoCommit(false);
+			
+			for (String userId : users) {
+				
+				stmt.setString(1, userId);
+				stmt.setBoolean(2, Arrays.asList(users).contains(userId));
+				stmt.setInt(3, groupId);
+				
+				stmt.addBatch();
+			}
+
+			stmt.executeBatch();
+			conn.commit();
+			
+			stmt.close();
+			conn.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+    	
+    	return 1;
+    	
+    }
     
     /**
      * Return Group object if existing into data
@@ -70,6 +167,25 @@ public class GroupManager {
      */
     public Group getGroup(String groupname) {
         return this.groups.get(groupname);
+    }
+    	
+    /**
+     * Create a Group object from resultSet
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    private Group createFromResultSet(ResultSet rs) throws SQLException{
+    	
+    	Group group = new Group();
+
+		group.setId(rs.getInt(GroupManager.COL_ID));
+		group.setName(rs.getString(GroupManager.COL_NAME));
+		group.setDescription(rs.getString(GroupManager.COL_DESCRIPTION));
+		group.setLogo(rs.getString(GroupManager.COL_LOGO));
+
+		return group;
+
     }
 
 }

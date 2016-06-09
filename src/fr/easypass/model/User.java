@@ -1,7 +1,6 @@
 package fr.easypass.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class User {
@@ -24,7 +23,7 @@ public class User {
     }
 
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Integer id) {
@@ -56,7 +55,7 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -64,7 +63,7 @@ public class User {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {

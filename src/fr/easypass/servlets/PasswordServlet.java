@@ -1,7 +1,7 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,7 +65,7 @@ public class PasswordServlet extends HttpServlet {
 	
 	    private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 	    	
-	    	HashMap<String, Password> passwords = passwordManager.getPasswords();
+	    	Map<Integer, Password> passwords = passwordManager.getPasswords();
 	    	
 	    	request.setAttribute("passwords", passwords.values());
 	    	
