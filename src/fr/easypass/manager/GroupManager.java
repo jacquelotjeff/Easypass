@@ -10,16 +10,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.model.Group;
-import fr.easypass.model.User;
-import fr.easypass.servlets.UserServlet;
 
 public class GroupManager {
     
@@ -225,7 +220,7 @@ public class GroupManager {
 			for (String userId : users) {
 				
 				stmt.setString(1, userId);
-				stmt.setBoolean(2, Arrays.asList(users).contains(userId));
+				stmt.setBoolean(2, Arrays.asList(admins).contains(userId));
 				stmt.setInt(3, groupId);
 				
 				stmt.addBatch();

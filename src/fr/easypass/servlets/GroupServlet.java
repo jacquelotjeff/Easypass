@@ -1,7 +1,6 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -109,7 +108,7 @@ public class GroupServlet extends HttpServlet {
 
 		if (method == "GET") {
 			
-			final HashMap<Integer, User> users = userManager.getUsers();
+			final Map<Integer, User> users = userManager.getUsers();
 			request.setAttribute("users", users.values());
 			request.setAttribute("formAction", "creer");
 			request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
@@ -149,7 +148,7 @@ public class GroupServlet extends HttpServlet {
 				return;
 			}
 			
-			final HashMap<Integer, User> users = userManager.getUsers();
+			final Map<Integer, User> users = userManager.getUsers();
 			request.setAttribute("users", users.values());
 			request.setAttribute("group", group);
 			request.setAttribute("formAction", "editer");

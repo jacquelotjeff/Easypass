@@ -11,6 +11,14 @@ public class Password {
 	private Integer ownerUser;
 	private Integer ownerGroup;
 	
+	public Integer getId(){
+		return this.id;
+	}
+	
+	public void setId(Integer id){
+		this.id = id;
+	}
+	
 	public String getNom() {
 		return nom;
 	}

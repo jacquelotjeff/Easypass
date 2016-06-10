@@ -1,7 +1,7 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -77,7 +77,7 @@ public class UserServlet extends HttpServlet {
 	private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		//Get the users from manager, and passing variable to the list.jsp view
-		final HashMap<Integer, User> users = userManager.getUsers();
+		final Map<Integer, User> users = userManager.getUsers();
 
 		request.setAttribute("users", users.values());
 
@@ -116,12 +116,33 @@ public class UserServlet extends HttpServlet {
 	}
 
 	private void signUp(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		HttpSession session = request.getSession();
+    	final String method = request.getMethod();
 
-		request.setAttribute("formAction", "inscription");
-		request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
-		this.userManager.insertUser(request);
-
-		return;
+		if (method == "GET") {
+			request.setAttribute("formAction", "inscription");
+			request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);			
+		} else {
+			
+			final Integer success = this.userManager.insertUser(request);
+			
+			if (success == 1) {
+				
+				session.setAttribute("alertClass", "alert-success");
+				session.setAttribute("alertMessage", "Vous êtes bien inscrit");
+					
+			} else {
+				
+				session.setAttribute("alertClass", "alert-danger");
+				session.setAttribute("alertMessage", "L'inscription a échoué");
+			}
+			
+			response.sendRedirect("/easypass");
+		}
+		
+        return;
+        
 	}
 
 	private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
