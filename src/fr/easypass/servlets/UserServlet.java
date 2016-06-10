@@ -2,6 +2,7 @@ package fr.easypass.servlets;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolation;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
+import fr.easypass.validation.formValidator;
 
 /**
  * Servlet implementation class UserServlet
@@ -124,21 +127,23 @@ public class UserServlet extends HttpServlet {
 			request.setAttribute("formAction", "inscription");
 			request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);			
 		} else {
+			User u = new User();
 			
-			final Integer success = this.userManager.insertUser(request);
-			
-			if (success == 1) {
+			if(u.isValid().isEmpty()){
+				final Integer success = this.userManager.insertUser(request);
 				
-				session.setAttribute("alertClass", "alert-success");
-				session.setAttribute("alertMessage", "Vous êtes bien inscrit");
-					
+				if (success == 1) {
+					session.setAttribute("alertClass", "alert-success");
+					session.setAttribute("alertMessage", "Vous êtes bien inscrit");		
+				} else {	
+					session.setAttribute("alertClass", "alert-danger");
+					session.setAttribute("alertMessage", "L'inscription a échoué");
+				}
+				response.sendRedirect("/easypass-j2ee");
 			} else {
 				
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "L'inscription a échoué");
 			}
 			
-			response.sendRedirect("/easypass");
 		}
 		
         return;

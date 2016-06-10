@@ -23,7 +23,7 @@ public class ConnectorManager {
 		
 		String url = "jdbc:mysql://localhost:3306/easypass";
 		String user = "root";
-		String password = "";
+		String password = "root";
 		
 		Connection conn = null;
 		
