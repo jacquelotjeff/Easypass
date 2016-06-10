@@ -2,8 +2,11 @@ package fr.easypass.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import fr.easypass.validation.formValidator;
 
-public class User {
+public class User extends formValidator<User> {
 
     private Integer id;
     private String firstname;
@@ -21,6 +24,10 @@ public class User {
         this.passwords = new ArrayList<Integer>();
         this.categories = new ArrayList<Integer>();
     }
+    
+    public User getObj() {
+        return this;
+    }
 
     public Integer getId() {
         return this.id;
@@ -30,6 +37,8 @@ public class User {
         this.id = id;
     }
 
+    @NotNull
+    @Size(min=3, max=16)
     public String getFirstname() {
         return firstname;
     }
