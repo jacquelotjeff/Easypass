@@ -2,19 +2,30 @@ package fr.easypass.manager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class ConnectorManager {
 	
-//	public static InputStream getParameters() throws IOException {
-//		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//	    InputStream stream = classLoader.getResourceAsStream("/WebContent/WEB-INF/config/config.properties");
-//	    
-//        return stream;
-//	}
+	public static JsonObject getParameters() throws IOException {
+		
+		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+	    
+		
+		
+		InputStream stream = ConnectorManager.class.getClassLoader().getResourceAsStream("config.properties");
+	    
+	    JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+	    
+        return jsonObject;
+	}
 	
 	
 	public static Connection getConnection() throws IOException {
@@ -23,9 +34,10 @@ public class ConnectorManager {
 //		Properties p = new Properties();
 //		p.load(parameters);
 		
-		String url = "jdbc:mysql://localhost:3306/easypass";
-		String user = "root";
-		String password = "";
+		JsonObject jsonObject = getParameters();
+		String connector = jsonObject.get("database").getAsJsonObject().get("connector").getAsString();
+		String user      = jsonObject.get("database").getAsJsonObject().get("user").getAsString();
+		String password  = jsonObject.get("database").getAsJsonObject().get("password").getAsString();
 		
 		Connection conn = null;
 		
@@ -36,7 +48,7 @@ public class ConnectorManager {
 		}
 		
 		try {
-			conn = DriverManager.getConnection(url, user, password);
+			conn = DriverManager.getConnection(connector, user, password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
