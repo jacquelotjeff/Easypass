@@ -30,6 +30,7 @@ public class UserManager {
     private static final String COL_EMAIL = "email";
     
     private static final String COL_REL_GROUPS_USER_ID = "user_id";
+    private static final String COL_REL_GROUPS_GROUP_ID = "group_id";
 
 	public UserManager() {
 		this.users = new HashMap<>();
@@ -95,6 +96,48 @@ public class UserManager {
 			//Not prepared statement
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * from " + UserManager.TABLE_NAME + ";");
+
+			while (rs.next()) {
+				
+				User user = this.createFromResultSet(rs);
+				users.put(user.getId(), user);
+
+			}
+
+			rs.close();
+			stmt.close();
+			conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return users;
+	}
+	
+	/**
+	 * Return list of user by group
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public Map<Integer, User> getUsersByGroup(Integer groupId) throws IOException {
+		
+		//Resetting the Hashmap (Prevent from caching users into)
+		this.users = new HashMap<>();
+		
+		Connection conn = ConnectorManager.getConnection();
+
+		try {
+			
+			String query = "SELECT * from " + UserManager.TABLE_NAME_REL_USERS + " as gu " + 
+					" WHERE " + UserManager.COL_REL_GROUPS_GROUP_ID + "=?" +
+					" INNER JOIN " + UserManager.TABLE_NAME  + "u ON u." + UserManager.COL_ID + " ="
+			//Not prepared statement
+			Statement stmt = conn.prepareStatement(
+					"SELECT * from " + UserManager.TABLE_NAME + 
+					";");
+			ResultSet rs = stmt.
 
 			while (rs.next()) {
 				
@@ -218,7 +261,6 @@ public class UserManager {
 		} else {
 			
 			final Integer userId = Integer.parseInt(request.getParameter("userId").toString());
-			this.deleteGroupUsers(userId);
 
 			try {
 				Connection conn = ConnectorManager.getConnection();
@@ -242,35 +284,6 @@ public class UserManager {
 		}
 
 	}
-	
-	private Integer deleteGroupUsers(Integer userId) throws IOException{
-    	
-    	Integer number = 0;
-    	
-    	try {
-			Connection conn = ConnectorManager.getConnection();
-			
-			PreparedStatement stmt = conn.prepareStatement(
-					"DELETE FROM " + UserManager.TABLE_NAME_REL_USERS + 
-					" WHERE " + UserManager.COL_REL_GROUPS_USER_ID + "=?"
-			);
-			
-			stmt.setInt(1, userId);
-
-			number = stmt.executeUpdate();
-			stmt.close();
-			conn.close();
-
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-			
-		}
-    	
-    	return number; 
-
-    	
-    }
 
 	/**
 	 * Check if user exists into database
