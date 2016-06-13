@@ -236,7 +236,7 @@ public class GroupManager {
     	
     }
     
-    public Integer addUser(Integer groupId, Integer userId, Boolean admin) throws IOException
+    public Integer addUser(Integer groupId, Integer userId) throws IOException
     {	
     	try {
 
@@ -249,7 +249,7 @@ public class GroupManager {
 			);
 				
 			stmt.setInt(1, userId);
-			stmt.setBoolean(2, admin);
+			stmt.setBoolean(2, false);
 			stmt.setInt(3, groupId);
 			
 			stmt.executeUpdate();
@@ -270,18 +270,19 @@ public class GroupManager {
     public Integer deleteUser(Integer groupId, Integer userId) throws IOException{
     	
     	Integer number = 0;
+    	String sql = "";
     	
     	try {
+    	    
+    	    sql = "DELETE FROM " + GroupManager.TABLE_NAME_REL_USERS + 
+                    " WHERE " + GroupManager.COL_REL_USERS_GROUP_ID + "=?" +
+                    " AND " + GroupManager.COL_REL_USERS_USER_ID + "=?;";
 			Connection conn = ConnectorManager.getConnection();
 			
-			PreparedStatement stmt = conn.prepareStatement(
-					"DELETE FROM " + GroupManager.TABLE_NAME_REL_USERS + 
-					" WHERE " + GroupManager.COL_REL_USERS_GROUP_ID + "=?" +
-					" AND WHERE " + GroupManager.COL_REL_USERS_USER_ID + "=?;"
-			);
+			PreparedStatement stmt = conn.prepareStatement(sql);
 			
 			stmt.setInt(1, groupId);
-			stmt.setInt(1, userId);
+			stmt.setInt(2, userId);
 
 			number = stmt.executeUpdate();
 			stmt.close();
@@ -289,7 +290,7 @@ public class GroupManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+			System.out.println(sql);
 		}
     	
     	return number; 
@@ -306,7 +307,7 @@ public class GroupManager {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE " + GroupManager.TABLE_NAME_REL_USERS + 
 					" SET " + GroupManager.COL_REL_USERS_ADMIN + "=? " +
 					" WHERE " + GroupManager.COL_REL_USERS_GROUP_ID + "=?" +
-					" AND WHERE " + GroupManager.COL_REL_USERS_USER_ID + "=?");
+					" AND " + GroupManager.COL_REL_USERS_USER_ID + "=?");
 			
 			stmt.setBoolean(1, admin);
 			stmt.setInt(2, groupId);

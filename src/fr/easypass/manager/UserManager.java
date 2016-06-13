@@ -119,30 +119,38 @@ public class UserManager {
 	 * Return list of user by group
 	 * 
 	 * @return
+	 * @param Integer The group identifiant
 	 * @throws IOException 
 	 */
-	public Map<Integer, User> getUsersByGroup(Integer groupId) throws IOException {
+	public Map<String, Map<Integer, User>> getUsersByGroup(Integer groupId) throws IOException {
 		
 		//Resetting the Hashmap (Prevent from caching users into)
-		this.users = new HashMap<>();
+	    Map<String, Map<Integer, User>> result = new HashMap<>();
+		Map<Integer, User> groupUsers = new HashMap<>();
+		Map<Integer, User> groupAdmins = new HashMap<>();
 		
 		Connection conn = ConnectorManager.getConnection();
 
 		try {
 			
-			String query = "SELECT * from " + UserManager.TABLE_NAME_REL_USERS + " as gu " + 
-					" WHERE " + UserManager.COL_REL_GROUPS_GROUP_ID + "=?" +
-					" INNER JOIN " + UserManager.TABLE_NAME  + "u ON u." + UserManager.COL_ID + " ="
+			String query = "SELECT DISTINCT * from " + UserManager.TABLE_NAME_REL_USERS +
+			        " INNER JOIN " + UserManager.TABLE_NAME  + " u ON u." + UserManager.COL_ID + " = " + UserManager.TABLE_NAME_REL_USERS +"." + COL_REL_GROUPS_USER_ID +
+					" WHERE " + UserManager.COL_REL_GROUPS_GROUP_ID + "=?";
+			
 			//Not prepared statement
-			Statement stmt = conn.prepareStatement(
-					"SELECT * from " + UserManager.TABLE_NAME + 
-					";");
-			ResultSet rs = stmt.
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setInt(1, groupId);
+			
+			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				
+				Boolean admin = rs.getBoolean("admin");
 				User user = this.createFromResultSet(rs);
-				users.put(user.getId(), user);
+				groupUsers.put(user.getId(), user);
+				
+				if (admin) {
+				    groupAdmins.put(user.getId(), user);
+				}
 
 			}
 
@@ -152,10 +160,60 @@ public class UserManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			
 		}
+		
+		result.put("groupUsers", groupUsers);
+		result.put("groupAdmins", groupAdmins);
 
-		return users;
+		return result;
 	}
+	
+	/**
+     * Return list of users not present in group
+     * 
+     * @return
+     * @param Integer The group identifiant
+     * @throws IOException 
+     */
+    public Map<Integer, User> getUsersAvailableByGroup(Integer groupId) throws IOException {
+        
+        //Resetting the Hashmap (Prevent from caching users into)
+        Map<Integer, User> groupUsersAvailable = new HashMap<>();
+        
+        Connection conn = ConnectorManager.getConnection();
+        String query = "";
+        try {
+            
+            query = "SELECT * from " + UserManager.TABLE_NAME +
+                    " WHERE " + UserManager.COL_ID + " NOT IN(" +
+                        "SELECT " + UserManager.COL_REL_GROUPS_USER_ID + 
+                        " FROM " + UserManager.TABLE_NAME_REL_USERS + 
+                        " WHERE " + UserManager.COL_REL_GROUPS_GROUP_ID + "=?);";
+            //Not prepared statement
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, groupId);
+            
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                
+                User user = this.createFromResultSet(rs);
+                groupUsersAvailable.put(user.getId(), user);
+
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println(query);
+            e.printStackTrace();
+        }
+
+        return groupUsersAvailable;
+    }
 
 	public Integer insertUser(HttpServletRequest request) {
 

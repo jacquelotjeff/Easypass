@@ -22,7 +22,8 @@ import fr.easypass.model.User;
  * Servlet implementation class GroupServlet
  */
 @WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.urlPrefix + "",
-        GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer", GroupServlet.urlPrefix + "/supprimer" })
+        GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer", GroupServlet.urlPrefix + "/supprimer",
+        GroupServlet.urlPrefix + "/ajouter-utilisateur", GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur"})
 public class GroupServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -50,18 +51,18 @@ public class GroupServlet extends HttpServlet {
 
         if (uri.contains(urlPrefix + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains(urlPrefix + "/creer")) {
-            this.create(request, response);
-        } else if (uri.contains(urlPrefix + "/editer")) {
-            this.edit(request, response);
-        } else if (uri.contains(urlPrefix + "/supprimer")) {
-            this.delete(request, response);
         } else if (uri.contains(urlPrefix + "/ajouter-utilisateur")) {
             this.addUser(request, response);
         } else if (uri.contains(urlPrefix + "/supprimer-utilisateur")) {
             this.deleteUser(request, response);
         } else if (uri.contains(urlPrefix + "/admin-utilisateur")) {
             this.adminUser(request, response);
+        } else if (uri.contains(urlPrefix + "/creer")) {
+            this.create(request, response);
+        } else if (uri.contains(urlPrefix + "/editer")) {
+            this.edit(request, response);
+        } else if (uri.contains(urlPrefix + "/supprimer")) {
+            this.delete(request, response);
         } else {
             this.list(request, response);
         }
@@ -136,13 +137,17 @@ public class GroupServlet extends HttpServlet {
 				request.setAttribute("formAction", "creer");
 				request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 				
+				return;
+				
 			} else {
 				
 				String name = request.getParameter("name");
 				String description = request.getParameter("description");
 				String logo = request.getParameter("logo");
 				String[] users = request.getParameterValues("users");
-				String[] admins = request.getParameterValues("admins");
+				
+				String[] admins = {};
+				//String[] admins = request.getParameterValues("admins");
 				
 				final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
 				
@@ -188,10 +193,13 @@ public class GroupServlet extends HttpServlet {
 					return;
 				}
 				
-				final Map<Integer, User> users = userManager.getUsers();
+				final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
+				final Map<Integer, User> groupUsers =  userManager.getUsersByGroup(groupId).get("groupUsers");
+				final Map<Integer, User> groupAdmins = userManager.getUsersByGroup(groupId).get("groupAdmins");
 				
-				request.setAttribute("users", users.values());
-				request.setAttribute("groupUsers", users.values());
+				request.setAttribute("users", availableUsers.values());
+				request.setAttribute("groupUsers", groupUsers.values());
+				request.setAttribute("groupAdmins", groupAdmins);
 				
 				request.setAttribute("group", group);
 				request.setAttribute("formAction", "editer");
@@ -283,9 +291,8 @@ public class GroupServlet extends HttpServlet {
 				
 				Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
 				Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
-				Boolean admin = BooleanUtils.toBoolean(request.getParameter("admin"));
 					
-				final Integer success = this.groupManager.addUser(groupId, userId, admin);
+				final Integer success = this.groupManager.addUser(groupId, userId);
 				
 				if (success == 0) {
 					session.setAttribute("alertClass", "alert-danger");
@@ -342,7 +349,7 @@ public class GroupServlet extends HttpServlet {
 			}
 			
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 			session.setAttribute("alertClass", "alert-danger");
 			session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
 			
