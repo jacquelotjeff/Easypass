@@ -22,8 +22,9 @@ import fr.easypass.model.User;
  * Servlet implementation class GroupServlet
  */
 @WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.urlPrefix + "",
-        GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer", GroupServlet.urlPrefix + "/supprimer",
-        GroupServlet.urlPrefix + "/ajouter-utilisateur", GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur"})
+        GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer",
+        GroupServlet.urlPrefix + "/supprimer", GroupServlet.urlPrefix + "/ajouter-utilisateur",
+        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur" })
 public class GroupServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -91,315 +92,328 @@ public class GroupServlet extends HttpServlet {
     }
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-    	
-    	try {
-			
-    		Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-    		
-    		final Group group = this.groupManager.getGroup(groupId);
-    		
-    		if (group == null) {
-    			
-    			session.setAttribute("alertClass", "alert-danger");
-    			session.setAttribute("alertMessage", "Le groupe n'existe pas");
-    			response.sendRedirect(GroupServlet.baseURL);
-    			return;
-    		}
-    		
-    		request.setAttribute("group", group);
-    		request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-    		
-    		return;
-    		
-		} catch (Exception e) {
-			
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Impossible de récupérer le groupe.");
-			response.sendRedirect(GroupServlet.baseURL);
-			return;
-			
-		}
+
+        HttpSession session = request.getSession();
+
+        try {
+
+            Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+
+            final Group group = this.groupManager.getGroup(groupId);
+
+            if (group == null) {
+
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Le groupe n'existe pas");
+                response.sendRedirect(GroupServlet.baseURL);
+                return;
+            }
+
+            request.setAttribute("group", group);
+            request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+
+            return;
+
+        } catch (Exception e) {
+
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Impossible de récupérer le groupe.");
+            response.sendRedirect(GroupServlet.baseURL);
+            return;
+
+        }
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-    	final String method = request.getMethod();
-    	
-    	try {
-			
-			if (method == "GET") {
-				
-				final Map<Integer, User> users = userManager.getUsers();
-				request.setAttribute("users", users.values());
-				request.setAttribute("formAction", "creer");
-				request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
-				
-				return;
-				
-			} else {
-				
-				String name = request.getParameter("name");
-				String description = request.getParameter("description");
-				String logo = request.getParameter("logo");
-				String[] users = request.getParameterValues("users");
-				
-				String[] admins = {};
-				//String[] admins = request.getParameterValues("admins");
-				
-				final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
-				
-				if (success == 1) {
-					
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "Le groupe à bien été créé");
-					
-				} else {
-					
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
-				}
-				
-			}
-			
-		} catch (Exception e) {
-			
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
-			
-		}
-    	
-    	response.sendRedirect(GroupServlet.baseURL);
-    	return;
+
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        try {
+
+            if (method == "GET") {
+
+                final Map<Integer, User> users = userManager.getUsers();
+                request.setAttribute("users", users.values());
+                request.setAttribute("formAction", "creer");
+                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+
+                return;
+
+            } else {
+
+                String name = request.getParameter("name");
+                String description = request.getParameter("description");
+                String logo = request.getParameter("logo");
+                String[] users = request.getParameterValues("users");
+
+                String[] admins = {};
+                // String[] admins = request.getParameterValues("admins");
+
+                final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
+
+                if (success == 1) {
+
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le groupe à bien été créé");
+
+                } else {
+
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                }
+
+            }
+
+        } catch (Exception e) {
+
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+
+        }
+
+        response.sendRedirect(GroupServlet.baseURL);
+        return;
 
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-    	HttpSession session = request.getSession();
-		final String method = request.getMethod();
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
 
-		if (method == "GET") {
-			
-			try {
-				
-				Integer groupId = NumberUtils.createInteger(request.getParameter("groupId")); 
-				final Group group = this.groupManager.getGroup(groupId);
-				
-				if (group == null) {
-					response.sendRedirect(GroupServlet.baseURL);
-					return;
-				}
-				
-				final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
-				final Map<Integer, User> groupUsers =  userManager.getUsersByGroup(groupId).get("groupUsers");
-				final Map<Integer, User> groupAdmins = userManager.getUsersByGroup(groupId).get("groupAdmins");
-				
-				request.setAttribute("users", availableUsers.values());
-				request.setAttribute("groupUsers", groupUsers.values());
-				request.setAttribute("groupAdmins", groupAdmins);
-				
-				request.setAttribute("group", group);
-				request.setAttribute("formAction", "editer");
-				
-				request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-				return;
-				
-			} catch (Exception e) {
-				
-				System.out.print(e.getStackTrace());
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Le groupe n'a pas été trouvé.");
-			}
+        if (method == "GET") {
 
-		} else {
-			
-			try {
-				
-				Integer groupId = NumberUtils.createInteger(request.getParameter("group"));
-				String name = request.getParameter("name");
-				String description = request.getParameter("description");
-				String logo = request.getParameter("logo");
-				
-				final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
-				
-				if (success == 1) {
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "Le groupe a bien été édité.");
-					
-				} else {
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
-				}
-				
-			} catch (Exception e) {
-				
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
-			}
-		}
-		
-		response.sendRedirect(GroupServlet.baseURL);
-		return;
+            try {
+
+                Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+                final Group group = this.groupManager.getGroup(groupId);
+
+                if (group == null) {
+                    response.sendRedirect(GroupServlet.baseURL);
+                    return;
+                }
+
+                final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
+                final Map<Integer, User> groupUsers = userManager.getUsersByGroup(groupId).get("groupUsers");
+                final Map<Integer, User> groupAdmins = userManager.getUsersByGroup(groupId).get("groupAdmins");
+
+                request.setAttribute("users", availableUsers.values());
+                request.setAttribute("groupUsers", groupUsers.values());
+                request.setAttribute("groupAdmins", groupAdmins);
+
+                request.setAttribute("group", group);
+                request.setAttribute("formAction", "editer");
+
+                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+
+                System.out.print(e.getStackTrace());
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Le groupe n'a pas été trouvé.");
+            }
+
+        } else {
+
+            try {
+
+                Integer groupId = NumberUtils.createInteger(request.getParameter("group"));
+                String name = request.getParameter("name");
+                String description = request.getParameter("description");
+                String logo = request.getParameter("logo");
+
+                final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
+
+                if (success == 1) {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+
+                } else {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+                }
+
+            } catch (Exception e) {
+
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+            }
+        }
+
+        response.sendRedirect(GroupServlet.baseURL);
+        return;
 
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-		final String method = request.getMethod();
 
-		try {
-			
-			if (method == "POST") {
-				Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-				final Integer success = this.groupManager.deleteGroup(groupId);
-				
-				if (success == 0) {
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
-				} else {
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
-				}
-				
-			} else {
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Accès interdit");
-			}
-			
-		} catch (Exception e) {
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
-		}
-		
-		response.sendRedirect(GroupServlet.baseURL);
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        try {
+
+            if (method == "POST") {
+                Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+                final Integer success = this.groupManager.deleteGroup(groupId);
+
+                if (success == 0) {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
+                } else {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
+                }
+
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Accès interdit");
+            }
+
+        } catch (Exception e) {
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
+        }
+
+        response.sendRedirect(GroupServlet.baseURL);
 
         return;
     }
-    
-    private void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-		final String method = request.getMethod();
-		
-		try {
-			
-			if (method == "POST") {
-				
-				Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-				Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
-					
-				final Integer success = this.groupManager.addUser(groupId, userId);
-				
-				if (success == 0) {
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
-				} else {
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
-				}
-				
-			} else {
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Accès interdit");
-			}
-			
-			
-		} catch (Exception e) {
-			
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
-			
-		}
-		
-		response.sendRedirect(GroupServlet.baseURL);
+
+    private void addUser(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        try {
+
+            if (method == "POST") {
+
+                Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+                Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
+
+                final Integer success = this.groupManager.addUser(groupId, userId);
+
+                if (success == 0) {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "L'utilisateur  n'a pas pu être ajouté au groupe.");
+                } else {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
+                    
+                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+
+                    return;
+                }
+
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Accès interdit");
+            }
+
+        } catch (Exception e) {
+
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
+
+        }
+
+        response.sendRedirect(GroupServlet.baseURL);
 
         return;
-        
+
     }
-    
-    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-		final String method = request.getMethod();
-		
-		try {
-			
-			Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-			Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
-			
-			if (method == "POST") {
-				
-				final Integer success = this.groupManager.deleteUser(groupId, userId);
-				
-				if (success == 0) {
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être retiré du groupe");
-				} else {
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
-				}
-				
-			} else {
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Accès interdit");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
-			
-		}
-		
-		response.sendRedirect(GroupServlet.baseURL);
+
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        try {
+
+            Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+            Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
+
+            if (method == "POST") {
+
+                final Integer success = this.groupManager.deleteUser(groupId, userId);
+
+                if (success == 0) {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être retiré du groupe");
+                } else {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
+                    
+                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+
+                    return;
+
+                }
+
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Accès interdit");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
+
+        }
+
+        response.sendRedirect(GroupServlet.baseURL);
 
         return;
-        
+
     }
-    
-    private void adminUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
-    	HttpSession session = request.getSession();
-		final String method = request.getMethod();
-		
-		try {
-			
-			if (method == "POST") {
-				
-				Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-				Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
-				Boolean admin = BooleanUtils.toBoolean(request.getParameter("admin"));
-				
-				final Integer success = this.groupManager.setUserAdmin(groupId, userId, admin);
-				
-				if (success == 0) {
-					session.setAttribute("alertClass", "alert-danger");
-					session.setAttribute("alertMessage", "Le statut de l'utilisateur n'a pas été mis à jour.");
-				} else {
-					session.setAttribute("alertClass", "alert-success");
-					session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
-				}
-				
-			} else {
-				session.setAttribute("alertClass", "alert-danger");
-				session.setAttribute("alertMessage", "Accès interdit");
-			}
-			
-		} catch (Exception e) {
-			
-			session.setAttribute("alertClass", "alert-danger");
-			session.setAttribute("alertMessage", "Impossible de changer le statut de l'utilisateur.");
-			
-		}
-		
-		response.sendRedirect(GroupServlet.baseURL);
+
+    private void adminUser(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        try {
+
+            if (method == "POST") {
+
+                Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+                Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
+                Boolean admin = BooleanUtils.toBoolean(request.getParameter("admin"));
+
+                final Integer success = this.groupManager.setUserAdmin(groupId, userId, admin);
+
+                if (success == 0) {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le statut de l'utilisateur n'a pas été mis à jour.");
+                } else {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
+
+                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+
+                    return;
+                }
+
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Accès interdit");
+            }
+
+        } catch (Exception e) {
+
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Impossible de changer le statut de l'utilisateur.");
+
+        }
 
         return;
-    	
+
     }
 
 }
