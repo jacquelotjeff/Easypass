@@ -8,9 +8,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.math.NumberUtils;
+
+import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
+import fr.easypass.manager.UserManager;
+import fr.easypass.model.Group;
 import fr.easypass.model.Password;
+import fr.easypass.model.User;
 
 /**
  * Servlet implementation class PasswordServlet
@@ -23,7 +30,10 @@ public class PasswordServlet extends HttpServlet {
     public static final String urlPrefix = "/user/password";
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/password";
+    
     public final PasswordManager passwordManager = new PasswordManager();
+    public final GroupManager groupManager = new GroupManager();
+    public final UserManager userManager = new UserManager();
    
     /**
      * @see HttpServlet#HttpServlet()
@@ -65,7 +75,7 @@ public class PasswordServlet extends HttpServlet {
 	
 	    private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 	    	
-	    	Map<Integer, Password> passwords = passwordManager.getPasswords();
+	    	Map<Integer, Password> passwords = this.passwordManager.getPasswords();
 	    	
 	    	request.setAttribute("passwords", passwords.values());
 	    	
@@ -97,9 +107,8 @@ public class PasswordServlet extends HttpServlet {
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
-        request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
+        request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
         return;
     }
 
