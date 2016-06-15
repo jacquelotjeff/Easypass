@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label for="category">Catégorie : </label>
-            <select name="category" class="selectpicker" multiple>
+            <select name="category" class="selectpicker">
                 <c:forEach var="category" items="${categories}">
                     <option value="${category.getId()}">${category.getName()}</option>
                 </c:forEach>

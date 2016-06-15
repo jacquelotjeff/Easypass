@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
+import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.UserManager;
+import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.User;
 
@@ -24,7 +26,8 @@ import fr.easypass.model.User;
 @WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.urlPrefix + "",
         GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer",
         GroupServlet.urlPrefix + "/supprimer", GroupServlet.urlPrefix + "/ajouter-utilisateur",
-        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur" })
+        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur",
+        GroupServlet.urlPrefix + "/ajouter-mot-de-passe" })
 public class GroupServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +36,7 @@ public class GroupServlet extends HttpServlet {
     public static final String viewPathPrefix = "/WEB-INF/html/group";
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
+    public final CategoryManager categoryManager = new CategoryManager();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -52,6 +56,8 @@ public class GroupServlet extends HttpServlet {
 
         if (uri.contains(urlPrefix + "/voir")) {
             this.show(request, response);
+        } else if (uri.contains(urlPrefix + "/ajouter-mot-de-passe")) {
+            this.addPassword(request, response);
         } else if (uri.contains(urlPrefix + "/ajouter-utilisateur")) {
             this.addUser(request, response);
         } else if (uri.contains(urlPrefix + "/supprimer-utilisateur")) {
@@ -92,30 +98,30 @@ public class GroupServlet extends HttpServlet {
     }
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
+
         Integer groupId = this.checkGroupParam(request, response);
-        
+
         if (groupId > 0) {
-            
+
             final Group group = this.groupManager.getGroup(groupId);
 
             if (group == null) {
                 this.alertGroupNotFound(request, response);
             } else {
-                
+
                 request.setAttribute("group", group);
                 request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-                
+
                 return;
             }
         }
-        
+
         response.sendRedirect(GroupServlet.baseURL);
         return;
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
+
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
@@ -153,7 +159,6 @@ public class GroupServlet extends HttpServlet {
 
         }
 
-
         response.sendRedirect(GroupServlet.baseURL);
         return;
 
@@ -163,10 +168,10 @@ public class GroupServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
-        
+
         Integer groupId = this.checkGroupParam(request, response);
         if (groupId > 0) {
-            
+
             if (method == "GET") {
 
                 final Group group = this.groupManager.getGroup(groupId);
@@ -186,7 +191,7 @@ public class GroupServlet extends HttpServlet {
                 request.setAttribute("formAction", "editer");
 
                 request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-                
+
                 return;
 
             } else {
@@ -207,9 +212,9 @@ public class GroupServlet extends HttpServlet {
                 }
 
             }
-            
+
         }
-        
+
         response.sendRedirect(GroupServlet.baseURL);
         return;
 
@@ -219,11 +224,11 @@ public class GroupServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
-        
+
         Integer groupId = this.checkGroupParam(request, response);
-        
+
         if (groupId > 0) {
-            
+
             if (method == "POST") {
                 final Integer success = this.groupManager.deleteGroup(groupId);
 
@@ -240,9 +245,9 @@ public class GroupServlet extends HttpServlet {
                 session.setAttribute("alertMessage", "Accès interdit");
             }
         }
-        
+
         response.sendRedirect(GroupServlet.baseURL);
-        
+
         return;
     }
 
@@ -267,7 +272,7 @@ public class GroupServlet extends HttpServlet {
                 } else {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
-                    
+
                     response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
 
                     return;
@@ -312,7 +317,7 @@ public class GroupServlet extends HttpServlet {
                 } else {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
-                    
+
                     response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
 
                     return;
@@ -380,34 +385,54 @@ public class GroupServlet extends HttpServlet {
         return;
 
     }
-    
-    /*
-    private void addPassword(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
+
+    private void addPassword(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
         Integer groupId = this.checkGroupParam(request, response);
         final String method = request.getMethod();
-        
+
         if (groupId > 0) {
-            
-            if (method == "GET") {
-                
-                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-                
+
+            Group group = this.groupManager.getGroup(groupId);
+
+            if (group == null) {
+                this.alertGroupNotFound(request, response);
             } else {
-                
+
+                if (method == "GET") {
+
+                    Map<Integer, Category> categories = this.categoryManager.getCategories();
+
+                    request.setAttribute("formAction", "ajouter-mot-de-passe");
+                    request.setAttribute("categories", categories.values());
+                    request.setAttribute("group", group);
+                    request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request,
+                            response);
+
+                    return;
+
+                } else {
+
+                    // TODO add the pasword
+
+                }
+
             }
 
             request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-            
+
         }
-        
+
+        response.sendRedirect(GroupServlet.baseURL);
+
+        return;
     }
-    */
-    
+
     private Integer checkGroupParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            
+
         Integer groupId = 0;
-        
+
         try {
             groupId = NumberUtils.createInteger(request.getParameter("groupId"));
         } catch (Exception e) {

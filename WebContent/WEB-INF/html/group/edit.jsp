@@ -64,13 +64,32 @@
                 <c:forEach var="user" items="${groupUsers}">
                      <c:choose>
                         <c:when test="${groupAdmins.containsKey(user.getId())}">
-                            <%@include file="manage-user/manage-admin.jsp"%>
+                            <%@include file="manage-user/manageAdmin.jsp"%>
                         </c:when>
                         <c:otherwise>
-                            <%@include file="manage-user/manage-user.jsp"%>
+                            <%@include file="manage-user/manageUser.jsp"%>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-group">
+                <li href="#" class="list-group-item title">Mots de passe du groupe</li>
+                <c:forEach var="password" items="${groupPasswords}">
+                    <li href="#" class="list-group-item title">${password.getName()}</li>
+                </c:forEach>
+                <c:url value="ajouter-mot-de-passe"
+                    var="addPasswordURL">
+                    <c:param name="groupId"
+                        value="${group.getId()}" />
+                </c:url> 
+                <li class="list-group-item title">
+                    <a href="${addPasswordURL}" class="btn btn-block btn-primary">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                        Ajouter un mot de passe
+                    </a>
+                </li>
             </ul>
         </div>
     </jsp:body>
