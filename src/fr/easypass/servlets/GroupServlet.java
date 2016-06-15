@@ -381,6 +381,7 @@ public class GroupServlet extends HttpServlet {
 
     }
     
+    /*
     private void addPassword(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
         Integer groupId = this.checkGroupParam(request, response);
@@ -389,7 +390,11 @@ public class GroupServlet extends HttpServlet {
         if (groupId > 0) {
             
             if (method == "GET") {
-                //Afficher le formulaire de création d'un mot de passe.
+                
+                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                
+            } else {
+                
             }
 
             request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
@@ -397,6 +402,7 @@ public class GroupServlet extends HttpServlet {
         }
         
     }
+    */
     
     private Integer checkGroupParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
             

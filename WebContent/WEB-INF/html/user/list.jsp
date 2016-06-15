@@ -8,7 +8,7 @@
       Easypass - Liste des utilisateurs
     </jsp:attribute>
     <jsp:body>
-        <h1>Exemple liste des utilisateurs</h1>
+        <h1>Liste des utilisateurs</h1>
         <table class="table table-striped table-hover table-users">
             <thead>
                 <tr>

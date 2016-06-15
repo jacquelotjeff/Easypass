@@ -3,7 +3,7 @@ package fr.easypass.model;
 public class Password {
 	
 	private Integer id;
-	private String nom;
+	private String name;
 	private String siteUrl;
 	private String password;
 	private String informations;
@@ -19,12 +19,12 @@ public class Password {
 		this.id = id;
 	}
 	
-	public String getNom() {
-		return nom;
+	public String getName() {
+		return name;
 	}
 	
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getSiteUrl() {

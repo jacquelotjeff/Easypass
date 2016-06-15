@@ -5,21 +5,30 @@ import java.util.List;
 
 public class Category {
 
-    private String nom;
+    private Integer id;
+    private String name;
     private String logo;
-    private Object owner;
+    
     private List<Integer> passwords;
 
     public Category() {
     	this.passwords = new ArrayList<Integer>();
     }
-
-    public String getNom() {
-        return nom;
+    
+    public Integer getId() {
+        return id;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLogo() {
@@ -30,14 +39,6 @@ public class Category {
         this.logo = logo;
     }
 
-    public Object getOwner() {
-        return this.owner;
-    }
-
-    public void setOwner(Object owner) {
-        this.owner = owner;
-    }
-
     public void addPassword(Integer passwordId) {
         this.passwords.add(passwordId);
     }
@@ -45,4 +46,5 @@ public class Category {
     public List<Integer> getPasswords() {
         return this.passwords;
     }
+
 }
