@@ -28,7 +28,7 @@ import fr.easypass.model.User;
         GroupServlet.urlPrefix + "/supprimer", GroupServlet.urlPrefix + "/ajouter-utilisateur",
         GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur",
         GroupServlet.urlPrefix + "/ajouter-mot-de-passe" })
-public class GroupServlet extends HttpServlet {
+public class GroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String urlPrefix = "/admin/groupes";
@@ -51,6 +51,8 @@ public class GroupServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        super.doGet(request, response);
 
         final String uri = request.getRequestURI();
 
