@@ -121,6 +121,8 @@ public class CategoryServlet extends BaseServlet {
 
             String name = request.getParameter("name");
             String logo = request.getParameter("logo");
+            
+            System.out.println(name);
 
             final Integer success = this.categoryManager.insertCategory(name, logo);
 
