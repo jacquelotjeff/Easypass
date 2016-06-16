@@ -21,7 +21,7 @@ import fr.easypass.model.Category;
 @WebServlet(name = "CategoryServlet", description = "Category Servlet", urlPatterns = { CategoryServlet.urlPrefix + "",
         CategoryServlet.urlPrefix + "/creer", CategoryServlet.urlPrefix + "/voir",
         CategoryServlet.urlPrefix + "/editer", CategoryServlet.urlPrefix + "/supprimer" })
-public class CategoryServlet extends HttpServlet {
+public class CategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String urlPrefix = "/admin/categories";
@@ -41,9 +41,10 @@ public class CategoryServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        super.doGet(request, response);
+        
         final String uri = request.getRequestURI();
 
         if (uri.contains(urlPrefix + "/voir")) {
@@ -120,6 +121,8 @@ public class CategoryServlet extends HttpServlet {
 
             String name = request.getParameter("name");
             String logo = request.getParameter("logo");
+            
+            System.out.println(name);
 
             final Integer success = this.categoryManager.insertCategory(name, logo);
 

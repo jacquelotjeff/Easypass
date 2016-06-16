@@ -14,7 +14,7 @@ import fr.easypass.manager.UserManager;
  * Servlet implementation class LoginServlet
  */
 @WebServlet(name = "LoginServlet",  description = "Login Servlet", urlPatterns = {"/login", "/logout"})
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends BaseServlet {
     
     private static final long serialVersionUID = 1L;
     private UserManager userManager = new UserManager();
@@ -33,6 +33,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        super.doGet(request, response);
         
         final String uri = request.getRequestURI();
         

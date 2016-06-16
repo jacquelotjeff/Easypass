@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class HelloServlet
  */
 @WebServlet(name = "HomeServlet", description = "Home Servlet", urlPatterns = {"", "/admin"})
-public class HomeServlet extends HttpServlet {
+public class HomeServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     
 
@@ -30,6 +30,8 @@ public class HomeServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        super.doGet(request, response);
 
         final String uri = request.getRequestURI();
 

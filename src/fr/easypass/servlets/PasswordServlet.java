@@ -24,7 +24,7 @@ import fr.easypass.model.User;
  */
 @WebServlet(name = "PasswordServlet", description = "Password Servlet", urlPatterns = { PasswordServlet.urlPrefix + "/liste",
 		PasswordServlet.urlPrefix + "/voir", PasswordServlet.urlPrefix + "/editer", PasswordServlet.urlPrefix + "/creer", PasswordServlet.urlPrefix + "/supprimer" })
-public class PasswordServlet extends HttpServlet {
+public class PasswordServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 
     public static final String urlPrefix = "/user/password";
@@ -47,6 +47,9 @@ public class PasswordServlet extends HttpServlet {
 		 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 		 */
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		    
+		    super.doGet(request, response);
+		    
 			final String uri = request.getRequestURI();
 		        
 		    if (uri.contains("/liste")) {

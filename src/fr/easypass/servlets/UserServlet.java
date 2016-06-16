@@ -22,7 +22,7 @@ import fr.easypass.model.User;
 @WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.urlPrefix + "",
         UserServlet.urlPrefix + "/voir", UserServlet.urlPrefix + "/editer", "/inscription",
         UserServlet.urlPrefix + "/supprimer" })
-public class UserServlet extends HttpServlet {
+public class UserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String urlPrefix = "/admin/utilisateurs";
@@ -43,6 +43,8 @@ public class UserServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        super.doGet(request, response);
 
         final String uri = request.getRequestURI();
 
