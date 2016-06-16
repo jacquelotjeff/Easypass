@@ -25,5 +25,4 @@ public abstract class BaseServlet extends HttpServlet {
         request.setCharacterEncoding(ENCODING);
         response.setContentType("text/html;charset=" + ENCODING);
     }
-
 }

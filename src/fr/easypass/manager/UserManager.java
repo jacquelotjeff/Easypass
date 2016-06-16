@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.model.User;
 
@@ -19,18 +18,17 @@ public class UserManager {
 
     private Map<Integer, User> users;
 
-    private static final String TABLE_NAME = "users";
-    private static final String TABLE_NAME_REL_USERS = "user_group";
+    public static final String TABLE = "users";
+    public static final String TABLE_REL_GROUP = "user_group";
 
-    private static final String COL_ID = "id";
-    private static final String COL_FIRSTNAME = "firstname";
-    private static final String COL_LASTNAME = "lastname";
-    private static final String COL_USERNAME = "username";
-    private static final String COL_PASSWORD = "password";
-    private static final String COL_EMAIL = "email";
-
-    private static final String COL_REL_GROUPS_USER_ID = "user_id";
-    private static final String COL_REL_GROUPS_GROUP_ID = "group_id";
+    public static final String COL_ID = "id";
+    public static final String COL_FIRSTNAME = "firstname";
+    public static final String COL_LASTNAME = "lastname";
+    public static final String COL_USERNAME = "username";
+    public static final String COL_PASSWORD = "password";
+    public static final String COL_EMAIL = "email";
+    public static final String COL_FOREIGN = "user_id";
+    public static final String COL_ADMIN = "admin";
 
     public UserManager() {
         this.users = new HashMap<>();
@@ -89,7 +87,7 @@ public class UserManager {
 
             // Not prepared statement
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from " + UserManager.TABLE_NAME + ";");
+            ResultSet rs = stmt.executeQuery("SELECT * from " + UserManager.TABLE + ";");
 
             while (rs.next()) {
 
@@ -128,10 +126,10 @@ public class UserManager {
 
         try {
 
-            String query = "SELECT DISTINCT * from " + UserManager.TABLE_NAME_REL_USERS + " INNER JOIN "
-                    + UserManager.TABLE_NAME + " u ON u." + UserManager.COL_ID + " = "
-                    + UserManager.TABLE_NAME_REL_USERS + "." + COL_REL_GROUPS_USER_ID + " WHERE "
-                    + UserManager.COL_REL_GROUPS_GROUP_ID + "=?";
+            String query = "SELECT DISTINCT * from " + UserManager.TABLE_REL_GROUP + " INNER JOIN "
+                    + UserManager.TABLE + " u ON u." + UserManager.COL_ID + " = "
+                    + UserManager.TABLE_REL_GROUP + "." + COL_FOREIGN + " WHERE "
+                    + GroupManager.COL_FOREIGN + "=?";
 
             // Not prepared statement
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -182,9 +180,9 @@ public class UserManager {
         String query = "";
         try {
 
-            query = "SELECT * from " + UserManager.TABLE_NAME + " WHERE " + UserManager.COL_ID + " NOT IN(" + "SELECT "
-                    + UserManager.COL_REL_GROUPS_USER_ID + " FROM " + UserManager.TABLE_NAME_REL_USERS + " WHERE "
-                    + UserManager.COL_REL_GROUPS_GROUP_ID + "=?);";
+            query = "SELECT * from " + UserManager.TABLE + " WHERE " + UserManager.COL_ID + " NOT IN(" + "SELECT "
+                    + UserManager.COL_FOREIGN + " FROM " + UserManager.TABLE_REL_GROUP + " WHERE "
+                    + GroupManager.COL_FOREIGN + "=?);";
             // Not prepared statement
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, groupId);
@@ -222,7 +220,7 @@ public class UserManager {
         try {
 
             Connection conn = ConnectorManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO " + UserManager.TABLE_NAME + "("
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO " + UserManager.TABLE + "("
                     + UserManager.COL_USERNAME + ", " + UserManager.COL_FIRSTNAME + ", " + UserManager.COL_LASTNAME
                     + ", " + UserManager.COL_PASSWORD + ", " + UserManager.COL_EMAIL + ") values(?,?,?,?,?)");
 
@@ -259,7 +257,7 @@ public class UserManager {
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("UPDATE " + UserManager.TABLE_NAME + " SET " + UserManager.COL_USERNAME
+            stmt = conn.prepareStatement("UPDATE " + UserManager.TABLE + " SET " + UserManager.COL_USERNAME
                     + "=?, " + UserManager.COL_FIRSTNAME + "=?, " + UserManager.COL_LASTNAME + "=?, "
                     + UserManager.COL_PASSWORD + "=?, " + UserManager.COL_EMAIL + "=?" + " WHERE id=?");
 
@@ -288,7 +286,7 @@ public class UserManager {
         try {
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                    "DELETE FROM " + UserManager.TABLE_NAME + " WHERE " + UserManager.COL_ID + "=?");
+                    "DELETE FROM " + UserManager.TABLE + " WHERE " + UserManager.COL_ID + "=?");
 
             stmt.setInt(1, userId);
 

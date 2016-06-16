@@ -1,4 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="fr.easypass.model.Password" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -18,14 +19,20 @@
             </c:url>
             <form action="${submitURL}" method="POST">
                 <div class="form-group">
-                    <label for="name">Nom du groupe : </label> <input type="text"
-                        name="name" class="form-control" value="${group.getName()}">
-                    <label for="description">Description du groupe : </label> <input
-                        type="textarea" name="description" class="form-control"
-                        value="${group.getDescription()}"> <label for="logo">Logo
-                        du groupe : </label> <input type="text" name="logo"
-                        class="form-control" value="${group.getLogo()}">
+                    <label for="name">Nom du groupe : </label> <input type="text" name="name" class="form-control" value="${group.getName()}">
                 </div>
+                <div class="form-group">
+                    <label for="description">Description du groupe : </label> 
+                    <textarea name="description" class="form-control">
+                        ${group.getDescription()}
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="logo">Logo du groupe : </label> 
+                    <input type="text" name="logo" class="form-control" value="${group.getLogo()}">
+                </div>                    
+                    
+                
                 <br />
                 <button type="submit" class="btn btn-default">Enregistrer</button>
             </form>
@@ -33,13 +40,13 @@
         </div>
         
         <div class="col-sm-6">
-            <li href="#" class="list-group-item title">Utilisateurs disponibles</li>
             <ul class="list-group">
+                <li class="list-group-item title">Utilisateurs disponibles</li>
                 <c:forEach var="user" items="${users}">
-                 <li href="#" class="list-group-item text-left">
+                 <li class="list-group-item text-left">
                     <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
                     <label class="name">${user.getUsername()}<br></label> 
-                    <label class="pull-right">
+                    <span class="pull-right">
                         <c:url value="ajouter-utilisateur"
                             var="addUserURL">
                             <c:param name="userId"
@@ -51,7 +58,7 @@
                             <button type="submit"
                                 class="btn btn-success btn-sm fa fa-plus"></button>
                         </form>
-                    </label>
+                    </span>
                     <div class="break"></div>
                    </li>
                 </c:forEach>
@@ -60,7 +67,7 @@
         <div class="col-sm-6">
         
             <ul class="list-group">
-                <li href="#" class="list-group-item title">Membres du groupe</li>
+                <li class="list-group-item title">Membres du groupe</li>
                 <c:forEach var="user" items="${groupUsers}">
                      <c:choose>
                         <c:when test="${groupAdmins.containsKey(user.getId())}">
@@ -75,18 +82,19 @@
         </div>
         <div class="col-sm-6">
             <ul class="list-group">
-                <li href="#" class="list-group-item title">Mots de passe du groupe</li>
+                <li class="list-group-item title">Mots de passe du groupe</li>
                 <c:forEach var="password" items="${groupPasswords}">
-                    <li href="#" class="list-group-item title">${password.getName()}</li>
+                    <li class="list-group-item title">${password.getTitle()}</li>
                 </c:forEach>
-                <c:url value="ajouter-mot-de-passe"
-                    var="addPasswordURL">
-                    <c:param name="groupId"
+                <c:url value="/admin/mot-de-passe/creer" var="addPasswordURL">
+                    <c:param name="ownerId"
                         value="${group.getId()}" />
+                    <c:param name="ownerType"
+                        value="${Password.OWNER_TYPE_GROUP}" />
                 </c:url> 
                 <li class="list-group-item title">
                     <a href="${addPasswordURL}" class="btn btn-block btn-primary">
-                        <i class="glyphicon glyphicon-refresh"></i>
+                        <i class="fa fa-plus"></i>
                         Ajouter un mot de passe
                     </a>
                 </li>

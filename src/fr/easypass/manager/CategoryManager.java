@@ -15,11 +15,12 @@ public class CategoryManager {
     
 private Map<Integer, Category> categories;
     
-    private static final String TABLE_NAME = "categories";
+    public static final String TABLE = "categories";
         
-    private static final String COL_ID = "id"; 
-    private static final String COL_NAME = "name";
-    private static final String COL_LOGO = "logo";
+    public static final String COL_ID = "id"; 
+    public static final String COL_NAME = "name";
+    public static final String COL_LOGO = "logo";
+    public static final String COL_FOREIGN = "category_id";
     
     public CategoryManager()
     {
@@ -39,7 +40,7 @@ private Map<Integer, Category> categories;
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("SELECT * from "+CategoryManager.TABLE_NAME+" WHERE "+CategoryManager.COL_ID+"=?");
+            stmt = conn.prepareStatement("SELECT * from "+CategoryManager.TABLE+" WHERE "+CategoryManager.COL_ID+"=?");
             stmt.setInt(1, categoryId);
 
             ResultSet rs = stmt.executeQuery();
@@ -72,7 +73,7 @@ private Map<Integer, Category> categories;
             
             //Not prepared statement
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from " + CategoryManager.TABLE_NAME + ";");
+            ResultSet rs = stmt.executeQuery("SELECT * from " + CategoryManager.TABLE + ";");
 
             while (rs.next()) {
                 
@@ -99,7 +100,7 @@ private Map<Integer, Category> categories;
             //On commence par insérer les groupe dans la table en récupérant son nouvel identifiant.
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO "+CategoryManager.TABLE_NAME+"("+ CategoryManager.COL_NAME + 
+                    "INSERT INTO "+CategoryManager.TABLE+"("+ CategoryManager.COL_NAME + 
                     "," + CategoryManager.COL_LOGO + 
                     ") values(?,?)", Statement.RETURN_GENERATED_KEYS
             );
@@ -127,7 +128,7 @@ private Map<Integer, Category> categories;
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("UPDATE " + CategoryManager.TABLE_NAME + 
+            stmt = conn.prepareStatement("UPDATE " + CategoryManager.TABLE + 
             " SET " + CategoryManager.COL_NAME + "=?, " +
             CategoryManager.COL_LOGO + "=? WHERE id=?;");
 
@@ -152,7 +153,7 @@ private Map<Integer, Category> categories;
         
         try {
             Connection conn = ConnectorManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM " + CategoryManager.TABLE_NAME + " WHERE " + CategoryManager.COL_ID + "=?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM " + CategoryManager.TABLE + " WHERE " + CategoryManager.COL_ID + "=?");
             
             stmt.setInt(1, categoryId);
 

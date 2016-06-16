@@ -26,8 +26,7 @@ import fr.easypass.model.User;
 @WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.urlPrefix + "",
         GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer",
         GroupServlet.urlPrefix + "/supprimer", GroupServlet.urlPrefix + "/ajouter-utilisateur",
-        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur",
-        GroupServlet.urlPrefix + "/ajouter-mot-de-passe" })
+        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur" })
 public class GroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
@@ -58,8 +57,6 @@ public class GroupServlet extends BaseServlet {
 
         if (uri.contains(urlPrefix + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains(urlPrefix + "/ajouter-mot-de-passe")) {
-            this.addPassword(request, response);
         } else if (uri.contains(urlPrefix + "/ajouter-utilisateur")) {
             this.addUser(request, response);
         } else if (uri.contains(urlPrefix + "/supprimer-utilisateur")) {
@@ -386,49 +383,6 @@ public class GroupServlet extends BaseServlet {
 
         return;
 
-    }
-
-    private void addPassword(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-
-        Integer groupId = this.checkGroupParam(request, response);
-        final String method = request.getMethod();
-
-        if (groupId > 0) {
-
-            Group group = this.groupManager.getGroup(groupId);
-
-            if (group == null) {
-                this.alertGroupNotFound(request, response);
-            } else {
-
-                if (method == "GET") {
-
-                    Map<Integer, Category> categories = this.categoryManager.getCategories();
-
-                    request.setAttribute("formAction", "ajouter-mot-de-passe");
-                    request.setAttribute("categories", categories.values());
-                    request.setAttribute("group", group);
-                    request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request,
-                            response);
-
-                    return;
-
-                } else {
-
-                    // TODO add the pasword
-
-                }
-
-            }
-
-            request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-
-        }
-
-        response.sendRedirect(GroupServlet.baseURL);
-
-        return;
     }
 
     private Integer checkGroupParam(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.UserManager;
-import fr.easypass.model.Group;
 import fr.easypass.model.User;
 
 /**
