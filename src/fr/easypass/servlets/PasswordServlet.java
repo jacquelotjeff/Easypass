@@ -1,6 +1,7 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -30,12 +31,12 @@ import fr.easypass.model.Password;
         PasswordServlet.urlPrefix + "/supprimer" })
 public class PasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
-
+	private HashMap<String, String> errors;
+    
     public static final String urlPrefix = "/admin/mot-de-passe";
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/password";
-
-    public final PasswordManager passwordManager = new PasswordManager();
+	public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
@@ -124,7 +125,7 @@ public class PasswordServlet extends BaseServlet {
         String method = request.getMethod();
 
         if (method == "POST") {
-
+        	
             String title = request.getParameter("title");
             String site = request.getParameter("site");
             String password = request.getParameter("password");
@@ -132,29 +133,36 @@ public class PasswordServlet extends BaseServlet {
             String informations = request.getParameter("informations");
             Boolean ownerType = BooleanUtils.toBooleanObject(request.getParameter("ownerType"));
             Integer ownerId = NumberUtils.createInteger(request.getParameter("ownerId"));
-
-            Integer success = this.passwordManager.insertPassword(title, site, password, categoryId, informations,
-                    ownerId, ownerType);
-
-            if (success == 1) {
-
-                session.setAttribute("alertClass", "alert-success");
-                session.setAttribute("alertMessage", "Le mot de passe a bien été ajouté.");
-
+            
+            Password pwd = new Password(title, site ,password, informations);
+            
+            errors = pwd.isValid();
+            if(errors.isEmpty()) {
+	            Integer success = this.passwordManager.insertPassword(title, site, password, categoryId, informations,
+	                    ownerId, ownerType);
+	
+	            if (success == 1) {
+	
+	                session.setAttribute("alertClass", "alert-success");
+	                session.setAttribute("alertMessage", "Le mot de passe a bien été ajouté.");
+	
+	            } else {
+	
+	                session.setAttribute("alertClass", "alert-danger");
+	                session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
+	            }
+	
+	            if (ownerType == Password.OWNER_TYPE_GROUP) {
+	                response.sendRedirect(GroupServlet.baseURL + "/voir?groupId=" + ownerId);
+	            } else {
+	                response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
+	            }
             } else {
-
-                session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
+            	  request.setAttribute("errors", errors);
+            	  request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
             }
-
-            if (ownerType == Password.OWNER_TYPE_GROUP) {
-                response.sendRedirect(GroupServlet.baseURL + "/voir?groupId=" + ownerId);
-            } else {
-                response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
-            }
-
             return;
-
+           
         } else {
 
             Integer ownerId = this.checkOwnerParam(request, response);

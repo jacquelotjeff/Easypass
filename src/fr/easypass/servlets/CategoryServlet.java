@@ -1,6 +1,7 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -24,6 +25,8 @@ import fr.easypass.model.Category;
 public class CategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
+    private HashMap<String, String> errors;
+    
     public static final String urlPrefix = "/admin/categories";
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/category";
@@ -34,8 +37,10 @@ public class CategoryServlet extends BaseServlet {
      */
     public CategoryServlet() {
         super();
+        this.errors = new  HashMap<String, String>();
         // TODO Auto-generated constructor stub
     }
+    
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -122,19 +127,28 @@ public class CategoryServlet extends BaseServlet {
             String name = request.getParameter("name");
             String logo = request.getParameter("logo");
             
-            System.out.println(name);
-
-            final Integer success = this.categoryManager.insertCategory(name, logo);
-
-            if (success == 1) {
-
-                session.setAttribute("alertClass", "alert-success");
-                session.setAttribute("alertMessage", "La catégorie à bien été créée");
-
+            Category ctg = new Category(name, logo);
+            
+            errors = ctg.isValid();
+            
+            if(errors.isEmpty()) {            
+	            System.out.println(name);
+	
+	            final Integer success = this.categoryManager.insertCategory(name, logo);
+	
+	            if (success == 1) {
+	
+	                session.setAttribute("alertClass", "alert-success");
+	                session.setAttribute("alertMessage", "La catégorie à bien été créée");
+	
+	            } else {
+	
+	                session.setAttribute("alertClass", "alert-danger");
+	                session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
+	            }
             } else {
-
-                session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
+            	  request.setAttribute("errors", errors);
+            	  request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
             }
 
         }

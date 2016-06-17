@@ -3,7 +3,12 @@ package fr.easypass.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import fr.easypass.validation.formValidator;
+
+public class Category extends formValidator<Category> {
 
     private Integer id;
     private String name;
@@ -15,6 +20,15 @@ public class Category {
     	this.passwords = new ArrayList<Integer>();
     }
     
+    public Category(String name, String logo) {
+    	this.name = name;
+    	this.logo = logo;
+    }
+    
+    public Category getObj() {
+        return this;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -23,6 +37,8 @@ public class Category {
         this.id = id;
     }
 
+  	@NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
     public String getName() {
         return name;
     }
@@ -31,6 +47,8 @@ public class Category {
         this.name = name;
     }
 
+    @NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
     public String getLogo() {
         return logo;
     }

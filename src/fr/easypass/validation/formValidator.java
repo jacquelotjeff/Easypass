@@ -1,6 +1,7 @@
 package fr.easypass.validation;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -10,15 +11,15 @@ public abstract class formValidator<T> {
 	
 	 public abstract T getObj();
 	
-	public ArrayList<String> isValid(){
+	public HashMap<String, String> isValid(){
 		 
-		 ArrayList<String> errors = new ArrayList<String>();
+		HashMap<String, String> errors = new HashMap<String, String>();
 		    //do your custom validations if needed
 		 Set<ConstraintViolation<T>> validation = Validation.buildDefaultValidatorFactory()
 		            .getValidator().validate(getObj());
 		 if(validation.size() > 0 ){
 			 for (ConstraintViolation<T> error : validation) {
-				errors.add(error.getPropertyPath() +" "+error.getMessage());
+				errors.put(error.getPropertyPath().toString(), error.getPropertyPath() +" "+error.getMessage());
 			 }
 		 }
 		 return errors;

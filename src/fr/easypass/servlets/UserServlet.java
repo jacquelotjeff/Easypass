@@ -1,6 +1,8 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +33,7 @@ public class UserServlet extends BaseServlet {
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/user";
     public final UserManager userManager = new UserManager();
-
+	private HashMap<String, String> errors;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -134,21 +136,28 @@ public class UserServlet extends BaseServlet {
             request.setAttribute("formAction", "inscription");
             request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
         } else {
-
+            User u = new User(
+                    request.getParameter("firstname"),
+                    request.getParameter("lastname"),
+                    request.getParameter("username"),
+                    request.getParameter("password"),
+                    request.getParameter("email")
+                    );
+            errors= u.isValid();
+            if(errors.isEmpty()){
             final Integer success = this.userManager.insertUser(request);
-
-            if (success == 1) {
-
-                session.setAttribute("alertClass", "alert-success");
-                session.setAttribute("alertMessage", "Vous êtes bien inscrit");
-
+                if (success == 1) {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Vous êtes bien inscrit");
+                } else {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "L'inscription a échoué");
+                }
+                response.sendRedirect("/easypass");
             } else {
-
-                session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "L'inscription a échoué");
+                request.setAttribute("errors", errors);
+                request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
             }
-
-            response.sendRedirect("/easypass");
         }
 
         return;
