@@ -18,7 +18,7 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
-import fr.easypass.validation.formValidator;
+import fr.easypass.validation.FormValidator;
 
 /**
  * Servlet implementation class UserServlet

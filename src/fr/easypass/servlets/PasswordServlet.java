@@ -31,12 +31,12 @@ import fr.easypass.model.Password;
         PasswordServlet.urlPrefix + "/supprimer" })
 public class PasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
-	private HashMap<String, String> errors;
-    
+    private HashMap<String, String> errors;
+
     public static final String urlPrefix = "/admin/mot-de-passe";
     public static final String baseURL = "/easypass" + urlPrefix;
     public static final String viewPathPrefix = "/WEB-INF/html/password";
-	public final PasswordManager passwordManager = new PasswordManager();
+    public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
@@ -123,75 +123,65 @@ public class PasswordServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         String method = request.getMethod();
+        
+        Integer ownerId = this.checkOwnerParam(request, response);
+        Boolean ownerType = BooleanUtils.toBooleanObject(request.getParameter("ownerType"));
+        
+        if (ownerType != Password.OWNER_TYPE_GROUP && ownerType != Password.OWNER_TYPE_USER) {
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Cette page n'existe pas.");
+            response.sendRedirect("/easypass/admin");
+            return;
+        }
 
         if (method == "POST") {
-        	
+
             String title = request.getParameter("title");
             String site = request.getParameter("site");
             String password = request.getParameter("password");
             Integer categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
             String informations = request.getParameter("informations");
-            Boolean ownerType = BooleanUtils.toBooleanObject(request.getParameter("ownerType"));
-            Integer ownerId = NumberUtils.createInteger(request.getParameter("ownerId"));
-            
-            Password pwd = new Password(title, site ,password, informations);
-            
+
+            Password pwd = new Password(title, site, password, informations);
+
             errors = pwd.isValid();
-            if(errors.isEmpty()) {
-	            Integer success = this.passwordManager.insertPassword(title, site, password, categoryId, informations,
-	                    ownerId, ownerType);
-	
-	            if (success == 1) {
-	
-	                session.setAttribute("alertClass", "alert-success");
-	                session.setAttribute("alertMessage", "Le mot de passe a bien été ajouté.");
-	
-	            } else {
-	
-	                session.setAttribute("alertClass", "alert-danger");
-	                session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
-	            }
-	
-	            if (ownerType == Password.OWNER_TYPE_GROUP) {
-	                response.sendRedirect(GroupServlet.baseURL + "/voir?groupId=" + ownerId);
-	            } else {
-	                response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
-	            }
-            } else {
-            	  request.setAttribute("errors", errors);
-            	  request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
-            }
-            return;
-           
-        } else {
+            if (errors.isEmpty()) {
+                Integer success = this.passwordManager.insertPassword(title, site, password, categoryId, informations,
+                        ownerId, ownerType);
 
-            Integer ownerId = this.checkOwnerParam(request, response);
-            Boolean ownerType = BooleanUtils.toBooleanObject(request.getParameter("ownerType"));
-            Boolean checkOwnerType = true;
+                if (success == 1) {
 
-            if (ownerType != Password.OWNER_TYPE_GROUP && ownerType != Password.OWNER_TYPE_USER) {
-                checkOwnerType = false;
-                session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            }
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le mot de passe a bien été ajouté.");
 
-            if (ownerId > 0 && checkOwnerType) {
+                } else {
 
-                Map<Integer, Category> categories = this.categoryManager.getCategories();
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
+                }
 
-                request.setAttribute("formAction", PasswordServlet.baseURL + "/creer");
-                request.setAttribute("categories", categories.values());
-                request.setAttribute("ownerId", ownerId);
-                request.setAttribute("ownerType", ownerType);
-                request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
-
+                if (ownerType == Password.OWNER_TYPE_GROUP) {
+                    response.sendRedirect(GroupServlet.baseURL + "/voir?groupId=" + ownerId);
+                } else {
+                    response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
+                }
+                
                 return;
 
+            } else {
+                
+                request.setAttribute("errors", errors);
             }
 
         }
 
-        response.sendRedirect(PasswordServlet.baseURL);
+        Map<Integer, Category> categories = this.categoryManager.getCategories();
+
+        request.setAttribute("formAction", PasswordServlet.baseURL + "/creer");
+        request.setAttribute("categories", categories.values());
+        request.setAttribute("ownerId", ownerId);
+        request.setAttribute("ownerType", ownerType);
+        request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
         return;
 
@@ -235,7 +225,7 @@ public class PasswordServlet extends BaseServlet {
 
         return ownerId;
     }
-    
+
     private Integer checkPasswordParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Integer passwordId = 0;
@@ -248,7 +238,7 @@ public class PasswordServlet extends BaseServlet {
 
         return passwordId;
     }
-    
+
     private void alertPasswordNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         HttpSession session = request.getSession();

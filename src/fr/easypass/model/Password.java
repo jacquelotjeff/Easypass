@@ -3,9 +3,9 @@ package fr.easypass.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import fr.easypass.validation.formValidator;
+import fr.easypass.validation.FormValidator;
 
-public class Password  extends formValidator<Password>{
+public class Password  extends FormValidator<Password>{
 
     private Integer id;
     private String title;
@@ -42,7 +42,7 @@ public class Password  extends formValidator<Password>{
         this.id = id;
     }
 
-	@NotNull(message = "${validatedValue} ne peut pas être vide")
+	@NotNull(message = "Le titre ne peut pas être vide")
     @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
     public String getTitle() {
         return title;
@@ -52,7 +52,7 @@ public class Password  extends formValidator<Password>{
         this.title = title;
     }
 
-	@NotNull(message = "${validatedValue} ne peut pas être vide")
+	@NotNull(message = "Le site ne peut pas être vide")
     @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getSiteUrl() {
         return siteUrl;
@@ -62,8 +62,8 @@ public class Password  extends formValidator<Password>{
         this.siteUrl = siteUrl;
     }
 
-	 @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")	
+	 @NotNull(message = "Le mot de passe ne peut pas être vide")
+    @Size(min=3, max=16,  message = "Le mot de passe doit faire entre {min} et {max} charactères de long")	
     public String getPassword() {
         return password;
     }
@@ -72,8 +72,6 @@ public class Password  extends formValidator<Password>{
         this.password = password;
     }
 
-	@NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getInformations() {
         return informations;
     }

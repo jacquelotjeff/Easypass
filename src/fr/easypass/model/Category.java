@@ -6,9 +6,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import fr.easypass.validation.formValidator;
+import fr.easypass.validation.FormValidator;
 
-public class Category extends formValidator<Category> {
+public class Category extends FormValidator<Category> {
 
     private Integer id;
     private String name;
@@ -37,8 +37,8 @@ public class Category extends formValidator<Category> {
         this.id = id;
     }
 
-  	@NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
+  	@NotNull(message = "Le nom ne peut pas être vide")
+    @Size(min=3, max=16,  message = "Le nom doit faire entre {min} et {max} charactères de long")  
     public String getName() {
         return name;
     }
@@ -47,8 +47,8 @@ public class Category extends formValidator<Category> {
         this.name = name;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
+    @NotNull(message = "Le logo ne peut pas être vide")
+    @Size(min=3, max=16,  message = "Le logo doit faire entre {min} et {max} charactères de long")  
     public String getLogo() {
         return logo;
     }

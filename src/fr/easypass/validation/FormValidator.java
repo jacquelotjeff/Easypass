@@ -7,7 +7,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 
-public abstract class formValidator<T> {
+public abstract class FormValidator<T> {
 
     public abstract T getObj();
 
@@ -19,7 +19,7 @@ public abstract class formValidator<T> {
                 .validate(getObj());
         if (validation.size() > 0) {
             for (ConstraintViolation<T> error : validation) {
-                errors.put(error.getPropertyPath().toString(), error.getPropertyPath() + " " + error.getMessage());
+                errors.put(error.getPropertyPath().toString(), error.getMessage());
             }
         }
         return errors;

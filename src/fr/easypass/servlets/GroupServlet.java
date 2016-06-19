@@ -1,6 +1,7 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -36,6 +37,7 @@ public class GroupServlet extends BaseServlet {
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
+    private HashMap<String, String> errors;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -124,41 +126,49 @@ public class GroupServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
-        if (method == "GET") {
-
-            final Map<Integer, User> users = userManager.getUsers();
-            request.setAttribute("users", users.values());
-            request.setAttribute("formAction", "creer");
-            request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
-
-            return;
-
-        } else {
+        if (method == "POST") {
 
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             String logo = request.getParameter("logo");
             String[] users = request.getParameterValues("users");
-
             String[] admins = {};
-            // String[] admins = request.getParameterValues("admins");
+            //String[] admins = request.getParameterValues("admins");
+            
+            Group group = new Group(name, description, logo);
+            
+            errors = group.isValid();
+            
+            if (errors.isEmpty()) {
+                
+                final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
 
-            final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
+                if (success == 1) {
 
-            if (success == 1) {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le groupe à bien été créé");
 
-                session.setAttribute("alertClass", "alert-success");
-                session.setAttribute("alertMessage", "Le groupe à bien été créé");
+                } else {
 
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                }
+                
+                response.sendRedirect(GroupServlet.baseURL);
+                return;
+                
             } else {
-
-                session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                
+                request.setAttribute("errors", errors);
             }
-
+            
         }
+        
+        final Map<Integer, User> users = userManager.getUsers();
+        request.setAttribute("users", users.values());
+        request.setAttribute("formAction", "creer");
+        request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
-        response.sendRedirect(GroupServlet.baseURL);
         return;
 
     }

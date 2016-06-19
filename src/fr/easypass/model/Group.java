@@ -6,7 +6,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class Group {
+import fr.easypass.validation.FormValidator;
+
+public class Group extends FormValidator<Group>{
 
 	private Integer id;
     private String name;
@@ -42,8 +44,8 @@ public class Group {
     	return this.id;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @NotNull(message = "Le nom ne peut pas être vide")
+    @Size(min=3, max=16,  message = "Le nom doit faire entre {min} et {max} charactères de long")
     public String getName() {
         return name;
     }
@@ -52,8 +54,8 @@ public class Group {
         this.name = name;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @NotNull(message = "La description ne peut pas être vide")
+    @Size(min=3, max=1600,  message = "La description doit faire entre {min} et {max} charactères de long")
     public String getDescription() {
         return description;
     }
@@ -62,7 +64,7 @@ public class Group {
         this.description = description;
     }
     
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
+    @NotNull(message = "Le logo ne peut pas être vide")
     public String getLogo() {
         return logo;
     }

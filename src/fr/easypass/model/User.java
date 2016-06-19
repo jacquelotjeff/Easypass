@@ -5,9 +5,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import fr.easypass.validation.formValidator;
+import fr.easypass.validation.FormValidator;
 
-public class User extends formValidator<User> {
+public class User extends FormValidator<User> {
 
     private Integer id;
     private String firstname;
@@ -47,8 +47,8 @@ public class User extends formValidator<User> {
     }
 
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @NotNull(message = "Le prénom ne peut pas être vide")
+    @Size(min=3, max=16,  message = "Le prénom doit faire entre {min} et {max} charactères de long")
     public String getFirstname() {
         return firstname;
     }
@@ -57,8 +57,8 @@ public class User extends formValidator<User> {
         this.firstname = fisrtname;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16, message = "${validatedValue} doit faire entre {min} et {max} charactères")
+    @NotNull(message = "Le nom ne peut pas être vide")
+    @Size(min=3, max=16, message = "Le nom doit faire entre {min} et {max} charactères")
     public String getLastname() {
         return lastname;
     }
@@ -67,8 +67,8 @@ public class User extends formValidator<User> {
         this.lastname = lastname;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16, message = "${validatedValue} doit faire entre {min} et {max} charactères")
+    @NotNull(message = "Le nom d'utilisateur ne peut pas être vide")
+    @Size(min=3, max=16, message = "Le nom d'utilisateur doit faire entre {min} et {max} charactères")
     public String getUsername() {
         return username;
     }
@@ -77,8 +77,8 @@ public class User extends formValidator<User> {
         this.username = username;
     }
     
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Size(min=3, max=16, message = "${validatedValue} doit faire entre {min} et {max} charactères")
+    @NotNull(message = "Le mot de passe ne peut pas être vide")
+    @Size(min=3, max=16, message = "Le mot de passe doit faire entre {min} et {max} charactères")
     public String getPassword() {
         return this.password;
     }
@@ -87,8 +87,8 @@ public class User extends formValidator<User> {
         this.password = password;
     }
 
-    @NotNull(message = "${validatedValue} ne peut pas être vide")
-    @Pattern(regexp = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}", message = "${validatedValue} n'est pas un mail valide")  
+    @NotNull(message = "L'email ne peut pas être vide")
+    @Pattern(regexp = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}", message = "Le champ mail ne contient pas un mail valide")  
     public String getEmail() {
         return this.email;
     }
