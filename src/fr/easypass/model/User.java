@@ -1,5 +1,8 @@
 package fr.easypass.model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class User {
         this.passwords = new ArrayList<Integer>();
         this.categories = new ArrayList<Integer>();
     }
-
+	
     public Integer getId() {
         return this.id;
     }

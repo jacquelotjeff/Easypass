@@ -1,23 +1,29 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import fr.easypass.manager.UserManager;
+import com.mysql.jdbc.Connection;
+
+import fr.easypass.manager.UserManagerDB;
 
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet(name = "LoginServlet",  description = "Login Servlet", urlPatterns = {"/login", "/logout"})
+@WebServlet(name = "LoginServlet",  description = "Login Servlet", urlPatterns = {"/user/login", "/user/logout"})
 public class LoginServlet extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
-    private UserManager userManager = new UserManager();
+    private UserManagerDB userManager = new UserManagerDB();
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,9 +42,13 @@ public class LoginServlet extends HttpServlet {
         
         final String uri = request.getRequestURI();
         
-        if (uri.contains("/login")) {
-            this.login(request, response);
-        } else if (uri.contains("/logout")) {
+        if (uri.contains("/user/login")) {
+            try {
+				this.login(request, response);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+        } else if (uri.contains("/user/logout")) {
             this.logout(request, response);
         } else {
             response.getWriter().append("No route LoginServlet");
@@ -55,21 +65,43 @@ public class LoginServlet extends HttpServlet {
         doGet(request, response);
     }
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 
-        final String username = request.getParameter("username");
-        final String password = request.getParameter("password");
-        
-        //TODO Use https://docs.oracle.com/javaee/7/tutorial/security-intro005.htm#BNBXM for Login
-        //request.login(username, password);
+    	 HttpSession session = request.getSession();
+         final String method = request.getMethod();
 
-        request.getRequestDispatcher("/WEB-INF/html/login/login.jsp").forward(request, response);
-        return;
+         if (method == "GET") {
+             request.getRequestDispatcher("/WEB-INF/html/header.jsp").forward(request, response);
+         } else {
 
+        	   final String username = request.getParameter("username");
+               final String email = request.getParameter("email");
+               final String password = request.getParameter("password");
+
+
+               Connection connection = (Connection) this.userManager.getConnection();
+               PreparedStatement stmt;
+               
+               stmt = connection.prepareStatement("select * from users where username=?  and password=?");
+               stmt.setString(1, email);
+               stmt.setString(2, password);
+               ResultSet rs = stmt.executeQuery();
+               
+               if (rs.next()) {
+                   session.setAttribute("username", email);
+                   session.setAttribute("alertClass", "alert-success");
+                   session.setAttribute("alertMessage", "Vous êtes bien connect�");
+                   response.sendRedirect("/easypass-j2e");
+               } else {
+                   session.setAttribute("alertClass", "alert-danger");
+                   session.setAttribute("alertMessage", "inscription �chou�e");
+               }
     }
-
+    }
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        //this.login(request, response);
+		HttpSession session = request.getSession();
+		session.invalidate();
+		response.sendRedirect("/easypass-j2e");
     }
 
 }

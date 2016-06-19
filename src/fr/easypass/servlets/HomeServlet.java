@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class HelloServlet
@@ -32,7 +33,7 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
 
         final String uri = request.getRequestURI();
-
+        
         if (uri.contains("/admin")) {
             this.admin(request, response);
         } else {
@@ -54,9 +55,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     private void home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
         //User test = this.getCurrentUser(request);
-        //request.setAttribute("currentUser", test);
         request.getRequestDispatcher("/WEB-INF/html/home/home.jsp").forward(request, response);
 
         return;

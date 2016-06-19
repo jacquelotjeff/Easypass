@@ -16,13 +16,8 @@ public class ConnectorManager {
 	public static JsonObject getParameters() throws IOException {
 		
 		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	    
-		
-		
 		InputStream stream = ConnectorManager.class.getClassLoader().getResourceAsStream("config.properties");
-	    
 	    JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
-	    
         return jsonObject;
 	}
 	
