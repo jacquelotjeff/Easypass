@@ -3,6 +3,9 @@ package fr.easypass.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Group {
 
 	private Integer id;
@@ -21,6 +24,16 @@ public class Group {
         this.categories = new ArrayList<Integer>();
     }
     
+    public Group(String name, String description, String logo) {
+    	this.name = name;
+    	this.description = description;
+    	this.logo = logo;
+    }
+    
+    public Group getObj() {
+        return this;
+    }
+    
     public void setId(Integer id) {
     	this.id = id;
     }
@@ -29,6 +42,8 @@ public class Group {
     	return this.id;
     }
 
+    @NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getName() {
         return name;
     }
@@ -37,6 +52,8 @@ public class Group {
         this.name = name;
     }
 
+    @NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getDescription() {
         return description;
     }
@@ -44,7 +61,8 @@ public class Group {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
+    @NotNull(message = "${validatedValue} ne peut pas être vide")
     public String getLogo() {
         return logo;
     }

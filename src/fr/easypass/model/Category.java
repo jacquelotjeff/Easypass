@@ -3,39 +3,58 @@ package fr.easypass.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-    private String nom;
+import fr.easypass.validation.formValidator;
+
+public class Category extends formValidator<Category> {
+
+    private Integer id;
+    private String name;
     private String logo;
-    private Object owner;
+    
     private List<Integer> passwords;
 
     public Category() {
     	this.passwords = new ArrayList<Integer>();
     }
-
-    public String getNom() {
-        return nom;
+    
+    public Category(String name, String logo) {
+    	this.name = name;
+    	this.logo = logo;
+    }
+    
+    public Category getObj() {
+        return this;
+    }
+    
+    public Integer getId() {
+        return id;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
+  	@NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @NotNull(message = "${validatedValue} ne peut pas être vide")
+    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
     public String getLogo() {
         return logo;
     }
 
     public void setLogo(String logo) {
         this.logo = logo;
-    }
-
-    public Object getOwner() {
-        return this.owner;
-    }
-
-    public void setOwner(Object owner) {
-        this.owner = owner;
     }
 
     public void addPassword(Integer passwordId) {
@@ -45,4 +64,5 @@ public class Category {
     public List<Integer> getPasswords() {
         return this.passwords;
     }
+
 }

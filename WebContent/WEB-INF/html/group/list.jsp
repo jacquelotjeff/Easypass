@@ -8,7 +8,7 @@
       Easypass - Liste des groupes
     </jsp:attribute>
     <jsp:body>
-        <h1>Exemple liste des groupes</h1>
+        <h1>Liste des groupes</h1>
         <table class="table table-striped table-hover table-users">
             <thead>
                 <tr>
