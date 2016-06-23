@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="fr.easypass.servlets.UserServlet"%>
 
 <t:genericadminpage>
     <jsp:attribute name="title">
@@ -13,7 +14,7 @@
         <p>Nom : <c:out value="${user.getLastname()}"/></p>
         <p>Email : <c:out value="${user.getEmail()}"/></p>
         
-        <a class="btn btn-success" href="/easypass/admin/utilisateurs">Retour</a>
+        <a class="btn btn-success" href="${UserServlet.baseURL}">Retour</a>
         
         <c:url value="editer" var="editURL">
             <c:param name="userId"   value="${user.getId()}" />

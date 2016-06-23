@@ -1,5 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ page import="fr.easypass.servlets.GroupServlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:genericadminpage>
@@ -13,7 +14,7 @@
         <p>Description : <c:out value="${group.getDescription()}"/></p>
         <p>Logo : <c:out value="${group.getLogo()}"/></p>
         
-        <a class="btn btn-success" href="/easypass/admin/groupes">Retour</a>
+        <a class="btn btn-success" href="${GroupServlet.baseURL}">Retour</a>
         
         <c:url value="editer" var="editURL">
             <c:param name="userId"   value="${group.getId()}" />

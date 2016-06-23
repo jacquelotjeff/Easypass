@@ -1,4 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="fr.easypass.servlets.CategoryServlet"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -12,7 +13,7 @@
         <p>Nom : ${category.getName()}</p>
         <p>Logo : ${user.getLogo()}</p>
         
-        <a class="btn btn-success" href="/easypass/admin/categories">Retour</a>
+        <a class="btn btn-success" href="${CategoryServlet.baseURL}">Retour</a>
         
         <c:url value="editer" var="editURL">
             <c:param name="categoryId"   value="${category.getId()}" />

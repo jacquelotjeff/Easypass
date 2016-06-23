@@ -1,4 +1,5 @@
 <%@ page import="fr.easypass.model.User"%>
+<%@ page import="fr.easypass.servlets.BaseServlet"%>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -55,6 +56,6 @@
                 </c:forEach>
             </tbody>
         </table>
-        <a href="/easypass/inscription" class="btn btn-primary">Créer</a>
+        <a href="${BaseServlet.rootPath}/inscription" class="btn btn-primary">Créer</a>
     </jsp:body>
 </t:genericadminpage>
