@@ -19,16 +19,17 @@ import fr.easypass.model.Category;
 /**
  * Servlet implementation class CategoryServlet
  */
-@WebServlet(name = "CategoryServlet", description = "Category Servlet", urlPatterns = { CategoryServlet.urlPrefix + "",
-        CategoryServlet.urlPrefix + "/creer", CategoryServlet.urlPrefix + "/voir",
-        CategoryServlet.urlPrefix + "/editer", CategoryServlet.urlPrefix + "/supprimer" })
+@WebServlet(name = "CategoryServlet", description = "Category Servlet", urlPatterns = { CategoryServlet.prefixURL + "",
+        CategoryServlet.prefixURL + "/creer", CategoryServlet.prefixURL + "/voir",
+        CategoryServlet.prefixURL + "/editer", CategoryServlet.prefixURL + "/supprimer" })
 public class CategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
     
-    public static final String urlPrefix = "/admin/categories";
-    public static final String baseURL = "/easypass" + urlPrefix;
+    public static String rootPath;
+    public static String baseURL;
+    public static final String prefixURL = "/admin/categories";
     public static final String viewPathPrefix = "/WEB-INF/html/category";
     public final CategoryManager categoryManager = new CategoryManager();
 
@@ -41,6 +42,12 @@ public class CategoryServlet extends BaseServlet {
         // TODO Auto-generated constructor stub
     }
     
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        CategoryServlet.rootPath = this.getServletContext().getContextPath();
+        CategoryServlet.baseURL = CategoryServlet.rootPath + CategoryServlet.prefixURL;
+    }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -52,13 +59,13 @@ public class CategoryServlet extends BaseServlet {
         
         final String uri = request.getRequestURI();
 
-        if (uri.contains(urlPrefix + "/voir")) {
+        if (uri.contains(prefixURL + "/voir")) {
             this.show(request, response);
         } else if (uri.contains("/creer")) {
             this.create(request, response);
-        } else if (uri.contains(urlPrefix + "/editer")) {
+        } else if (uri.contains(prefixURL + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(urlPrefix + "/supprimer")) {
+        } else if (uri.contains(prefixURL + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);
@@ -200,7 +207,7 @@ public class CategoryServlet extends BaseServlet {
             }
 
         }
-
+        
         response.sendRedirect(CategoryServlet.baseURL);
         return;
 

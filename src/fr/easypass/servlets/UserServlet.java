@@ -1,10 +1,8 @@
 package fr.easypass.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,25 +10,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolation;
 
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
-import fr.easypass.validation.FormValidator;
 
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.urlPrefix + "",
-        UserServlet.urlPrefix + "/voir", UserServlet.urlPrefix + "/editer", "/inscription",
-        UserServlet.urlPrefix + "/supprimer" })
+@WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.prefixURL + "",
+        UserServlet.prefixURL + "/voir", UserServlet.prefixURL + "/editer", "/inscription",
+        UserServlet.prefixURL + "/supprimer" })
 public class UserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String urlPrefix = "/admin/utilisateurs";
-    public static final String baseURL = "/easypass" + urlPrefix;
+    public static final String prefixURL = "/admin/utilisateurs";
+    public static String baseURL;
+    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/user";
     public final UserManager userManager = new UserManager();
 	private HashMap<String, String> errors;
@@ -39,6 +36,13 @@ public class UserServlet extends BaseServlet {
      */
     public UserServlet() {
         super();
+    }
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        UserServlet.rootPath = this.getServletContext().getContextPath();
+        UserServlet.baseURL = UserServlet.rootPath + UserServlet.prefixURL;
     }
 
     /**
@@ -52,13 +56,13 @@ public class UserServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(urlPrefix + "/voir")) {
+        if (uri.contains(prefixURL + "/voir")) {
             this.show(request, response);
         } else if (uri.contains("/inscription")) {
             this.signUp(request, response);
-        } else if (uri.contains(urlPrefix + "/editer")) {
+        } else if (uri.contains(prefixURL + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(urlPrefix + "/supprimer")) {
+        } else if (uri.contains(prefixURL + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);

@@ -7,18 +7,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.easypass.manager.UserManager;
+import fr.easypass.model.User;
 
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet(name = "LoginServlet",  description = "Login Servlet", urlPatterns = {"/login", "/logout"})
+
+@WebServlet(name = "LoginServlet", description = "Login Servlet", urlPatterns = { "/user/login", "/user/logout" })
 public class LoginServlet extends BaseServlet {
-    
+
     private static final long serialVersionUID = 1L;
     private UserManager userManager = new UserManager();
-    
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,20 +34,20 @@ public class LoginServlet extends BaseServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         super.doGet(request, response);
         
         final String uri = request.getRequestURI();
-        
-        if (uri.contains("/login")) {
+
+        if (uri.contains("/user/login")) {
             this.login(request, response);
-        } else if (uri.contains("/logout")) {
+        } else if (uri.contains("/user/logout")) {
             this.logout(request, response);
         } else {
             response.getWriter().append("No route LoginServlet");
         }
+        
     }
 
     /**
@@ -57,21 +60,43 @@ public class LoginServlet extends BaseServlet {
         doGet(request, response);
     }
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        final String username = request.getParameter("username");
-        final String password = request.getParameter("password");
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
         
-        //TODO Use https://docs.oracle.com/javaee/7/tutorial/security-intro005.htm#BNBXM for Login
-        //request.login(username, password);
+        if (method == "GET") {
+            
+            request.getRequestDispatcher("/WEB-INF/html/header.jsp").forward(request, response);
+            
+        } else {
 
-        request.getRequestDispatcher("/WEB-INF/html/login/login.jsp").forward(request, response);
+            final String email = request.getParameter("email");
+            final String password = request.getParameter("password");
+            
+            User user = userManager.checkMailWithPassword(email, password);
+
+
+            if (user instanceof User) {
+                session.setAttribute("username", user.getUsername());
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "Vous êtes bien connecté.");
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Connexion échouée.");
+            }
+            
+            response.sendRedirect("/easypass");
+        }
+        
         return;
-
+        
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        //this.login(request, response);
+        HttpSession session = request.getSession();
+        session.invalidate();
+        response.sendRedirect("/easypass");
     }
 
 }

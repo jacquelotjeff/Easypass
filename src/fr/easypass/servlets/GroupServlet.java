@@ -17,26 +17,29 @@ import org.apache.commons.lang.math.NumberUtils;
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.UserManager;
-import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.User;
 
 /**
  * Servlet implementation class GroupServlet
  */
-@WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.urlPrefix + "",
-        GroupServlet.urlPrefix + "/voir", GroupServlet.urlPrefix + "/editer", GroupServlet.urlPrefix + "/creer",
-        GroupServlet.urlPrefix + "/supprimer", GroupServlet.urlPrefix + "/ajouter-utilisateur",
-        GroupServlet.urlPrefix + "/supprimer-utilisateur", GroupServlet.urlPrefix + "/admin-utilisateur" })
+@WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.prefixURL + "",
+        GroupServlet.prefixURL + "/voir", GroupServlet.prefixURL + "/editer", GroupServlet.prefixURL + "/creer",
+        GroupServlet.prefixURL + "/supprimer", GroupServlet.prefixURL + "/ajouter-utilisateur",
+        GroupServlet.prefixURL + "/supprimer-utilisateur", GroupServlet.prefixURL + "/admin-utilisateur" })
 public class GroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String urlPrefix = "/admin/groupes";
-    public static final String baseURL = "/easypass" + urlPrefix;
+    public static final String prefixURL = "/admin/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/group";
+    public static String rootPath;
+    public static String baseURL;
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
+    
+    
+    
     private HashMap<String, String> errors;
 
     /**
@@ -45,6 +48,14 @@ public class GroupServlet extends BaseServlet {
     public GroupServlet() {
         super();
     }
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        GroupServlet.rootPath = this.getServletContext().getContextPath();
+        GroupServlet.baseURL = GroupServlet.rootPath + GroupServlet.prefixURL;
+    }
+
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -57,19 +68,19 @@ public class GroupServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(urlPrefix + "/voir")) {
+        if (uri.contains(prefixURL + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains(urlPrefix + "/ajouter-utilisateur")) {
+        } else if (uri.contains(prefixURL + "/ajouter-utilisateur")) {
             this.addUser(request, response);
-        } else if (uri.contains(urlPrefix + "/supprimer-utilisateur")) {
+        } else if (uri.contains(prefixURL + "/supprimer-utilisateur")) {
             this.deleteUser(request, response);
-        } else if (uri.contains(urlPrefix + "/admin-utilisateur")) {
+        } else if (uri.contains(prefixURL + "/admin-utilisateur")) {
             this.adminUser(request, response);
-        } else if (uri.contains(urlPrefix + "/creer")) {
+        } else if (uri.contains(prefixURL + "/creer")) {
             this.create(request, response);
-        } else if (uri.contains(urlPrefix + "/editer")) {
+        } else if (uri.contains(prefixURL + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(urlPrefix + "/supprimer")) {
+        } else if (uri.contains(prefixURL + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);

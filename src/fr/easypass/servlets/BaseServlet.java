@@ -13,7 +13,7 @@ public abstract class BaseServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public static final String ENCODING = "utf-8";
-
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         request.setCharacterEncoding(ENCODING);

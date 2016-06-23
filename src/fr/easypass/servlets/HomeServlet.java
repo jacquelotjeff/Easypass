@@ -34,7 +34,7 @@ public class HomeServlet extends BaseServlet {
         super.doGet(request, response);
 
         final String uri = request.getRequestURI();
-
+        
         if (uri.contains("/admin")) {
             this.admin(request, response);
         } else {
@@ -56,9 +56,7 @@ public class HomeServlet extends BaseServlet {
     }
 
     private void home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
         //User test = this.getCurrentUser(request);
-        //request.setAttribute("currentUser", test);
         request.getRequestDispatcher("/WEB-INF/html/home/home.jsp").forward(request, response);
 
         return;

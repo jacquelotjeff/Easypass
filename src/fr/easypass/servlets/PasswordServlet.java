@@ -26,15 +26,16 @@ import fr.easypass.model.Password;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "PasswordServlet", description = "Password Servlet", urlPatterns = {
-        PasswordServlet.urlPrefix + "/liste", PasswordServlet.urlPrefix + "/voir",
-        PasswordServlet.urlPrefix + "/editer", PasswordServlet.urlPrefix + "/creer",
-        PasswordServlet.urlPrefix + "/supprimer" })
+        PasswordServlet.prefixURL + "/liste", PasswordServlet.prefixURL + "/voir",
+        PasswordServlet.prefixURL + "/editer", PasswordServlet.prefixURL + "/creer",
+        PasswordServlet.prefixURL + "/supprimer" })
 public class PasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String urlPrefix = "/admin/mot-de-passe";
-    public static final String baseURL = "/easypass" + urlPrefix;
+    public static final String prefixURL = "/admin/mot-de-passe";
+    public static String baseURL;
+    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -47,6 +48,13 @@ public class PasswordServlet extends BaseServlet {
     public PasswordServlet() {
         super();
         // TODO Auto-generated constructor stub
+    }
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        PasswordServlet.rootPath = this.getServletContext().getContextPath();
+        PasswordServlet.baseURL = PasswordServlet.rootPath + PasswordServlet.prefixURL;
     }
 
     /**
@@ -130,7 +138,7 @@ public class PasswordServlet extends BaseServlet {
         if (ownerType != Password.OWNER_TYPE_GROUP && ownerType != Password.OWNER_TYPE_USER) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            response.sendRedirect("/easypass/admin");
+            response.sendRedirect(PasswordServlet.rootPath + "/admin");
             return;
         }
 

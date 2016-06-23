@@ -317,18 +317,42 @@ public class UserManager {
     }
 
     /**
-     * Check if User and Password corresponds
+     * Check if email and Password corresponds
      * 
-     * @param username
+     * @param email
      * @param password
      * @return
      * @throws IOException
+     * @throws SQLException 
      */
-    public Boolean checkLoginWithPassword(String username, String password) throws IOException {
-        // TODO request by login and check the password
-        Map<Integer, User> users = this.getUsers();
-        User user = users.get(username);
-        return (user.getPassword().equals(password));
+    public User checkMailWithPassword(String email, String password) throws IOException {
+        
+        Connection connection = ConnectorManager.getConnection();
+        PreparedStatement stmt;
+        User user = null;
+
+        try {
+            
+            stmt = connection.prepareStatement("select * from "+ UserManager.TABLE +" where "+ UserManager.COL_EMAIL +"=?  and " + UserManager.COL_PASSWORD + "=?");
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                user = this.createFromResultSet(rs);
+            }
+            
+            rs.close();
+            stmt.close();
+            connection.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        
+        return user;
+
     }
 
     /**

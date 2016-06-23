@@ -1,7 +1,9 @@
-<li href="#" class="list-group-item text-left">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<li class="list-group-item text-left">
     <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
     <label class="name">${user.getUsername()} (Admin)<br></label> 
-    <label class="pull-right"> 
+    <div class="pull-right"> 
         <c:url value="admin-utilisateur" var="adminUserURL">
             <c:param name="userId" value="${user.getId()}" />
             <c:param name="groupId" value="${group.getId()}" />
@@ -22,6 +24,6 @@
                 <i class="fa fa-minus" aria-hidden="true"></i>
             </button>
         </form>
-    </label>
+    </div>
     <div class="break"></div>
 </li>

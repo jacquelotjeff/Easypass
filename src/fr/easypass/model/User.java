@@ -2,9 +2,11 @@ package fr.easypass.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import fr.easypass.validation.FormValidator;
 
 public class User extends FormValidator<User> {
@@ -37,6 +39,7 @@ public class User extends FormValidator<User> {
     public User getObj() {
         return this;
     }
+
 
     public Integer getId() {
         return this.id;
