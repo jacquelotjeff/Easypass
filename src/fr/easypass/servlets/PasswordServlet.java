@@ -150,7 +150,7 @@ public class PasswordServlet extends BaseServlet {
             Integer categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
             String informations = request.getParameter("informations");
 
-            Password pwd = new Password(title, site, password, informations);
+            Password pwd = new Password(title, site, password, informations, categoryId);
 
             errors = pwd.isValid();
             if (errors.isEmpty()) {

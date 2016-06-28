@@ -23,11 +23,12 @@ public class Password  extends FormValidator<Password>{
     public Password() {
     }
     
-    public Password(String title, String siteUrl, String password, String informations) {
+    public Password(String title, String siteUrl, String password, String informations, Integer category) {
 		this.title = title;
 		this.siteUrl = siteUrl;
 		this.password = password;
 		this.informations = informations;
+		this.category = category;
 	}
 
 	public Password getObj() {
@@ -106,6 +107,7 @@ public class Password  extends FormValidator<Password>{
         return this.ownerGroup;
     }
 
+    @NotNull(message = "Le mot de passe doit être associé à une catégorie.")
     public Integer getCategory() {
         return category;
     }

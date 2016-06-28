@@ -22,13 +22,16 @@
                 <small class="help-block">${errors.get("password")}</small>
             </c:if>
         </div>
-        <div class="form-group">
-            <label for="categoryId">Catégorie : </label> <select
-                name="categoryId" class="selectpicker">
+        <div class="form-group ${not empty errors.get('category')?'has-error':''}">
+            <label for="categoryId">Catégorie : </label> 
+            <select name="categoryId" class="selectpicker">
                 <c:forEach var="category" items="${categories}">
                     <option value="${category.getId()}">${category.getName()}</option>
                 </c:forEach>
             </select>
+            <c:if test="${not empty errors.get('category')}">
+                <small class="help-block">${errors.get("category")}</small>
+            </c:if>
         </div>
         <div class="form-group">
             <label for="informations">Informations : </label> 
