@@ -25,7 +25,7 @@
                                 <span class="help-block">${user.getEmail()}</span>
                             </div>
                             <div>
-                                <form action="${deleteURL}" method="POST">
+                                <form action="${deleteURL}" method="POST" class="form-group">
                                     <c:url value="editer" var="editURL">
                                         <c:param name="userId"   value="${user.getId()}" />
                                     </c:url>
@@ -71,7 +71,10 @@
                                     <ul class="list-group">
                                         <c:forEach var="password" items="${passwords}">
                                                 <li class="list-group-item title">
-                                                    <span class="col-sm-2"><i class="fa fa-star"></i></span>
+                                                    <span class="col-sm-2">
+                                                        <c:set var="category" value="${categories.get(password.getCategory())}"/>
+                                                        <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
+                                                    </span>
                                                     <div class="col-sm-6">
                                                         <h4 class="list-group-item-heading">${password.getTitle()}</h4>
                                                         <p class="list-group-item-text">
@@ -112,22 +115,35 @@
                             </div>
                             <div id="groups" class="tab-pane">
                                 <div class="col-sm-12">
+                                    <h3>Groupes</h3>
                                     <ul class="list-group">
-                                        <li class="list-group-item title">Groupes</li>
                                         <c:forEach var="group" items="${groups}">
-                                            <c:url value="/admin/group/voir" var="showGroupURL">
-                                                <c:param name="groupId" value="${group.getId()}"/>
-                                            </c:url>
                                             <li class="list-group-item title">
-                                                <span class="col-sm-9">${group.getName()}</span>
-                                                <div class="col-sm-3">
-                                                    <a href="${showGroupURL}" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-eye"></i>
-                                                        Voir
-                                                    </a>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </li>
+                                                    <span class="col-sm-2">
+                                                        <img class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${group.getLogo()}">
+                                                    </span>
+                                                    <div class="col-sm-6">
+                                                        <h4 class="list-group-item-heading">${group.getName()}</h4>
+                                                        <p class="list-group-item-text">
+                                                            ${group.getDescription()}
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <c:url value="/admin/group/voir" var="showGroupURL">
+                                                            <c:param name="groupId" value="${group.getId()}"/>
+                                                        </c:url>
+                                                        <a href="${showGroupURL}" title="Voir le groupe." class="btn btn-success btn-sm">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                        <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a href="${exitGroupURL}" title="Quitter le groupe." class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-sign-out"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </li>
                                         </c:forEach>
                                     </ul>
                                 </div>

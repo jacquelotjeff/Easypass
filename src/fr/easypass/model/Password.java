@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 import fr.easypass.validation.FormValidator;
 
-public class Password  extends FormValidator<Password>{
+public class Password extends FormValidator<Password> {
 
     private Integer id;
     private String title;
@@ -16,24 +16,24 @@ public class Password  extends FormValidator<Password>{
     private Integer ownerUser;
     private Integer ownerGroup;
     private String typeOwner;
-    
+
     public static String OWNER_TYPE_GROUP = "G";
     public static String OWNER_TYPE_USER = "U";
 
     public Password() {
     }
-    
-    public Password(String title, String siteUrl, String password, String informations, Integer category) {
-		this.title = title;
-		this.siteUrl = siteUrl;
-		this.password = password;
-		this.informations = informations;
-		this.category = category;
-	}
 
-	public Password getObj() {
-		return this;
-	}
+    public Password(String title, String siteUrl, String password, String informations, Integer category) {
+        this.title = title;
+        this.siteUrl = siteUrl;
+        this.password = password;
+        this.informations = informations;
+        this.category = category;
+    }
+
+    public Password getObj() {
+        return this;
+    }
 
     public Integer getId() {
         return this.id;
@@ -43,8 +43,8 @@ public class Password  extends FormValidator<Password>{
         this.id = id;
     }
 
-	@NotNull(message = "Le titre ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")  
+    @NotNull(message = "Le titre ne peut pas être vide")
+    @Size(min = 3, max = 16, message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getTitle() {
         return title;
     }
@@ -53,8 +53,8 @@ public class Password  extends FormValidator<Password>{
         this.title = title;
     }
 
-	@NotNull(message = "Le site ne peut pas être vide")
-    @Size(min=3, max=16,  message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @NotNull(message = "Le site ne peut pas être vide")
+    @Size(min = 3, max = 16, message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
     public String getSiteUrl() {
         return siteUrl;
     }
@@ -63,8 +63,8 @@ public class Password  extends FormValidator<Password>{
         this.siteUrl = siteUrl;
     }
 
-	 @NotNull(message = "Le mot de passe ne peut pas être vide")
-    @Size(min=3, max=16,  message = "Le mot de passe doit faire entre {min} et {max} charactères de long")	
+    @NotNull(message = "Le mot de passe ne peut pas être vide")
+    @Size(min = 3, max = 16, message = "Le mot de passe doit faire entre {min} et {max} charactères de long")
     public String getPassword() {
         return password;
     }
@@ -94,11 +94,11 @@ public class Password  extends FormValidator<Password>{
         this.ownerGroup = groupId;
         this.typeOwner = Password.OWNER_TYPE_GROUP;
     }
-    
-    public Boolean ownerIsGroup(){
+
+    public Boolean ownerIsGroup() {
         return this.typeOwner.equals(Password.OWNER_TYPE_GROUP);
     }
-    
+
     public Boolean ownerIsUser() {
         return this.typeOwner.equals(Password.OWNER_TYPE_USER);
     }

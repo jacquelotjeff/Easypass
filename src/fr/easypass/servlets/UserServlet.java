@@ -13,9 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.math.NumberUtils;
 
+import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
+import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
@@ -36,6 +38,7 @@ public class UserServlet extends BaseServlet {
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
     public final PasswordManager passwordManager = new PasswordManager();
+    public final CategoryManager categoryManager = new CategoryManager();
 	private HashMap<String, String> errors;
     /**
      * @see HttpServlet#HttpServlet()
@@ -126,13 +129,15 @@ public class UserServlet extends BaseServlet {
             if (user == null) {
                 this.alertUserNotFound(request, response);
             } else {
-            	
-            	Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
+
+                Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
             	Map<Integer, Password> passwords = this.passwordManager.getPasswordsByUser(userId);
+            	Map<Integer, Category> categories = this.categoryManager.getCategories();
             	
             	request.setAttribute("groups", groups.get("groups").values());
             	request.setAttribute("groupsAdmin", groups.get("groupsAdmin"));
             	request.setAttribute("passwords", passwords.values());
+                request.setAttribute("categories", categories);
                 request.setAttribute("user", user);
                 request.getRequestDispatcher(UserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
                 return;
