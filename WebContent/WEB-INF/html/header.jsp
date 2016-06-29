@@ -27,17 +27,16 @@
                     <form class="navbar-form navbar-right" method="post"
                         action="${BaseServlet.rootPath}/user/login">
                         <div class="form-group">
-                            <input type="text" placeholder="email"
+                            <input type="text" placeholder="E-mail"
                                 id="email" name="email"
                                 class="form-control">
                         </div>
                         <div class="form-group">
                             <input type="password" id="password"
-                                name="password" placeholder="Password"
+                                name="password" placeholder="Mot de passe"
                                 class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-success">Sign
-                            in</button>
+                        <button type="submit" class="btn btn-success">Se connecter</button>
                     </form>
                 </c:otherwise>
             </c:choose>

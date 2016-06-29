@@ -57,8 +57,8 @@
                 <label>
                     <input name="admin" type="checkbox" value="true"
                         <c:if test="${user.getAdmin()}">
-                            checked
-                        </c:if>
+                                    checked
+                        </c:if> 
                     >
                     Admin
                 </label>

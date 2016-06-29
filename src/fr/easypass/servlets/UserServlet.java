@@ -161,7 +161,7 @@ public class UserServlet extends BaseServlet {
         } else {
             
             User user = this.createUserFromParam(request);
-            
+            user.setAdmin(false);
             errors = user.isValid();
             
             if(errors.isEmpty()){

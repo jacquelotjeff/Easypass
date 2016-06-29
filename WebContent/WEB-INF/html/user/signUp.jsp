@@ -7,11 +7,13 @@
       Easypass - Inscription
     </jsp:attribute>
     <jsp:body>
-        <div class="jumbotron">
-            <div class="container">
-                <h1>Inscription</h1>
-                <jsp:include page="form.jsp"/>
-            </div>
+        <div class="container">
+            <div class="panel-heading">
+               <div class="panel-title text-center">
+                    <h1 class="title">Inscription</h1>
+                </div>
+            </div> 
+            <jsp:include page="form-signup.jsp"/>
         </div>
     </jsp:body>
 </t:genericpage>
