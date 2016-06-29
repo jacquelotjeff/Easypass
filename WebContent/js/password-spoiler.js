@@ -1,0 +1,9 @@
+$(function(){
+	$(".show-password").mousedown(function(){
+	    $(this).parent().find('input.password-field').attr('type','text');
+	}).mouseup(function(){
+		$(this).parent().find('input.password-field').attr('type','password');
+	}).mouseout(function(){
+		$(this).parent().find('input.password-field').attr('type','password');
+	});
+});

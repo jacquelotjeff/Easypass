@@ -133,9 +133,9 @@ public class PasswordServlet extends BaseServlet {
         String method = request.getMethod();
         
         Integer ownerId = this.checkOwnerParam(request, response);
-        Boolean ownerType = BooleanUtils.toBooleanObject(request.getParameter("ownerType"));
+        String ownerType = request.getParameter("ownerType");
         
-        if (ownerType != Password.OWNER_TYPE_GROUP && ownerType != Password.OWNER_TYPE_USER) {
+        if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
             response.sendRedirect(PasswordServlet.rootPath + "/admin");

@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Map;
 
+import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 
 public class PasswordManager {
@@ -61,6 +63,43 @@ public class PasswordManager {
         return passwords;
 
     }
+    
+    public Map<Integer, Password> getPasswordsByUser(Integer userId) throws IOException{
+    		
+       Map<Integer, Password> passwords = new HashMap<>();
+
+       Connection conn = ConnectorManager.getConnection();
+
+       try {
+
+           String query = "SELECT DISTINCT * from " + PasswordManager.TABLE_REL_OWNER + " INNER JOIN "
+                   + PasswordManager.TABLE + " u ON u." + PasswordManager.COL_ID + " = "
+                   + PasswordManager.TABLE_REL_OWNER + "." + PasswordManager.COL_FOREIGN + " WHERE "
+                   + UserManager.COL_FOREIGN + "=?";
+
+           // Not prepared statement
+           PreparedStatement stmt = conn.prepareStatement(query);
+           stmt.setInt(1, userId);
+
+           ResultSet rs = stmt.executeQuery();
+
+           while (rs.next()) {
+               Password password = this.createFromResultSet(rs);
+               passwords.put(password.getId(), password);
+           }
+
+           rs.close();
+           stmt.close();
+           conn.close();
+
+       } catch (SQLException e) {
+           e.printStackTrace();
+
+       }
+
+       return passwords;
+    	
+    }
 
     /**
      * Return User object if existing into data
@@ -100,7 +139,7 @@ public class PasswordManager {
     }
 
     public Integer insertPassword(String title, String site, String password, Integer category, String informations,
-            Integer owner, Boolean ownerType) {
+            Integer owner, String ownerType) {
 
         try {
 
@@ -196,7 +235,7 @@ public class PasswordManager {
 
     }
 
-    public Integer addOwner(Integer passwordId, Integer ownerId, Boolean ownerType) throws IOException {
+    public Integer addOwner(Integer passwordId, Integer ownerId, String ownerType) throws IOException {
         
         try {
 
@@ -207,7 +246,7 @@ public class PasswordManager {
                     ") values(?,?,?)"
             );
             
-            if (ownerType == Password.OWNER_TYPE_USER) {
+            if (ownerType.equals(Password.OWNER_TYPE_USER)) {
                 stmt.setInt(1, ownerId);
                 stmt.setNull(2, java.sql.Types.INTEGER);
             } else {

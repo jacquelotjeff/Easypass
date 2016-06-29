@@ -17,8 +17,8 @@ public class Password  extends FormValidator<Password>{
     private Integer ownerGroup;
     private Boolean typeOwner;
     
-    public static Boolean OWNER_TYPE_GROUP = true;
-    public static Boolean OWNER_TYPE_USER = false;
+    public static String OWNER_TYPE_GROUP = "G";
+    public static String OWNER_TYPE_USER = "U";
 
     public Password() {
     }

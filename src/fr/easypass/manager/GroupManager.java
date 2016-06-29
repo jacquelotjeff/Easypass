@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.easypass.model.Group;
+import fr.easypass.model.User;
 
 public class GroupManager {
 
@@ -302,6 +303,54 @@ public class GroupManager {
 
         return number;
 
+    }
+    
+    public Map<String, Map<Integer, Group>> getGroupByUsers(Integer userId) throws IOException{
+    	
+    	 // Resetting the Hashmap (Prevent from caching users into)
+        Map<String, Map<Integer, Group>> result = new HashMap<>();
+        Map<Integer, Group> groups = new HashMap<>();
+        Map<Integer, Group> groupsAdmin = new HashMap<>();
+
+        Connection conn = ConnectorManager.getConnection();
+
+        try {
+
+            String query = "SELECT DISTINCT * from " + GroupManager.TABLE_REL_USERS + " INNER JOIN "
+                    + GroupManager.TABLE + " u ON u." + GroupManager.COL_ID + " = "
+                    + GroupManager.TABLE_REL_USERS + "." + COL_FOREIGN + " WHERE "
+                    + UserManager.COL_FOREIGN + "=?";
+
+            // Not prepared statement
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Boolean admin = rs.getBoolean("admin");
+                Group group = this.createFromResultSet(rs);
+                groups.put(group.getId(), group);
+
+                if (admin) {
+                    groupsAdmin.put(group.getId(), group);
+                }
+
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        result.put("groups", groups);
+        result.put("groupsAdmin", groupsAdmin);
+
+        return result;
     }
 
     /**

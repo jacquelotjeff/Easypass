@@ -20,10 +20,14 @@
         <br/>
         <br/>
         <br/>
-        <%@ include file="../html/flash.jsp" %>
-        <jsp:doBody/>
-    <%@ include file="../html/footer.jsp" %>
-    
+        <div class="container">
+            <%@ include file="../html/flash.jsp" %>
+            <div class="row row-offcanvas row-offcanvas-right">
+                <hr>
+                <jsp:doBody/>
+            </div>
+            <%@ include file="../html/footer.jsp" %>
+        </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-select.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
