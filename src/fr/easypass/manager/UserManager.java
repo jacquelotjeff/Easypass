@@ -208,27 +208,21 @@ public class UserManager {
         return groupUsersAvailable;
     }
 
-    public Integer insertUser(HttpServletRequest request) {
-
-        // TODO Validation for parameters
-        String username = request.getParameter(UserManager.COL_USERNAME);
-        String firstname = request.getParameter(UserManager.COL_FIRSTNAME);
-        String lastname = request.getParameter(UserManager.COL_LASTNAME);
-        String password = request.getParameter(UserManager.COL_PASSWORD);
-        String email = request.getParameter(UserManager.COL_EMAIL);
+    public Integer insertUser(User user) {
 
         try {
 
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO " + UserManager.TABLE + "("
                     + UserManager.COL_USERNAME + ", " + UserManager.COL_FIRSTNAME + ", " + UserManager.COL_LASTNAME
-                    + ", " + UserManager.COL_PASSWORD + ", " + UserManager.COL_EMAIL + ") values(?,?,?,?,?)");
+                    + ", " + UserManager.COL_PASSWORD + ", " + UserManager.COL_EMAIL + ", " + UserManager.COL_ADMIN + ") values(?,?,?,?,?,?)");
 
-            stmt.setString(1, username);
-            stmt.setString(2, firstname);
-            stmt.setString(3, lastname);
-            stmt.setString(4, password);
-            stmt.setString(5, email);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getFirstname());
+            stmt.setString(3, user.getLastname());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getEmail());
+            stmt.setBoolean(6, user.getAdmin());
 
             Integer number = stmt.executeUpdate();
             stmt.close();
@@ -251,7 +245,7 @@ public class UserManager {
      * @return
      * @throws IOException
      */
-    public Integer editUser(Integer userId, String username, String lastname, String firstname, String password, String email) throws IOException {
+    public Integer editUser(Integer userId, User user) throws IOException {
 
         try {
             Connection conn = ConnectorManager.getConnection();
@@ -259,15 +253,16 @@ public class UserManager {
 
             stmt = conn.prepareStatement("UPDATE " + UserManager.TABLE + " SET " + UserManager.COL_USERNAME
                     + "=?, " + UserManager.COL_FIRSTNAME + "=?, " + UserManager.COL_LASTNAME + "=?, "
-                    + UserManager.COL_PASSWORD + "=?, " + UserManager.COL_EMAIL + "=?" + " WHERE id=?");
+                    + UserManager.COL_PASSWORD + "=?, " + UserManager.COL_EMAIL + "=?," + UserManager.COL_ADMIN + "=?" + " WHERE id=?");
 
-            stmt.setString(1, username);
-            stmt.setString(2, firstname);
-            stmt.setString(3, lastname);
-            stmt.setString(4, password);
-            stmt.setString(5, email);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getFirstname());
+            stmt.setString(3, user.getLastname());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getEmail());
+            stmt.setBoolean(6, user.getAdmin());
 
-            stmt.setInt(6, userId);
+            stmt.setInt(7, userId);
 
             Integer number = stmt.executeUpdate();
             stmt.close();
@@ -373,6 +368,7 @@ public class UserManager {
         user.setFirstname(rs.getString(UserManager.COL_FIRSTNAME));
         user.setLastname(rs.getString(UserManager.COL_LASTNAME));
         user.setEmail(rs.getString(UserManager.COL_EMAIL));
+        user.setAdmin(rs.getBoolean(UserManager.COL_ADMIN));
 
         return user;
     }

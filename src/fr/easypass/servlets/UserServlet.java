@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.CategoryManager;
@@ -158,16 +159,15 @@ public class UserServlet extends BaseServlet {
             request.setAttribute("formAction", "inscription");
             request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
         } else {
-            User u = new User(
-                    request.getParameter("firstname"),
-                    request.getParameter("lastname"),
-                    request.getParameter("username"),
-                    request.getParameter("password"),
-                    request.getParameter("email")
-                    );
-            errors= u.isValid();
+            
+            User user = this.createUserFromParam(request);
+            
+            errors = user.isValid();
+            
             if(errors.isEmpty()){
-            final Integer success = this.userManager.insertUser(request);
+                
+                final Integer success = this.userManager.insertUser(user);
+            
                 if (success == 1) {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Vous êtes bien inscrit");
@@ -196,7 +196,7 @@ public class UserServlet extends BaseServlet {
             if (method == "GET") {
 
                 final User user = this.userManager.getUser(userId);
-
+                
                 if (user == null) {
                     this.alertUserNotFound(request, response);
                 } else {
@@ -208,21 +208,26 @@ public class UserServlet extends BaseServlet {
                 
             } else {
                 
-                String username = request.getParameter("username");
-                String lastname = request.getParameter("lastname");
-                String firstname = request.getParameter("firstname");
-                String password = request.getParameter("password");
-                String email = request.getParameter("email");
+                User user = this.createUserFromParam(request);
+                
+                errors = user.isValid();
+                
+                if (errors.isEmpty()) {
+                    
+                    final Integer success = this.userManager.editUser(userId, user);
 
-                final Integer success = this.userManager.editUser(userId, username, lastname, firstname, password, email);
-
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "L'utilisateur a bien été édité.");
+                    if (success == 1) {
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "L'utilisateur a bien été édité.");
+                        
+                    } else {
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être édité.");
+                    }
                     
                 } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être édité.");
+                    request.setAttribute("errors", errors);
+                    request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
                 }
             }
         }
@@ -275,6 +280,27 @@ public class UserServlet extends BaseServlet {
         }
 
         return userId;
+    }
+    
+    private User createUserFromParam(HttpServletRequest request) throws IOException {
+
+        Boolean admin = BooleanUtils.toBooleanObject(request.getParameter("admin"));
+        
+        if (admin == null) {
+            admin = false;
+        }
+        
+        User user = new User(
+            request.getParameter("firstname"),
+            request.getParameter("lastname"),
+            request.getParameter("username"),
+            request.getParameter("password"),
+            request.getParameter("email"),
+            admin
+        );
+        
+        return user;
+        
     }
 
     private void alertUserNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {

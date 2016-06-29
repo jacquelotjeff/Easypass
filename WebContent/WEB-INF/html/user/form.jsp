@@ -52,6 +52,18 @@
                 <small class="help-block">${errors.get("password")}</small>
             </c:if>
         </div>
+        <div class="form-group ${not empty errors.get('admin')?'has-error':''}">
+            <div class="checkbox">
+                <label>
+                    <input name="admin" type="checkbox" value="true"
+                        <c:if test="${user.getAdmin()}">
+                            checked
+                        </c:if>
+                    >
+                    Admin
+                </label>
+            </div>
+        </div>
     </div>
     <br />
     <button type="submit" class="btn btn-default">Enregistrer</button>

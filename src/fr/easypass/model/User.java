@@ -17,6 +17,8 @@ public class User extends FormValidator<User> {
     private String username;
     private String password;
     private String email;
+    private Boolean admin;
+    
     private List<Integer> groups;
     private List<Integer> passwords;
     private List<Integer> categories;
@@ -28,12 +30,13 @@ public class User extends FormValidator<User> {
         this.categories = new ArrayList<Integer>();
     }
     
-    public User(String firstname, String lastname, String username, String password, String email) {
+    public User(String firstname, String lastname, String username, String password, String email, Boolean admin) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.admin = admin;
     }
     
     public User getObj() {
@@ -122,5 +125,13 @@ public class User extends FormValidator<User> {
 
     public List<Integer> getPasswords() {
         return this.passwords;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }

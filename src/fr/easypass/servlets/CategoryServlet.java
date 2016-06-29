@@ -26,7 +26,7 @@ public class CategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
-    
+
     public static String rootPath;
     public static String baseURL;
     public static final String prefixURL = "/admin/categories";
@@ -38,10 +38,10 @@ public class CategoryServlet extends BaseServlet {
      */
     public CategoryServlet() {
         super();
-        this.errors = new  HashMap<String, String>();
+        this.errors = new HashMap<String, String>();
         // TODO Auto-generated constructor stub
     }
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -53,10 +53,11 @@ public class CategoryServlet extends BaseServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         super.doGet(request, response);
-        
+
         final String uri = request.getRequestURI();
 
         if (uri.contains(prefixURL + "/voir")) {
@@ -133,29 +134,28 @@ public class CategoryServlet extends BaseServlet {
 
             String name = request.getParameter("name");
             String logo = request.getParameter("logo");
-            
+
             Category ctg = new Category(name, logo);
-            
+
             errors = ctg.isValid();
-            
-            if(errors.isEmpty()) {            
-	            System.out.println(name);
-	
-	            final Integer success = this.categoryManager.insertCategory(name, logo);
-	
-	            if (success == 1) {
-	
-	                session.setAttribute("alertClass", "alert-success");
-	                session.setAttribute("alertMessage", "La catégorie à bien été créée");
-	
-	            } else {
-	
-	                session.setAttribute("alertClass", "alert-danger");
-	                session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
-	            }
+
+            if (errors.isEmpty()) {
+
+                final Integer success = this.categoryManager.insertCategory(name, logo);
+
+                if (success == 1) {
+
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "La catégorie à bien été créée");
+
+                } else {
+
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
+                }
             } else {
-            	  request.setAttribute("errors", errors);
-            	  request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                request.setAttribute("errors", errors);
+                request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
             }
 
         }
@@ -207,7 +207,7 @@ public class CategoryServlet extends BaseServlet {
             }
 
         }
-        
+
         response.sendRedirect(CategoryServlet.baseURL);
         return;
 

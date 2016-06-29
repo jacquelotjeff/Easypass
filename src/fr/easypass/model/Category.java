@@ -48,7 +48,7 @@ public class Category extends FormValidator<Category> {
     }
 
     @NotNull(message = "Le logo ne peut pas être vide")
-    @Size(min=3, max=16,  message = "Le logo doit faire entre {min} et {max} charactères de long")  
+    @Size(min=1, max=255,  message = "Le logo doit faire entre {min} et {max} charactères de long")  
     public String getLogo() {
         return logo;
     }
