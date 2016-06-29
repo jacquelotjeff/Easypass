@@ -15,7 +15,7 @@ public class Password  extends FormValidator<Password>{
     private Integer category;
     private Integer ownerUser;
     private Integer ownerGroup;
-    private Boolean typeOwner;
+    private String typeOwner;
     
     public static String OWNER_TYPE_GROUP = "G";
     public static String OWNER_TYPE_USER = "U";
@@ -96,11 +96,11 @@ public class Password  extends FormValidator<Password>{
     }
     
     public Boolean ownerIsGroup(){
-        return this.typeOwner == Password.OWNER_TYPE_GROUP;
+        return this.typeOwner.equals(Password.OWNER_TYPE_GROUP);
     }
     
     public Boolean ownerIsUser() {
-        return this.typeOwner == Password.OWNER_TYPE_USER;
+        return this.typeOwner.equals(Password.OWNER_TYPE_USER);
     }
 
     public Integer getOwnerGroup() {
