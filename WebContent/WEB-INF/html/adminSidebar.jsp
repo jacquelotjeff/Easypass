@@ -6,6 +6,6 @@
     <li><a href="${BaseServlet.rootPath}/admin/utilisateurs">Utilisateurs</a></li>
     <li><a href="${BaseServlet.rootPath}/admin/groupes">Groupes</a></li>
     <li><a href="${BaseServlet.rootPath}/admin/categories">Catégories</a></li>
-    <li><a href="#">Mot de passes</a></li>
+    <li><a href="${BaseServlet.rootPath}/admin/mot-de-passe">Mots de passes</a></li>
   </ul>
 </div>

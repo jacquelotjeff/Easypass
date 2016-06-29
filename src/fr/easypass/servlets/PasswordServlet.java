@@ -26,7 +26,7 @@ import fr.easypass.model.Password;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "PasswordServlet", description = "Password Servlet", urlPatterns = {
-        PasswordServlet.prefixURL + "/liste", PasswordServlet.prefixURL + "/voir",
+        PasswordServlet.prefixURL, PasswordServlet.prefixURL + "/voir",
         PasswordServlet.prefixURL + "/editer", PasswordServlet.prefixURL + "/creer",
         PasswordServlet.prefixURL + "/supprimer" })
 public class PasswordServlet extends BaseServlet {
@@ -49,7 +49,7 @@ public class PasswordServlet extends BaseServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -68,9 +68,7 @@ public class PasswordServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains("/liste")) {
-            this.list(request, response);
-        } else if (uri.contains("/voir")) {
+        if (uri.contains("/voir")) {
             this.show(request, response);
         } else if (uri.contains("/creer")) {
             this.create(request, response);
@@ -79,7 +77,7 @@ public class PasswordServlet extends BaseServlet {
         } else if (uri.contains("/supprimer")) {
             this.delete(request, response);
         } else {
-            response.getWriter().append("Index");
+            this.list(request, response);
         }
     }
 
@@ -96,7 +94,7 @@ public class PasswordServlet extends BaseServlet {
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Map<Integer, Password> passwords = this.passwordManager.getPasswords();
-
+        
         request.setAttribute("passwords", passwords.values());
 
         request.getRequestDispatcher("/WEB-INF/html/password/list.jsp").forward(request, response);
@@ -131,10 +129,10 @@ public class PasswordServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         String method = request.getMethod();
-        
+
         Integer ownerId = this.checkOwnerParam(request, response);
         String ownerType = request.getParameter("ownerType");
-        
+
         if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
@@ -173,11 +171,11 @@ public class PasswordServlet extends BaseServlet {
                 } else {
                     response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
                 }
-                
+
                 return;
 
             } else {
-                
+
                 request.setAttribute("errors", errors);
             }
 
@@ -197,21 +195,48 @@ public class PasswordServlet extends BaseServlet {
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        /*
-         * String passwordParam = request.getParameter("password"); if
-         * (passwordParam == null) {
-         * response.sendRedirect(PasswordServlet.baseURL + "/liste"); return; }
-         * 
-         * // Simulating database request final Password password =
-         * this.passwordManager.getPassword(passwordParam);
-         * 
-         * if (password == null) { response.sendRedirect(PasswordServlet.baseURL
-         * + "/liste"); return; }
-         * 
-         * request.setAttribute("password", password);
-         * request.getRequestDispatcher(PasswordServlet.viewPathPrefix +
-         * "/edit.jsp").forward(request, response);
-         */
+        Integer passwordId = this.checkPasswordParam(request, response);
+        final String method = request.getMethod();
+        HttpSession session = request.getSession();
+        
+        if (passwordId > 0) {
+            
+            if (method == "GET") {
+                
+                Password password = this.passwordManager.getPassword(passwordId);
+                Map<Integer, Category> categories = this.categoryManager.getCategories();
+                
+                request.setAttribute("password", password);
+                request.setAttribute("categories", categories);
+                
+                request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                
+                return;
+                
+            } else {
+                
+                String title = request.getParameter("title");
+                Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
+                String site = request.getParameter("site");
+                String password = request.getParameter("password");
+                String informations = request.getParameter("informations");
+                
+                final Integer success = this.passwordManager.editPassword(passwordId, title, site, password, category, informations);
+                
+                if (success == 1) {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
+
+                } else {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
+                }
+                
+            }
+
+        }
+        
+        response.sendRedirect(PasswordServlet.baseURL);
 
         return;
     }

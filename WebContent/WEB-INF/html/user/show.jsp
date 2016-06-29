@@ -85,13 +85,13 @@
                                                         <div class="input-group">
                                                             <input type="password" class="form-control password-field" value="${password.getPassword()}">
                                                             <div class="input-group-addon show-password">
-                                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                                                <span class="fa fa-eye"></span>
                                                             </div>
                                                             <c:url value="/admin/mot-de-passe/editer" var="editPasswordURL">
                                                                 <c:param name="passwordId" value="${password.getId()}"/>
                                                             </c:url>
-                                                            <a href="${editerPasswordURL}" class="input-group-addon btn btn-xs btn-primary">
-                                                             <i class="fa fa-edit"></i>
+                                                            <a href="${editPasswordURL}" class="input-group-addon">
+                                                                <i class="fa fa-edit"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -129,12 +129,15 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <c:url value="/admin/group/voir" var="showGroupURL">
+                                                        <c:url value="/admin/groupes/voir" var="showGroupURL">
                                                             <c:param name="groupId" value="${group.getId()}"/>
                                                         </c:url>
                                                         <a href="${showGroupURL}" title="Voir le groupe." class="btn btn-success btn-sm">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
+                                                        <c:url value="/admin/groupes/editer" var="editGroupURL">
+                                                            <c:param name="groupId" value="${group.getId()}"/>
+                                                        </c:url>
                                                         <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
                                                             <i class="fa fa-edit"></i>
                                                         </a>

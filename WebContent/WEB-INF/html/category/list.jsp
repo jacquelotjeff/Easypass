@@ -14,9 +14,7 @@
                 <tr>
                     <th>Nom</th>
                     <th>Logo</th>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>
+                    <th class="col-sm-2">Action</th>
                 </tr>
             </thead>
     
@@ -24,27 +22,33 @@
                 <c:forEach var="category" items="${categories}">
                     <tr>
                         <td>${category.getName()}</td>
-                        <td>${category.getLogo()}</td>
                         <td>
-                            <c:url value="categories/voir" var="showURL">
-                                <c:param name="categoryId"   value="${category.getId()}" />
-                            </c:url>
-                            <a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a>
+                            <img width="30" class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
                         </td>
-                        
-                        <td>
-                            <c:url value="categories/editer" var="editURL">
-                                <c:param name="categoryId"   value="${category.getId()}" />
-                            </c:url>
-                            <a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a>
-                        </td>
-                        
-                        <td>
+                        <td>   
                             <c:url value="categories/supprimer" var="deleteURL">
                                 <c:param name="categoryId"   value="${category.getId()}" />
                             </c:url>
                             <form action="${deleteURL}" method="POST">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <div class="btn-group">
+                                    <c:url value="categories/voir" var="showURL">
+                                        <c:param name="categoryId"   value="${category.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-success" href="${showURL}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+    
+                                    <c:url value="categories/editer" var="editURL">
+                                        <c:param name="categoryId"   value="${category.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-primary" href="${editURL}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+    
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </div>
                             </form>
                         </td>
                     </tr>

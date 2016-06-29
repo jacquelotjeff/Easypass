@@ -48,6 +48,7 @@ public class PasswordManager {
             while (rs.next()) {
 
                 Password password = this.createFromResultSet(rs);
+                password.setId(rs.getInt(PasswordManager.COL_ID));
                 passwords.put(password.getId(), password);
 
             }
@@ -85,6 +86,7 @@ public class PasswordManager {
 
            while (rs.next()) {
                Password password = this.createFromResultSet(rs);
+               password.setId(rs.getInt(PasswordManager.COL_FOREIGN));
                passwords.put(password.getId(), password);
            }
 
@@ -115,7 +117,7 @@ public class PasswordManager {
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("SELECT * from " + PasswordManager.COL_ID + " WHERE id=?");
+            stmt = conn.prepareStatement("SELECT * from " + PasswordManager.TABLE + " WHERE id=?");
             stmt.setInt(1, passwordId);
 
             ResultSet rs = stmt.executeQuery();
@@ -123,6 +125,7 @@ public class PasswordManager {
             Password password = null;
             while (rs.next()) {
                 password = this.createFromResultSet(rs);
+                password.setId(rs.getInt(PasswordManager.COL_ID));
             }
 
             rs.close();
@@ -279,8 +282,7 @@ public class PasswordManager {
     private Password createFromResultSet(ResultSet rs) throws SQLException {
 
         Password password = new Password();
-
-        password.setId(rs.getInt(PasswordManager.COL_ID));
+        
         password.setTitle(rs.getString(PasswordManager.COL_TITLE));
         password.setCategory(rs.getInt(CategoryManager.COL_FOREIGN));
         password.setInformations(rs.getString(PasswordManager.COL_INFORMATIONS));

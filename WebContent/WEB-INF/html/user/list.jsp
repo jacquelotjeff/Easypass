@@ -17,9 +17,7 @@
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Email</th>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>
+                    <th class="col-sm-2">Action</th>
                 </tr>
             </thead>
     
@@ -31,25 +29,30 @@
                         <td>${user.getFirstname()}</td>
                         <td>${user.getEmail()}</td>
                         <td>
-                            <c:url value="utilisateurs/voir" var="showURL">
-                                <c:param name="userId"   value="${user.getId()}" />
-                            </c:url>
-                            <a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a>
-                        </td>
-                        
-                        <td>
-                            <c:url value="utilisateurs/editer" var="editURL">
-                                <c:param name="userId"   value="${user.getId()}" />
-                            </c:url>
-                            <a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a>
-                        </td>
-                        
-                        <td>
                             <c:url value="utilisateurs/supprimer" var="deleteURL">
                                 <c:param name="userId"   value="${user.getId()}" />
                             </c:url>
                             <form action="${deleteURL}" method="POST">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <div class="btn-group">
+
+                                    <c:url value="utilisateurs/voir" var="showURL">
+                                        <c:param name="userId"   value="${user.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-success" href='<c:out value="${showURL}"/>'>
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+
+                                    <c:url value="utilisateurs/editer" var="editURL">
+                                        <c:param name="userId"   value="${user.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-primary" href="<c:out value="${editURL}"/>">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </div>
                             </form>
                         </td>
                     </tr>

@@ -15,9 +15,7 @@
                     <th>Nom</th>
                     <th>Description</th>
                     <th>Logo</th>
-                    <th>#</th>
-                    <th>#</th>
-                    <th>#</th>
+                    <th class="col-sm-2">Action</th>
                 </tr>
             </thead>
     
@@ -27,20 +25,30 @@
                         <td>${group.getName()}</td>
                         <td>${group.getDescription()}</td>
                         <td>${group.getLogo()}</td>
-                        <c:url value="groupes/voir" var="showURL">
-                            <c:param name="groupId"   value="${group.getId()}" />
-                        </c:url>
-                        <td><a class="btn btn-success" href='<c:out value="${showURL}"/>'>Voir</a></td>
-                        <c:url value="groupes/editer" var="editURL">
-                            <c:param name="groupId"   value="${group.getId()}" />
-                        </c:url>
-                        <td><a class="btn btn-default" href="<c:out value="${editURL}"/>">Editer</a></td>
-                        <td>
+                        <td> 
                             <c:url value="groupes/supprimer" var="deleteURL">
                                 <c:param name="groupId"   value="${group.getId()}" />
                             </c:url>
                             <form action="${deleteURL}" method="POST">
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <div class="btn-group"> 
+                                    <c:url value="groupes/voir" var="showURL">
+                                        <c:param name="groupId"   value="${group.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-success" href='${showURL}'>
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    
+                                    <c:url value="groupes/editer" var="editURL">
+                                        <c:param name="groupId"   value="${group.getId()}" />
+                                    </c:url>
+                                    <a role="button" class="btn btn-primary" href="${editURL}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </div>
                             </form>
                         </td>
                     </tr>
