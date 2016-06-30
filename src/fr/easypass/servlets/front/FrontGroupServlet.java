@@ -21,6 +21,7 @@ import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
+import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
@@ -221,12 +222,18 @@ public class FrontGroupServlet extends BaseServlet {
                 }
 
                 final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
-                final Map<Integer, User> groupUsers = userManager.getUsersByGroup(groupId).get("groupUsers");
-                final Map<Integer, User> groupAdmins = userManager.getUsersByGroup(groupId).get("groupAdmins");
+                final Map<String, Map<Integer, User>> users = userManager.getUsersByGroup(groupId);
+                final Map<Integer, User> groupUsers = users.get("groupUsers");
+                final Map<Integer, User> groupAdmins = users.get("groupAdmins");
+                final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
+                final Map<Integer, Category> categories = categoryManager.getCategories();
 
-                request.setAttribute("users", availableUsers.values());
-                request.setAttribute("groupUsers", groupUsers.values());
+                request.setAttribute("users", availableUsers);
+                request.setAttribute("groupUsers", groupUsers);
                 request.setAttribute("groupAdmins", groupAdmins);
+                request.setAttribute("groupPasswords", groupPasswords);
+                request.setAttribute("categories", categories);
+                
                 request.setAttribute("group", group);
                 request.setAttribute("formAction", "editer");
 
