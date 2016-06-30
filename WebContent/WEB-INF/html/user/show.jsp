@@ -148,6 +148,14 @@
                                                     <div class="clearfix"></div>
                                                 </li>
                                         </c:forEach>
+                                        <c:url value="/admin/groupes/creer" var="addGroupURL">
+                                        </c:url>
+                                        <li class="list-group-item title">
+                                            <a href="${addGroupURL}" class="btn btn-md btn-primary">
+                                                <i class="fa fa-plus"></i>
+                                                Ajouter un groupe
+                                            </a>
+                                        </li>  
                                     </ul>
                                 </div>
                             </div>
