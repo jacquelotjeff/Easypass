@@ -16,17 +16,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
   </head>
   <body>
-    <%@ include file="../html/header.jsp" %>
+    <%@ include file="/WEB-INF/html/header.jsp" %>
         <br/>
         <br/>
         <br/>
         <div class="container">
-            <%@ include file="../html/flash.jsp" %>
+            <%@ include file="/WEB-INF/html/flash.jsp" %>
             <div class="row row-offcanvas row-offcanvas-right">
                 <hr>
                 <jsp:doBody/>
             </div>
-            <%@ include file="../html/footer.jsp" %>
+            <%@ include file="/WEB-INF/html/footer.jsp" %>
         </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-select.min.js"></script>

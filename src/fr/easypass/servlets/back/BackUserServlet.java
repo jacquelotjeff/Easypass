@@ -1,4 +1,4 @@
-package fr.easypass.servlets;
+package fr.easypass.servlets.back;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,20 +22,22 @@ import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
+import fr.easypass.servlets.BaseServlet;
+import fr.easypass.servlets.front.FrontUserServlet;
 
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "UserServlet", description = "User Servlet", urlPatterns = { UserServlet.prefixURL + "",
-        UserServlet.prefixURL + "/voir", UserServlet.prefixURL + "/editer", "/inscription",
-        UserServlet.prefixURL + "/supprimer" })
-public class UserServlet extends BaseServlet {
+@WebServlet(name = "BackUserServlet", description = "User Servlet", urlPatterns = { BackUserServlet.prefixURL + "",
+        BackUserServlet.prefixURL + "/voir", BackUserServlet.prefixURL + "/editer", "/inscription",
+        BackUserServlet.prefixURL + "/supprimer" })
+public class BackUserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/admin/utilisateurs";
     public static String baseURL;
     public static String rootPath;
-    public static final String viewPathPrefix = "/WEB-INF/html/user";
+    public static final String viewPathPrefix = "/WEB-INF/html/back/user";
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
     public final PasswordManager passwordManager = new PasswordManager();
@@ -44,15 +46,15 @@ public class UserServlet extends BaseServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserServlet() {
+    public BackUserServlet() {
         super();
     }
     
     @Override
     public void init() throws ServletException {
         super.init();
-        UserServlet.rootPath = this.getServletContext().getContextPath();
-        UserServlet.baseURL = UserServlet.rootPath + UserServlet.prefixURL;
+        BackUserServlet.rootPath = this.getServletContext().getContextPath();
+        BackUserServlet.baseURL = BackUserServlet.rootPath + BackUserServlet.prefixURL;
     }
 
     /**
@@ -105,7 +107,7 @@ public class UserServlet extends BaseServlet {
 
         request.setAttribute("users", users.values());
 
-        request.getRequestDispatcher("/WEB-INF/html/user/list.jsp").forward(request, response);
+        request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/list.jsp").forward(request, response);
 
         // Do not forget the return at the end of action
         return;
@@ -140,12 +142,12 @@ public class UserServlet extends BaseServlet {
             	request.setAttribute("passwords", passwords.values());
                 request.setAttribute("categories", categories);
                 request.setAttribute("user", user);
-                request.getRequestDispatcher(UserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+                request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
                 return;
             }
             
         }
-        response.sendRedirect(UserServlet.baseURL);
+        response.sendRedirect(BackUserServlet.baseURL);
         
         return;
     }
@@ -157,7 +159,7 @@ public class UserServlet extends BaseServlet {
 
         if (method == "GET") {
             request.setAttribute("formAction", "inscription");
-            request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
+            request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
         } else {
             
             User user = this.createUserFromParam(request);
@@ -178,7 +180,7 @@ public class UserServlet extends BaseServlet {
                 response.sendRedirect("/easypass");
             } else {
                 request.setAttribute("errors", errors);
-                request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
+                request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
             }
         }
         return;
@@ -202,7 +204,7 @@ public class UserServlet extends BaseServlet {
                 } else {
                     request.setAttribute("user", user);
                     request.setAttribute("formAction", "editer");
-                    request.getRequestDispatcher(UserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                    request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
                     return;
                 }
                 
@@ -227,12 +229,12 @@ public class UserServlet extends BaseServlet {
                     
                 } else {
                     request.setAttribute("errors", errors);
-                    request.getRequestDispatcher(UserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
+                    request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
                 }
             }
         }
         
-        response.sendRedirect(UserServlet.baseURL);
+        response.sendRedirect(BackUserServlet.baseURL);
         return;
     }
 
@@ -264,7 +266,7 @@ public class UserServlet extends BaseServlet {
             session.setAttribute("alertMessage", "Accès interdit");
         }
 
-        response.sendRedirect(UserServlet.baseURL);
+        response.sendRedirect(BackUserServlet.baseURL);
 
         return;
     }

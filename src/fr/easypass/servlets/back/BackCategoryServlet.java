@@ -1,4 +1,4 @@
-package fr.easypass.servlets;
+package fr.easypass.servlets.back;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,14 +15,15 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.model.Category;
+import fr.easypass.servlets.BaseServlet;
 
 /**
  * Servlet implementation class CategoryServlet
  */
-@WebServlet(name = "CategoryServlet", description = "Category Servlet", urlPatterns = { CategoryServlet.prefixURL + "",
-        CategoryServlet.prefixURL + "/creer", CategoryServlet.prefixURL + "/voir",
-        CategoryServlet.prefixURL + "/editer", CategoryServlet.prefixURL + "/supprimer" })
-public class CategoryServlet extends BaseServlet {
+@WebServlet(name = "BackCategoryServlet", description = "Category Servlet", urlPatterns = { BackCategoryServlet.prefixURL + "",
+        BackCategoryServlet.prefixURL + "/creer", BackCategoryServlet.prefixURL + "/voir",
+        BackCategoryServlet.prefixURL + "/editer", BackCategoryServlet.prefixURL + "/supprimer" })
+public class BackCategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
@@ -30,13 +31,13 @@ public class CategoryServlet extends BaseServlet {
     public static String rootPath;
     public static String baseURL;
     public static final String prefixURL = "/admin/categories";
-    public static final String viewPathPrefix = "/WEB-INF/html/category";
+    public static final String viewPathPrefix = "/WEB-INF/html/back/category";
     public final CategoryManager categoryManager = new CategoryManager();
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CategoryServlet() {
+    public BackCategoryServlet() {
         super();
         this.errors = new HashMap<String, String>();
         // TODO Auto-generated constructor stub
@@ -45,8 +46,8 @@ public class CategoryServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        CategoryServlet.rootPath = this.getServletContext().getContextPath();
-        CategoryServlet.baseURL = CategoryServlet.rootPath + CategoryServlet.prefixURL;
+        BackCategoryServlet.rootPath = this.getServletContext().getContextPath();
+        BackCategoryServlet.baseURL = BackCategoryServlet.rootPath + BackCategoryServlet.prefixURL;
     }
 
     /**
@@ -90,7 +91,7 @@ public class CategoryServlet extends BaseServlet {
 
         request.setAttribute("categories", categories.values());
 
-        request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/list.jsp").forward(request, response);
+        request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/list.jsp").forward(request, response);
 
         return;
     }
@@ -108,13 +109,13 @@ public class CategoryServlet extends BaseServlet {
             } else {
 
                 request.setAttribute("category", category);
-                request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
                 return;
             }
         }
 
-        response.sendRedirect(CategoryServlet.baseURL);
+        response.sendRedirect(BackCategoryServlet.baseURL);
         return;
     }
 
@@ -126,7 +127,7 @@ public class CategoryServlet extends BaseServlet {
         if (method == "GET") {
 
             request.setAttribute("formAction", "creer");
-            request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+            request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
             return;
 
@@ -155,12 +156,12 @@ public class CategoryServlet extends BaseServlet {
                 }
             } else {
                 request.setAttribute("errors", errors);
-                request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
             }
 
         }
 
-        response.sendRedirect(CategoryServlet.baseURL);
+        response.sendRedirect(BackCategoryServlet.baseURL);
         return;
 
     }
@@ -184,7 +185,7 @@ public class CategoryServlet extends BaseServlet {
                 request.setAttribute("category", category);
                 request.setAttribute("formAction", "editer");
 
-                request.getRequestDispatcher(CategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
 
                 return;
 
@@ -208,7 +209,7 @@ public class CategoryServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(CategoryServlet.baseURL);
+        response.sendRedirect(BackCategoryServlet.baseURL);
         return;
 
     }
@@ -239,7 +240,7 @@ public class CategoryServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(CategoryServlet.baseURL);
+        response.sendRedirect(BackCategoryServlet.baseURL);
 
         return;
     }

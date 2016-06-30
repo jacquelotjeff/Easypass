@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<t:genericpage>
+<t:genericadminpage>
     <jsp:attribute name="title">
       Easypass - Ajouter une catégorie
     </jsp:attribute>
@@ -14,4 +14,4 @@
             </div>
         </div>
     </jsp:body>
-</t:genericpage>
+</t:genericadminpage>

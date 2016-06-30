@@ -9,9 +9,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-
 import fr.easypass.model.User;
 
 public class UserManager {

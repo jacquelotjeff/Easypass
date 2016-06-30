@@ -22,7 +22,8 @@ public class BaseServlet extends HttpServlet {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        request.setCharacterEncoding(ENCODING);
+        
+    	request.setCharacterEncoding(ENCODING);
         response.setContentType("text/html;charset=" + ENCODING);
     }
 

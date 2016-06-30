@@ -1,4 +1,4 @@
-package fr.easypass.servlets;
+package fr.easypass.servlets.back;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,19 +19,20 @@ import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.Group;
 import fr.easypass.model.User;
+import fr.easypass.servlets.BaseServlet;
 
 /**
  * Servlet implementation class GroupServlet
  */
-@WebServlet(name = "GroupServlet", description = "Group Servlet", urlPatterns = { GroupServlet.prefixURL + "",
-        GroupServlet.prefixURL + "/voir", GroupServlet.prefixURL + "/editer", GroupServlet.prefixURL + "/creer",
-        GroupServlet.prefixURL + "/supprimer", GroupServlet.prefixURL + "/ajouter-utilisateur",
-        GroupServlet.prefixURL + "/supprimer-utilisateur", GroupServlet.prefixURL + "/admin-utilisateur" })
-public class GroupServlet extends BaseServlet {
+@WebServlet(name = "BackGroupServlet", description = "Group Servlet", urlPatterns = { BackGroupServlet.prefixURL + "",
+        BackGroupServlet.prefixURL + "/voir", BackGroupServlet.prefixURL + "/editer", BackGroupServlet.prefixURL + "/creer",
+        BackGroupServlet.prefixURL + "/supprimer", BackGroupServlet.prefixURL + "/ajouter-utilisateur",
+        BackGroupServlet.prefixURL + "/supprimer-utilisateur", BackGroupServlet.prefixURL + "/admin-utilisateur" })
+public class BackGroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/admin/groupes";
-    public static final String viewPathPrefix = "/WEB-INF/html/group";
+    public static final String viewPathPrefix = "/WEB-INF/html/back/group";
     public static String rootPath;
     public static String baseURL;
     public final GroupManager groupManager = new GroupManager();
@@ -45,15 +46,15 @@ public class GroupServlet extends BaseServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GroupServlet() {
+    public BackGroupServlet() {
         super();
     }
     
     @Override
     public void init() throws ServletException {
         super.init();
-        GroupServlet.rootPath = this.getServletContext().getContextPath();
-        GroupServlet.baseURL = GroupServlet.rootPath + GroupServlet.prefixURL;
+        BackGroupServlet.rootPath = this.getServletContext().getContextPath();
+        BackGroupServlet.baseURL = BackGroupServlet.rootPath + BackGroupServlet.prefixURL;
     }
 
 
@@ -104,7 +105,7 @@ public class GroupServlet extends BaseServlet {
 
         request.setAttribute("groups", groups.values());
 
-        request.getRequestDispatcher("/WEB-INF/html/group/list.jsp").forward(request, response);
+        request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/list.jsp").forward(request, response);
 
         return;
     }
@@ -122,13 +123,13 @@ public class GroupServlet extends BaseServlet {
             } else {
 
                 request.setAttribute("group", group);
-                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+                request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
                 return;
             }
         }
 
-        response.sendRedirect(GroupServlet.baseURL);
+        response.sendRedirect(BackGroupServlet.baseURL);
         return;
     }
 
@@ -165,7 +166,7 @@ public class GroupServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
                 }
                 
-                response.sendRedirect(GroupServlet.baseURL);
+                response.sendRedirect(BackGroupServlet.baseURL);
                 return;
                 
             } else {
@@ -178,7 +179,7 @@ public class GroupServlet extends BaseServlet {
         final Map<Integer, User> users = userManager.getUsers();
         request.setAttribute("users", users.values());
         request.setAttribute("formAction", "creer");
-        request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+        request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
         return;
 
@@ -210,7 +211,7 @@ public class GroupServlet extends BaseServlet {
                 request.setAttribute("group", group);
                 request.setAttribute("formAction", "editer");
 
-                request.getRequestDispatcher(GroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
 
                 return;
 
@@ -235,7 +236,7 @@ public class GroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(GroupServlet.baseURL);
+        response.sendRedirect(BackGroupServlet.baseURL);
         return;
 
     }
@@ -266,7 +267,7 @@ public class GroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(GroupServlet.baseURL);
+        response.sendRedirect(BackGroupServlet.baseURL);
 
         return;
     }
@@ -293,7 +294,7 @@ public class GroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -310,7 +311,7 @@ public class GroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(GroupServlet.baseURL);
+        response.sendRedirect(BackGroupServlet.baseURL);
 
         return;
 
@@ -338,7 +339,7 @@ public class GroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -356,7 +357,7 @@ public class GroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(GroupServlet.baseURL);
+        response.sendRedirect(BackGroupServlet.baseURL);
 
         return;
 
@@ -385,7 +386,7 @@ public class GroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(GroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }

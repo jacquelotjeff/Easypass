@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <c:url value="${formAction}" var="submitURL">
     <c:if test="${not empty password}">
         <c:param name="passwordId" value="${password.getId()}"/>

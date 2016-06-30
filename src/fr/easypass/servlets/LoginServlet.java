@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
 
@@ -76,18 +78,28 @@ public class LoginServlet extends BaseServlet {
             
             User user = userManager.checkMailWithPassword(email, password);
 
-
             if (user instanceof User) {
                 session.setAttribute("username", user.getUsername());
+                session.setAttribute("userId", user.getId());
                 session.setAttribute("alertClass", "alert-success");
                 session.setAttribute("alertMessage", "Vous êtes bien connecté.");
+                
+                if (user.getAdmin()){
+                	response.sendRedirect(BaseServlet.rootPath + "/admin");
+                } else {
+                	response.sendRedirect(BaseServlet.rootPath + "/utilisateur");
+                }
+                
+                return;
+                
             } else {
+            	
                 session.setAttribute("alertClass", "alert-danger");
                 session.setAttribute("alertMessage", "Connexion échouée.");
             }
-            
-            response.sendRedirect("/easypass");
         }
+        
+        response.sendRedirect(BaseServlet.rootPath);
         
         return;
         
@@ -97,6 +109,16 @@ public class LoginServlet extends BaseServlet {
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("/easypass");
+    }
+    
+    public static User getCurrentUser(HttpServletRequest request) throws IOException
+    {
+    	HttpSession session = request.getSession();
+    	
+    	UserManager userManager = new UserManager();
+    	User user = userManager.getUser(NumberUtils.createInteger(session.getAttribute("userId").toString()));
+    	
+    	return user;
     }
 
 }

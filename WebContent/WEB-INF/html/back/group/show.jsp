@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ page import="fr.easypass.servlets.GroupServlet"%>
+<%@ page import="fr.easypass.servlets.back.BackGroupServlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:genericadminpage>

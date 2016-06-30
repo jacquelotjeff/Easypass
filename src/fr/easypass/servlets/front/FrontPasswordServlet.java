@@ -1,4 +1,4 @@
-package fr.easypass.servlets;
+package fr.easypass.servlets.front;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.CategoryManager;
@@ -21,22 +20,23 @@ import fr.easypass.manager.UserManager;
 import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.Password;
+import fr.easypass.servlets.BaseServlet;
 
 /**
  * Servlet implementation class PasswordServlet
  */
-@WebServlet(name = "PasswordServlet", description = "Password Servlet", urlPatterns = {
-        PasswordServlet.prefixURL, PasswordServlet.prefixURL + "/voir",
-        PasswordServlet.prefixURL + "/editer", PasswordServlet.prefixURL + "/creer",
-        PasswordServlet.prefixURL + "/supprimer" })
-public class PasswordServlet extends BaseServlet {
+@WebServlet(name = "FrontPasswordServlet", description = "Front Password Servlet", urlPatterns = {
+        FrontPasswordServlet.prefixURL, FrontPasswordServlet.prefixURL + "/voir",
+        FrontPasswordServlet.prefixURL + "/editer", FrontPasswordServlet.prefixURL + "/creer",
+        FrontPasswordServlet.prefixURL + "/supprimer" })
+public class FrontPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String prefixURL = "/admin/mot-de-passe";
+    public static final String prefixURL = "/utilisateur/mot-de-passe";
     public static String baseURL;
     public static String rootPath;
-    public static final String viewPathPrefix = "/WEB-INF/html/password";
+    public static final String viewPathPrefix = "/WEB-INF/html/front/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
@@ -45,7 +45,7 @@ public class PasswordServlet extends BaseServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PasswordServlet() {
+    public FrontPasswordServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -53,8 +53,8 @@ public class PasswordServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        PasswordServlet.rootPath = this.getServletContext().getContextPath();
-        PasswordServlet.baseURL = PasswordServlet.rootPath + PasswordServlet.prefixURL;
+        FrontPasswordServlet.rootPath = this.getServletContext().getContextPath();
+        FrontPasswordServlet.baseURL = FrontPasswordServlet.rootPath + FrontPasswordServlet.prefixURL;
     }
 
     /**
@@ -76,8 +76,6 @@ public class PasswordServlet extends BaseServlet {
             this.edit(request, response);
         } else if (uri.contains("/supprimer")) {
             this.delete(request, response);
-        } else {
-            this.list(request, response);
         }
     }
 
@@ -90,18 +88,7 @@ public class PasswordServlet extends BaseServlet {
         // TODO Auto-generated method stub
         doGet(request, response);
     }
-
-    private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        Map<Integer, Password> passwords = this.passwordManager.getPasswords();
-        
-        request.setAttribute("passwords", passwords.values());
-
-        request.getRequestDispatcher("/WEB-INF/html/password/list.jsp").forward(request, response);
-
-        return;
-    }
-
+    
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Integer passwordId = this.checkPasswordParam(request, response);
@@ -115,13 +102,13 @@ public class PasswordServlet extends BaseServlet {
             } else {
 
                 request.setAttribute("group", group);
-                request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+                request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
                 return;
             }
         }
 
-        response.sendRedirect(PasswordServlet.baseURL);
+        response.sendRedirect(FrontPasswordServlet.baseURL);
         return;
     }
 
@@ -136,7 +123,7 @@ public class PasswordServlet extends BaseServlet {
         if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            response.sendRedirect(PasswordServlet.rootPath + "/admin");
+            response.sendRedirect(FrontUserServlet.baseURL);
             return;
         }
 
@@ -165,12 +152,8 @@ public class PasswordServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
                 }
-
-                if (ownerType == Password.OWNER_TYPE_GROUP) {
-                    response.sendRedirect(GroupServlet.baseURL + "/voir?groupId=" + ownerId);
-                } else {
-                    response.sendRedirect(UserServlet.baseURL + "/voir?userId=" + ownerId);
-                }
+                
+                response.sendRedirect(FrontUserServlet.baseURL);
 
                 return;
 
@@ -183,11 +166,11 @@ public class PasswordServlet extends BaseServlet {
 
         Map<Integer, Category> categories = this.categoryManager.getCategories();
 
-        request.setAttribute("formAction", PasswordServlet.baseURL + "/creer");
-        request.setAttribute("categories", categories.values());
+        request.setAttribute("formAction", "creer");
+        request.setAttribute("categories", categories);
         request.setAttribute("ownerId", ownerId);
         request.setAttribute("ownerType", ownerType);
-        request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+        request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
         return;
 
@@ -209,7 +192,7 @@ public class PasswordServlet extends BaseServlet {
                 request.setAttribute("password", password);
                 request.setAttribute("categories", categories);
                 
-                request.getRequestDispatcher(PasswordServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
                 
                 return;
                 
@@ -236,7 +219,7 @@ public class PasswordServlet extends BaseServlet {
 
         }
         
-        response.sendRedirect(PasswordServlet.baseURL);
+        response.sendRedirect(FrontUserServlet.baseURL);
 
         return;
     }

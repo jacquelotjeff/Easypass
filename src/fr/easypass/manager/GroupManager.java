@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.easypass.model.Group;
-import fr.easypass.model.User;
 
 public class GroupManager {
 

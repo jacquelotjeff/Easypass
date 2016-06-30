@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 
 public class PasswordManager {

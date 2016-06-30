@@ -39,10 +39,7 @@ public class HomeServlet extends BaseServlet {
             this.admin(request, response);
         } else {
             this.home(request, response);
-            response.getWriter().append("Index");
         }
-        response.getWriter().append("Served at: ").append(request.getContextPath());
-
     }
 
     /**
@@ -57,7 +54,7 @@ public class HomeServlet extends BaseServlet {
 
     private void home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //User test = this.getCurrentUser(request);
-        request.getRequestDispatcher("/WEB-INF/html/home/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/html/front/home.jsp").forward(request, response);
 
         return;
     }
@@ -66,7 +63,7 @@ public class HomeServlet extends BaseServlet {
 
         //User test = this.getCurrentUser(request);
         //request.setAttribute("currentUser", test);
-        request.getRequestDispatcher("/WEB-INF/html/home/admin.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/html/back/home.jsp").forward(request, response);
 
         return;
     }

@@ -2,7 +2,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<t:genericpage>
+<t:genericuserpage>
     <jsp:attribute name="title">
       Easypass - Inscription
     </jsp:attribute>
@@ -16,4 +16,4 @@
             <jsp:include page="form-signup.jsp"/>
         </div>
     </jsp:body>
-</t:genericpage>
+</t:genericuserpage>
