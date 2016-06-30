@@ -2,7 +2,6 @@ package fr.easypass.servlets.front;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,15 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.math.NumberUtils;
-
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
-import fr.easypass.model.Category;
-import fr.easypass.model.Group;
-import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
 import fr.easypass.servlets.LoginServlet;

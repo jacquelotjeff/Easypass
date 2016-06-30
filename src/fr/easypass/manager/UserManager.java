@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import fr.easypass.model.User;
 
 public class UserManager {
@@ -217,7 +219,7 @@ public class UserManager {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getFirstname());
             stmt.setString(3, user.getLastname());
-            stmt.setString(4, user.getPassword());
+            stmt.setString(4, DigestUtils.sha1Hex(user.getPassword()));
             stmt.setString(5, user.getEmail());
             stmt.setBoolean(6, user.getAdmin());
 
@@ -229,7 +231,6 @@ public class UserManager {
 
         } catch (Exception e) {
             e.printStackTrace();
-
             return 0;
         }
     }
@@ -255,7 +256,7 @@ public class UserManager {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getFirstname());
             stmt.setString(3, user.getLastname());
-            stmt.setString(4, user.getPassword());
+            stmt.setString(4, DigestUtils.sha1Hex(user.getPassword()));
             stmt.setString(5, user.getEmail());
             stmt.setBoolean(6, user.getAdmin());
 

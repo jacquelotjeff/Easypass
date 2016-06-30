@@ -9,11 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
-import fr.easypass.servlets.front.FrontUserServlet;
 
 /**
  * Servlet implementation class LoginServlet
@@ -79,7 +78,7 @@ public class LoginServlet extends BaseServlet {
             final String email = request.getParameter("email");
             final String password = request.getParameter("password");
 
-            User user = userManager.checkMailWithPassword(email, password);
+            User user = userManager.checkMailWithPassword(email, DigestUtils.sha1Hex(password));
 
             if (user instanceof User) {
                 user.setPassword(null);

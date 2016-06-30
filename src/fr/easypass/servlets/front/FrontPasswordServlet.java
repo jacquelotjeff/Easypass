@@ -23,7 +23,6 @@ import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
 import fr.easypass.servlets.LoginServlet;
-import fr.easypass.servlets.back.BackPasswordServlet;
 
 /**
  * Servlet implementation class PasswordServlet
