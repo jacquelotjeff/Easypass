@@ -20,7 +20,7 @@
                     <form class="navbar-form navbar-right" method="post"
                         action="${BaseServlet.rootPath}/user/logout">
                         <a>${sessionScope.username}</a>
-                        <button type="submit" class="btn btn-success">Logout</button>
+                        <button type="submit" class="btn btn-success">Déconnexion</button>
                     </form>
                 </c:when>
                 <c:otherwise>
@@ -36,7 +36,7 @@
                                 name="password" placeholder="Mot de passe"
                                 class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-success">Se connecter</button>
+                        <button type="submit" class="btn btn-success">Connexion</button>
                     </form>
                 </c:otherwise>
             </c:choose>

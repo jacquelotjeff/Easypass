@@ -13,6 +13,7 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
+import fr.easypass.servlets.front.FrontUserServlet;
 
 /**
  * Servlet implementation class LoginServlet
@@ -69,7 +70,8 @@ public class LoginServlet extends BaseServlet {
         
         if (method == "GET") {
             
-            request.getRequestDispatcher("/WEB-INF/html/header.jsp").forward(request, response);
+            response.sendRedirect(LoginServlet.rootPath);
+            return;
             
         } else {
 

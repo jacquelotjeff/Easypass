@@ -304,6 +304,11 @@ public class GroupManager {
 
     }
     
+    /**
+     * @param userId
+     * @return Map<String, Map<Integer, Group>> "groups" contains all User groups, "groupsAdmin" contains all groups wich user is admin
+     * @throws IOException
+     */
     public Map<String, Map<Integer, Group>> getGroupByUsers(Integer userId) throws IOException{
     	
     	 // Resetting the Hashmap (Prevent from caching users into)
