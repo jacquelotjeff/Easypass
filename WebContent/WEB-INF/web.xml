@@ -51,6 +51,8 @@
         <url-pattern>/utilisateur/groupes/editer/*</url-pattern>
         <url-pattern>/utilisateur/groupes/supprimer/*</url-pattern>
         <url-pattern>/utilisateur/groupes/admin-utilisateur/*</url-pattern>
+        <url-pattern>/utilisateur/groupes/ajouter-utilisateur/*</url-pattern>
+        <url-pattern>/utilisateur/groupes/supprimer-utilisateur/*</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
