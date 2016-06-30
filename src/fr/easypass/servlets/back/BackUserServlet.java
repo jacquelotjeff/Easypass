@@ -180,7 +180,7 @@ public class BackUserServlet extends BaseServlet {
                 response.sendRedirect("/easypass");
             } else {
                 request.setAttribute("errors", errors);
-                request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
+                request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
             }
         }
         return;

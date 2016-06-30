@@ -1,3 +1,4 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:url value="${formAction}" var="submitURL">
@@ -42,7 +43,7 @@
         </div>
         <div class="form-group row ${not empty errors.get('category')?'has-error':''}">
             <div class="col-sm-4">
-                <label for="categoryId">Catégorie : </label> 
+                <label for="categoryId">CatÃ©gorie : </label> 
                 <select name="categoryId" class="form-control selectpicker">
                     <c:forEach var="category" items="${categories.values()}">
                         <option 

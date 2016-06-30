@@ -86,7 +86,7 @@
                 <c:forEach var="password" items="${groupPasswords}">
                     <li class="list-group-item title">${password.getTitle()}</li>
                 </c:forEach>
-                <c:url value="/admin/mot-de-passe/creer" var="addPasswordURL">
+                <c:url value="/utilisateur/mots-de-passes/creer" var="addPasswordURL">
                     <c:param name="ownerId"
                         value="${group.getId()}" />
                     <c:param name="ownerType"

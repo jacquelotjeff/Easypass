@@ -1,7 +1,10 @@
 package fr.easypass.servlets.back;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -20,6 +23,7 @@ import fr.easypass.manager.UserManager;
 import fr.easypass.model.Group;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
+import fr.easypass.servlets.LoginServlet;
 
 /**
  * Servlet implementation class GroupServlet
@@ -134,6 +138,8 @@ public class BackGroupServlet extends BaseServlet {
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        
+        final User user = LoginServlet.getCurrentUser(request);
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
@@ -143,11 +149,13 @@ public class BackGroupServlet extends BaseServlet {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             String logo = request.getParameter("logo");
-            String[] users = request.getParameterValues("users");
-            String[] admins = {};
-            //String[] admins = request.getParameterValues("admins");
+            List<String> users = new ArrayList<>(Arrays.asList(request.getParameterValues("users")));
+            List<String> admins = new ArrayList<>();
             
             Group group = new Group(name, description, logo);
+            
+            users.add(user.getId().toString());
+            admins.add(user.getId().toString());
             
             errors = group.isValid();
             
@@ -177,6 +185,7 @@ public class BackGroupServlet extends BaseServlet {
         }
         
         final Map<Integer, User> users = userManager.getUsers();
+        users.remove(LoginServlet.getCurrentUser(request).getId());
         request.setAttribute("users", users.values());
         request.setAttribute("formAction", "creer");
         request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);

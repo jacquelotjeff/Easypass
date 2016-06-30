@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.easypass.model.Group;
@@ -96,7 +97,7 @@ public class GroupManager {
         return groups;
     }
 
-    public Integer insertGroup(String name, String description, String logo, String[] users, String[] admins) {
+    public Integer insertGroup(String name, String description, String logo, List<String> users, List<String> admins) {
 
         try {
 
@@ -186,7 +187,7 @@ public class GroupManager {
 
     }
 
-    public Integer addUsers(Integer groupId, String[] users, String[] admins) throws IOException {
+    public Integer addUsers(Integer groupId, List<String> users, List<String> admins) throws IOException {
         // Adding the new relations.
         try {
 
@@ -200,7 +201,7 @@ public class GroupManager {
             for (String userId : users) {
 
                 stmt.setString(1, userId);
-                stmt.setBoolean(2, Arrays.asList(admins).contains(userId));
+                stmt.setBoolean(2, admins.contains(userId));
                 stmt.setInt(3, groupId);
 
                 stmt.addBatch();

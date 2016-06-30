@@ -35,12 +35,11 @@
                             <c:url value="/utilisateur/groupes/editer" var="editGroupURL">
                                 <c:param name="groupId" value="${group.getId()}"/>
                             </c:url>
-                            <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="${exitGroupURL}" title="Quitter le groupe." class="btn btn-danger btn-sm">
-                                <i class="fa fa-sign-out"></i>
-                            </a>
+                            <c:if test="${groupsAdmin.containsKey(group.getId())}">
+                                <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </c:if>
                         </div>
                         <div class="clearfix"></div>
                     </li>

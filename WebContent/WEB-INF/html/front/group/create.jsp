@@ -9,11 +9,11 @@
     <jsp:body>
         <div class="container">
             <div class="panel-heading">
-               <div class="panel-title text-center">
-                    <h1 class="title">Créer un groupe</h1>
+               <div class="panel-title">
+                    <h3 class="title">Créer un groupe</h3>
                 </div>
             </div> 
-            <div class="col-sm-4 col-md-offset-4">
+            <div class="col-sm-5">
                 <c:url value="${formAction}" var="submitURL"/>
                 <form action="${submitURL}" method="POST">
                     <div class='form-group ${not empty errors.get("name")?"has-error":""}'>

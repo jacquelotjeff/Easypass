@@ -32,7 +32,7 @@
                                 <div class="input-group-addon show-password">
                                     <span class="fa fa-eye"></span>
                                 </div>
-                                <c:url value="/utilisateur/mot-de-passe/editer" var="editPasswordURL">
+                                <c:url value="/utilisateur/mots-de-passes/editer" var="editPasswordURL">
                                     <c:param name="passwordId" value="${password.getId()}"/>
                                 </c:url>
                                 <a href="${editPasswordURL}" class="input-group-addon">

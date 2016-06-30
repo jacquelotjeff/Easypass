@@ -9,11 +9,48 @@
     </jsp:attribute>
     <jsp:body> 
         
-        <h1>Consulter le groupe <c:out value="${group.getName()}"/></h1>
-        <p>Nom : <c:out value="${group.getName()}"/></p>
-        <p>Description : <c:out value="${group.getDescription()}"/></p>
-        <p>Logo : <c:out value="${group.getLogo()}"/></p>
+        <h3>Consulter le groupe ${group.getName()}</h3>
+        <p>Nom : ${group.getName()}</p>
+        <p>Description : ${group.getDescription()}</p>
+        <p>Logo : ${group.getLogo()}</p>
         
+        <div class="col-sm-6">
+            <ul class="list-group">
+                <li class="list-group-item title">Membres</li>
+                <c:forEach var="user" items="${users.values()}">
+                 <li class="list-group-item text-left">
+                    <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
+                    <label class="name">${user.getUsername()}<br></label> 
+                    <div class="break"></div>
+                  </li>
+                </c:forEach>
+            </ul>
+        </div>
+        <ul class="list-group">
+            <c:forEach var="password" items="${passwords.values()}">
+                    <li class="list-group-item title">
+                        <span class="col-sm-2">
+                            <c:set var="category" value="${categories.get(password.getCategory())}"/>
+                            <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
+                        </span>
+                        <div class="col-sm-6">
+                            <h4 class="list-group-item-heading">${password.getTitle()}</h4>
+                            <p class="list-group-item-text">
+                                ${password.getInformations()}
+                            </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input type="password" class="form-control password-field" value="${password.getPassword()}">
+                                <div class="input-group-addon show-password">
+                                    <span class="fa fa-eye"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+            </c:forEach>
+        </ul>
         <a class="btn btn-success" href="${GroupServlet.baseURL}">Retour</a>
         
         <c:url value="editer" var="editURL">

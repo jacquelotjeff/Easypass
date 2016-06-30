@@ -1,7 +1,10 @@
 package fr.easypass.servlets.front;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -11,11 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
+import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.Category;
 import fr.easypass.model.Group;
@@ -38,6 +43,7 @@ public class FrontGroupServlet extends BaseServlet {
     public static final String viewPathPrefix = "/WEB-INF/html/front/group";
     public static String rootPath;
     public static String baseURL;
+    public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
@@ -124,12 +130,16 @@ public class FrontGroupServlet extends BaseServlet {
         if (groupId > 0) {
 
             final Group group = this.groupManager.getGroup(groupId);
+            final Map<Integer, User> groupUsers = userManager.getUsersByGroup(groupId).get("groupUsers");
+            final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
 
             if (group == null) {
                 this.alertGroupNotFound(request, response);
             } else {
 
                 request.setAttribute("group", group);
+                request.setAttribute("users", groupUsers);
+                request.setAttribute("passwords", groupPasswords);
                 request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
                 return;
@@ -144,14 +154,18 @@ public class FrontGroupServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
+        final User user = LoginServlet.getCurrentUser(request);
 
         if (method == "POST") {
 
             String name = request.getParameter("name");
             String description = request.getParameter("description");
             String logo = request.getParameter("logo");
-            String[] users = request.getParameterValues("users");
-            String[] admins = {};
+            List<String> users = new ArrayList<>(Arrays.asList(request.getParameterValues("users")));
+            List<String> admins = new ArrayList<>();
+            
+            users.add(user.getId().toString());
+            admins.add(user.getId().toString());
             
             Group group = new Group(name, description, logo);
             
@@ -183,6 +197,7 @@ public class FrontGroupServlet extends BaseServlet {
         }
         
         final Map<Integer, User> users = userManager.getUsers();
+        users.remove(user.getId());
         request.setAttribute("users", users.values());
         request.setAttribute("formAction", "creer");
         request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);

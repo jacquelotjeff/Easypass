@@ -64,7 +64,7 @@ public class PasswordManager {
 
     }
     
-    public Map<Integer, Password> getPasswordsByUser(Integer userId) throws IOException{
+    public Map<Integer, Password> getPasswordsByGroup(Integer groupId) throws IOException{
     		
        Map<Integer, Password> passwords = new HashMap<>();
 
@@ -75,11 +75,11 @@ public class PasswordManager {
            String query = "SELECT DISTINCT * from " + PasswordManager.TABLE_REL_OWNER + " INNER JOIN "
                    + PasswordManager.TABLE + " u ON u." + PasswordManager.COL_ID + " = "
                    + PasswordManager.TABLE_REL_OWNER + "." + PasswordManager.COL_FOREIGN + " WHERE "
-                   + UserManager.COL_FOREIGN + "=?";
+                   + GroupManager.COL_FOREIGN + "=?";
 
            // Not prepared statement
            PreparedStatement stmt = conn.prepareStatement(query);
-           stmt.setInt(1, userId);
+           stmt.setInt(1, groupId);
 
            ResultSet rs = stmt.executeQuery();
 
@@ -101,6 +101,44 @@ public class PasswordManager {
        return passwords;
     	
     }
+    
+    public Map<Integer, Password> getPasswordsByUser(Integer userId) throws IOException{
+        
+        Map<Integer, Password> passwords = new HashMap<>();
+
+        Connection conn = ConnectorManager.getConnection();
+
+        try {
+
+            String query = "SELECT DISTINCT * from " + PasswordManager.TABLE_REL_OWNER + " INNER JOIN "
+                    + PasswordManager.TABLE + " u ON u." + PasswordManager.COL_ID + " = "
+                    + PasswordManager.TABLE_REL_OWNER + "." + PasswordManager.COL_FOREIGN + " WHERE "
+                    + UserManager.COL_FOREIGN + "=?";
+
+            // Not prepared statement
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Password password = this.createFromResultSet(rs);
+                password.setId(rs.getInt(PasswordManager.COL_FOREIGN));
+                passwords.put(password.getId(), password);
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        return passwords;
+         
+     }
 
     /**
      * Return User object if existing into data
