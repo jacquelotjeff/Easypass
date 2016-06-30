@@ -25,6 +25,7 @@ public class BaseServlet extends HttpServlet {
         
     	request.setCharacterEncoding(ENCODING);
         response.setContentType("text/html;charset=" + ENCODING);
+        request.setAttribute("requestURL", request.getRequestURI());
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

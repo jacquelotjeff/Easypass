@@ -37,10 +37,11 @@ public class LoginServlet extends BaseServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         super.doGet(request, response);
-        
+
         final String uri = request.getRequestURI();
 
         if (uri.contains("/user/login")) {
@@ -50,7 +51,7 @@ public class LoginServlet extends BaseServlet {
         } else {
             response.getWriter().append("No route LoginServlet");
         }
-        
+
     }
 
     /**
@@ -67,44 +68,44 @@ public class LoginServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
-        
+
         if (method == "GET") {
-            
+
             response.sendRedirect(LoginServlet.rootPath);
             return;
-            
+
         } else {
 
             final String email = request.getParameter("email");
             final String password = request.getParameter("password");
-            
+
             User user = userManager.checkMailWithPassword(email, password);
 
             if (user instanceof User) {
-                session.setAttribute("username", user.getUsername());
-                session.setAttribute("userId", user.getId());
+                user.setPassword(null);
+                session.setAttribute("user", user);
                 session.setAttribute("alertClass", "alert-success");
                 session.setAttribute("alertMessage", "Vous êtes bien connecté.");
-                
-                if (user.getAdmin()){
-                	response.sendRedirect(BaseServlet.rootPath + "/admin");
+
+                if (user.getAdmin()) {
+                    response.sendRedirect(BaseServlet.rootPath + "/admin");
                 } else {
-                	response.sendRedirect(BaseServlet.rootPath + "/utilisateur");
+                    response.sendRedirect(BaseServlet.rootPath + "/utilisateur");
                 }
-                
+
                 return;
-                
+
             } else {
-            	
+
                 session.setAttribute("alertClass", "alert-danger");
                 session.setAttribute("alertMessage", "Connexion échouée.");
             }
         }
-        
+
         response.sendRedirect(BaseServlet.rootPath);
-        
+
         return;
-        
+
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -112,15 +113,15 @@ public class LoginServlet extends BaseServlet {
         session.invalidate();
         response.sendRedirect("/easypass");
     }
-    
-    public static User getCurrentUser(HttpServletRequest request) throws IOException
-    {
-    	HttpSession session = request.getSession();
-    	
-    	UserManager userManager = new UserManager();
-    	User user = userManager.getUser(NumberUtils.createInteger(session.getAttribute("userId").toString()));
-    	
-    	return user;
+
+    public static User getCurrentUser(HttpServletRequest request) throws IOException {
+        HttpSession session = request.getSession();
+
+        UserManager userManager = new UserManager();
+        User user = (User) session.getAttribute("user");
+        user = userManager.getUser(user.getId());
+
+        return user;
     }
 
 }

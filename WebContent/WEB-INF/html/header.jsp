@@ -16,10 +16,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <c:choose>
-                <c:when test='${sessionScope.username  != null}'>
+                <c:when test='${sessionScope.user  != null}'>
                     <form class="navbar-form navbar-right" method="post"
                         action="${BaseServlet.rootPath}/user/logout">
-                        <a>${sessionScope.username}</a>
+                        <a href="${BaseServlet.rootPath}/utilisateur">${sessionScope.user.getUsername()}</a>
                         <button type="submit" class="btn btn-success">Déconnexion</button>
                     </form>
                 </c:when>

@@ -29,7 +29,7 @@ public class AuthentificationFilter implements Filter {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("username") == null) {
+        if (session.getAttribute("user") == null) {
 
             session.setAttribute("alertClass", "alert-warning");
             session.setAttribute("alertMessage", "Veuillez vous identifier.");

@@ -20,7 +20,10 @@ import fr.easypass.manager.UserManager;
 import fr.easypass.model.Category;
 import fr.easypass.model.Group;
 import fr.easypass.model.Password;
+import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
+import fr.easypass.servlets.LoginServlet;
+import fr.easypass.servlets.back.BackPasswordServlet;
 
 /**
  * Servlet implementation class PasswordServlet
@@ -33,7 +36,7 @@ public class FrontPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String prefixURL = "/utilisateur/mot-de-passe";
+    public static final String prefixURL = "/utilisateur/mots-de-passes";
     public static String baseURL;
     public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/front/password";
@@ -76,6 +79,8 @@ public class FrontPasswordServlet extends BaseServlet {
             this.edit(request, response);
         } else if (uri.contains("/supprimer")) {
             this.delete(request, response);
+        } else {
+            this.list(request, response);
         }
     }
 
@@ -87,6 +92,23 @@ public class FrontPasswordServlet extends BaseServlet {
             throws ServletException, IOException {
         // TODO Auto-generated method stub
         doGet(request, response);
+    }
+    
+    private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        Integer userId = LoginServlet.getCurrentUser(request).getId();
+
+        final User user = this.userManager.getUser(userId);
+
+        Map<Integer, Password> passwords = this.passwordManager.getPasswordsByUser(userId);
+        Map<Integer, Category> categories = this.categoryManager.getCategories();
+
+        request.setAttribute("passwords", passwords.values());
+        request.setAttribute("categories", categories);
+        request.setAttribute("user", user);
+        request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/list.jsp").forward(request, response);
+
+        return;
     }
     
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

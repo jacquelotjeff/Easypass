@@ -43,7 +43,7 @@
     
     <filter-mapping>
         <filter-name>GroupMemberFilter</filter-name>
-        <url-pattern>/utilisateur/groupes/*</url-pattern>
+        <url-pattern>/utilisateur/groupes/voir/*</url-pattern>
     </filter-mapping>
     
     <filter-mapping>

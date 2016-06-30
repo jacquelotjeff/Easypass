@@ -17,11 +17,8 @@
   </head>
   <body>
     <%@ include file="/WEB-INF/html/header.jsp" %>
-        <br/>
-        <br/>
-        <br/>
+        <%@ include file="/WEB-INF/html/flash.jsp" %>
         <div class="container">
-            <%@ include file="/WEB-INF/html/flash.jsp" %>
             <div class="row row-offcanvas row-offcanvas-right">
                 <div class="row">
                     <%@ include file="/WEB-INF/html/back/adminSidebar.jsp" %>

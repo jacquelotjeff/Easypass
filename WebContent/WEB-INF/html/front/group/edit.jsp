@@ -8,7 +8,7 @@
       Easypass - Modification de ${group.getName()}
     </jsp:attribute>
     <jsp:body>
-        <h1>Modification de ${group.getName()}</h1>
+        <h3>Modification de ${group.getName()}</h3>
         <div class="panel panel-default">
           <div class="panel-heading">Infos générales du groupe</div>
           <div class="panel-body">

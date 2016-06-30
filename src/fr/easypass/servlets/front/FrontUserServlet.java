@@ -22,6 +22,7 @@ import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
+import fr.easypass.servlets.LoginServlet;
 
 /**
  * Servlet implementation class UserServlet
@@ -39,14 +40,15 @@ public class FrontUserServlet extends BaseServlet {
     public final GroupManager groupManager = new GroupManager();
     public final PasswordManager passwordManager = new PasswordManager();
     public final CategoryManager categoryManager = new CategoryManager();
-	private HashMap<String, String> errors;
+    private HashMap<String, String> errors;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public FrontUserServlet() {
         super();
     }
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -60,15 +62,15 @@ public class FrontUserServlet extends BaseServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         super.doGet(request, response);
 
         final String uri = request.getRequestURI();
 
         if (uri.contains(prefixURL + "/editer")) {
-        	this.edit(request, response);
+            this.edit(request, response);
         } else {
-        	this.show(request, response);
+            this.show(request, response);
         }
 
     }
@@ -93,21 +95,13 @@ public class FrontUserServlet extends BaseServlet {
      */
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-    	Integer userId = NumberUtils.createInteger(request.getSession().getAttribute("userId").toString());
-        
-        final User user = this.userManager.getUser(userId);
+        Integer userId = LoginServlet.getCurrentUser(request).getId();
 
-        Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
-    	Map<Integer, Password> passwords = this.passwordManager.getPasswordsByUser(userId);
-    	Map<Integer, Category> categories = this.categoryManager.getCategories();
-    	
-    	request.setAttribute("groups", groups.get("groups").values());
-    	request.setAttribute("groupsAdmin", groups.get("groupsAdmin"));
-    	request.setAttribute("passwords", passwords.values());
-        request.setAttribute("categories", categories);
+        final User user = this.userManager.getUser(userId);
         request.setAttribute("user", user);
-        request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
         
+        request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+
         return;
     }
 
@@ -115,60 +109,55 @@ public class FrontUserServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
-        
-        Integer userId = NumberUtils.createInteger(session.getAttribute("userId").toString());
-        
+
+        Integer userId = LoginServlet.getCurrentUser(request).getId();
+
         if (method == "GET") {
 
             final User user = this.userManager.getUser(userId);
-            
+
             request.setAttribute("user", user);
             request.setAttribute("formAction", "editer");
             request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-            
+
             return;
-            
+
         } else {
-            
+
             User user = this.createUserFromParam(request);
-            
+
             errors = user.isValid();
-            
+
             if (errors.isEmpty()) {
-                
+
                 final Integer success = this.userManager.editUser(userId, user);
 
                 if (success == 1) {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a bien été édité.");
-                    
+
                 } else {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être édité.");
                 }
-                
+
             } else {
                 request.setAttribute("errors", errors);
                 request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
             }
         }
-        
+
         response.sendRedirect(FrontUserServlet.baseURL);
         return;
     }
-    
+
     private User createUserFromParam(HttpServletRequest request) throws IOException {
-        
-    	User user = new User(
-            request.getParameter("firstname"),
-            request.getParameter("lastname"),
-            request.getParameter("username"),
-            request.getParameter("password"),
-            request.getParameter("email"),
-            false
-        );
-        
+
+        User user = new User(request.getParameter("firstname"), request.getParameter("lastname"),
+                request.getParameter("username"), request.getParameter("password"), request.getParameter("email"),
+                false);
+
         return user;
-        
+
     }
 }

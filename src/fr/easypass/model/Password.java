@@ -44,7 +44,7 @@ public class Password extends FormValidator<Password> {
     }
 
     @NotNull(message = "Le titre ne peut pas être vide")
-    @Size(min = 3, max = 16, message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @Size(min = 3, max = 60, message = "Le titre du mot de passe doit faire entre {min} et {max} charactères de long")
     public String getTitle() {
         return title;
     }
@@ -54,7 +54,7 @@ public class Password extends FormValidator<Password> {
     }
 
     @NotNull(message = "Le site ne peut pas être vide")
-    @Size(min = 3, max = 16, message = "${validatedValue} doit faire entre {min} et {max} charactères de long")
+    @Size(min = 3, max = 255, message = "Le site doit faire entre {min} et {max} charactères de long")
     public String getSiteUrl() {
         return siteUrl;
     }

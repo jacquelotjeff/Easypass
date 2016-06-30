@@ -17,17 +17,16 @@
   </head>
   <body>
     <%@ include file="/WEB-INF/html/header.jsp" %>
-        <br/>
-        <br/>
-        <br/>
-        <div class="container">
-            <%@ include file="/WEB-INF/html/flash.jsp" %>
-            <div class="row row-offcanvas row-offcanvas-right">
-                <hr>
-                <jsp:doBody/>
-            </div>
-            <%@ include file="/WEB-INF/html/footer.jsp" %>
+    <%@ include file="/WEB-INF/html/flash.jsp" %>
+    <div class="container">
+        <c:if test="${sessionScope.user != null}">
+            <jsp:include page="/WEB-INF/html/front/userNavbar.jsp" />                    
+        </c:if>
+        <div class="col-sm-12">
+            <jsp:doBody/>
         </div>
+    </div>
+    <%@ include file="/WEB-INF/html/footer.jsp" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-select.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>

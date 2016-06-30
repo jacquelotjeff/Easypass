@@ -8,7 +8,7 @@
       Easypass - Edition de mon profil <c:out value="${user.getUsername()}"/>
     </jsp:attribute>
     <jsp:body>
-        <h1>Editer mon profil <c:out value="${user.getUsername()}"/></h1>
+        <h3>Editer mon profil <c:out value="${user.getUsername()}"/></h3>
         <jsp:include page="form.jsp"/>
     </jsp:body>
 </t:genericuserpage>
