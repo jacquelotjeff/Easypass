@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-group">
                         <label for="users">Utilisateurs : </label>
-                        <select name="users" class="selectpicker form-control" multiple>
+                        <select data-live-search="true" name="users" class="selectpicker form-control" multiple>
                                 <c:forEach var="user" items="${users}">
                                     <option value="${user.getId()}">${user.getUsername()}</option>
                                 </c:forEach>
