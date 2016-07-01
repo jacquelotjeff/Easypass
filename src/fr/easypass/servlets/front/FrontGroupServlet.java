@@ -129,7 +129,9 @@ public class FrontGroupServlet extends BaseServlet {
         if (groupId > 0) {
 
             final Group group = this.groupManager.getGroup(groupId);
-            final Map<Integer, User> groupUsers = userManager.getUsersByGroup(groupId).get("groupUsers");
+            final Map<String, Map<Integer, User>> users = userManager.getUsersByGroup(groupId);
+            final Map<Integer, User> groupUsers = users.get("groupUsers");
+            final Map<Integer, User> groupsAdmins = users.get("groupAdmins");
             final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
 
             if (group == null) {
@@ -138,6 +140,7 @@ public class FrontGroupServlet extends BaseServlet {
 
                 request.setAttribute("group", group);
                 request.setAttribute("users", groupUsers);
+                request.setAttribute("groupsAdmins", groupsAdmins);
                 request.setAttribute("passwords", groupPasswords);
                 request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 

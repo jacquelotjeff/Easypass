@@ -45,7 +45,7 @@ public class Group extends FormValidator<Group>{
     }
 
     @NotNull(message = "Le nom ne peut pas être vide")
-    @Size(min=3, max=16,  message = "Le nom doit faire entre {min} et {max} charactères de long")
+    @Size(min=3, max=60,  message = "Le nom doit faire entre {min} et {max} charactères de long")
     public String getName() {
         return name;
     }

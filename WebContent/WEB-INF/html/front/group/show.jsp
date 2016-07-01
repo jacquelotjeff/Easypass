@@ -1,6 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ page import="fr.easypass.servlets.back.BackGroupServlet"%>
+<%@ page import="fr.easypass.servlets.front.FrontGroupServlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:genericuserpage>
@@ -51,18 +51,21 @@
                     </li>
             </c:forEach>
         </ul>
-        <a class="btn btn-success" href="${GroupServlet.baseURL}">Retour</a>
         
-        <c:url value="editer" var="editURL">
-            <c:param name="userId"   value="${group.getId()}" />
-        </c:url>
-        <a class="btn btn-default" href="${editURL}">Editer</a>
-        
-        <c:url value="groupes/supprimer" var="deleteURL">
-            <c:param name="userId"   value="${group.getId()}" />
-        </c:url>
-        <form action="${deleteURL}" method="POST">
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-        </form>
+        <div class="col-sm-12">
+            <a class="btn btn-success" href="${FrontGroupServlet.baseURL}">Retour</a>
+            <c:if test="${groupAdmins.containsKey(sessionScope.user.getId())}">
+                <c:url value="editer" var="editURL">
+                    <c:param name="userId"   value="${group.getId()}" />
+                </c:url>
+                <a class="btn btn-default" href="${editURL}">Editer</a>
+                <c:url value="groupes/supprimer" var="deleteURL">
+                    <c:param name="userId"   value="${group.getId()}" />
+                </c:url>
+                <form action="${deleteURL}" method="POST">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </c:if>
+        </div>
     </jsp:body>
 </t:genericuserpage>
