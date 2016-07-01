@@ -1,6 +1,7 @@
 package fr.easypass.filters;
 
 import java.io.IOException;
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -15,7 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.math.NumberUtils;
 
+import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
+import fr.easypass.manager.UserManager;
+import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.LoginServlet;
@@ -40,21 +44,41 @@ public class PasswordOwnerFilter implements Filter {
         
         User user = LoginServlet.getCurrentUser(request);
         PasswordManager passwordManager = new PasswordManager();
+        UserManager userManager = new UserManager();
         
         try {
             
             Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
             
-            Map<Integer, Password> passwordsUser = passwordManager.getPasswordsByUser(user.getId());
+            Password password = passwordManager.getPassword(passwordId);
             
-            if (passwordsUser.containsKey(passwordId)) {
-                
-                chain.doFilter(request, response);
-                
+            if (password.getOwnerGroup() != null) {
+            	
+            	GroupManager groupManager = new GroupManager();
+            	Group group = groupManager.getGroup(password.getOwnerGroup());
+            	Map<Integer, User> usersAdmin = userManager.getUsersByGroup(group.getId()).get("adminsGroup");
+            	
+            	if (usersAdmin.containsKey(user.getId())) {
+            		
+            		chain.doFilter(request, response);
+            		
+            	} else {
+            		
+            		this.restrict(session, response);
+            		
+            	}
+            	
+            	
             } else {
+            	
+            	Map<Integer, Password> passwordsUser = passwordManager.getPasswordsByUser(user.getId());
                 
-                this.restrict(session, response);
-                
+                if (passwordsUser.containsKey(passwordId)) {
+                    chain.doFilter(request, response);
+                } else {
+                    this.restrict(session, response);
+                }
+            	
             }
             
         } catch (Exception e) {
