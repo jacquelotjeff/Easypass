@@ -28,8 +28,6 @@ public class BackCategoryServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static String rootPath;
-    public static String baseURL;
     public static final String prefixURL = "/admin/categories";
     public static final String viewPathPrefix = "/WEB-INF/html/back/category";
     public final CategoryManager categoryManager = new CategoryManager();
@@ -46,8 +44,6 @@ public class BackCategoryServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        BackCategoryServlet.rootPath = this.getServletContext().getContextPath();
-        BackCategoryServlet.baseURL = BackCategoryServlet.rootPath + BackCategoryServlet.prefixURL;
     }
 
     /**
@@ -115,7 +111,7 @@ public class BackCategoryServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BackCategoryServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
         return;
     }
 
@@ -161,7 +157,7 @@ public class BackCategoryServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(BackCategoryServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
         return;
 
     }
@@ -209,7 +205,7 @@ public class BackCategoryServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(BackCategoryServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
         return;
 
     }
@@ -240,7 +236,7 @@ public class BackCategoryServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BackCategoryServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
 
         return;
     }

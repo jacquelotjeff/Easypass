@@ -37,8 +37,6 @@ public class BackGroupServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/admin/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/back/group";
-    public static String rootPath;
-    public static String baseURL;
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
@@ -57,8 +55,6 @@ public class BackGroupServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        BackGroupServlet.rootPath = this.getServletContext().getContextPath();
-        BackGroupServlet.baseURL = BackGroupServlet.rootPath + BackGroupServlet.prefixURL;
     }
 
 
@@ -133,7 +129,7 @@ public class BackGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BackGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
         return;
     }
 
@@ -174,7 +170,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
                 }
                 
-                response.sendRedirect(BackGroupServlet.baseURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
                 return;
                 
             } else {
@@ -245,7 +241,7 @@ public class BackGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(BackGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
         return;
 
     }
@@ -276,7 +272,7 @@ public class BackGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BackGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
 
         return;
     }
@@ -303,7 +299,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -320,7 +316,7 @@ public class BackGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(BackGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
 
         return;
 
@@ -348,7 +344,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -366,7 +362,7 @@ public class BackGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(BackGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
 
         return;
 
@@ -395,7 +391,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(BackGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }

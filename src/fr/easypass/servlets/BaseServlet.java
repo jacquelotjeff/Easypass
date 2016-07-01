@@ -11,14 +11,7 @@ public class BaseServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    public static String rootPath;
     public static final String ENCODING = "utf-8";
-    
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        BaseServlet.rootPath = this.getServletContext().getContextPath();
-    }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

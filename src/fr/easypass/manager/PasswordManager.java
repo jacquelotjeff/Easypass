@@ -206,9 +206,10 @@ public class PasswordManager {
                 } else {
                     throw new SQLException("Creating group failed, no ID obtained.");
                 }
+            } finally {
+                stmt.close();
             }
-
-            stmt.close();
+            
             conn.close();
 
             return 1;

@@ -27,8 +27,6 @@ public class FrontUserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/utilisateur";
-    public static String baseURL;
-    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/front/user";
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
@@ -46,8 +44,6 @@ public class FrontUserServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        FrontUserServlet.rootPath = this.getServletContext().getContextPath();
-        FrontUserServlet.baseURL = FrontUserServlet.rootPath + FrontUserServlet.prefixURL;
     }
 
     /**
@@ -141,7 +137,7 @@ public class FrontUserServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(FrontUserServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
         return;
     }
 

@@ -34,8 +34,6 @@ public class BackPasswordServlet extends BaseServlet {
     private HashMap<String, String> errors;
 
     public static final String prefixURL = "/admin/mot-de-passe";
-    public static String baseURL;
-    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/back/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -53,8 +51,6 @@ public class BackPasswordServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        BackPasswordServlet.rootPath = this.getServletContext().getContextPath();
-        BackPasswordServlet.baseURL = BackPasswordServlet.rootPath + BackPasswordServlet.prefixURL;
     }
 
     /**
@@ -121,7 +117,7 @@ public class BackPasswordServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BackPasswordServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.prefixURL);
         return;
     }
 
@@ -136,7 +132,7 @@ public class BackPasswordServlet extends BaseServlet {
         if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            response.sendRedirect(BackPasswordServlet.rootPath + "/admin");
+            response.sendRedirect(this.getServletContext().getContextPath() + "/admin");
             return;
         }
 
@@ -167,9 +163,9 @@ public class BackPasswordServlet extends BaseServlet {
                 }
 
                 if (ownerType == Password.OWNER_TYPE_GROUP) {
-                    response.sendRedirect(BackGroupServlet.baseURL + "/voir?groupId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/voir?groupId=" + ownerId);
                 } else {
-                    response.sendRedirect(BackUserServlet.baseURL + "/voir?userId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL + "/voir?userId=" + ownerId);
                 }
 
                 return;
@@ -236,7 +232,7 @@ public class BackPasswordServlet extends BaseServlet {
 
         }
         
-        response.sendRedirect(BackPasswordServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.prefixURL);
 
         return;
     }

@@ -165,7 +165,7 @@
             </div>
             <div class="col-sm-12">
                 <div class="pull-right">
-                    <a class="btn btn-success" href="${UserServlet.baseURL}">Retour</a>
+                    <a class="btn btn-success" href="${pageContext.request.contextPath}${UserServlet.prefixURL}">Retour</a>
                 </div>
             </div>
         </div>        

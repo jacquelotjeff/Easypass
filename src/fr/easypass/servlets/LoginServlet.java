@@ -70,7 +70,7 @@ public class LoginServlet extends BaseServlet {
 
         if (method == "GET") {
 
-            response.sendRedirect(LoginServlet.rootPath);
+            response.sendRedirect(this.getServletContext().getContextPath());
             return;
 
         } else {
@@ -87,9 +87,9 @@ public class LoginServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Vous êtes bien connecté.");
 
                 if (user.getAdmin()) {
-                    response.sendRedirect(BaseServlet.rootPath + "/admin");
+                    response.sendRedirect(this.getServletContext().getContextPath() + "/admin");
                 } else {
-                    response.sendRedirect(BaseServlet.rootPath + "/utilisateur");
+                    response.sendRedirect(this.getServletContext().getContextPath() + "/utilisateur");
                 }
 
                 return;
@@ -101,7 +101,7 @@ public class LoginServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(BaseServlet.rootPath);
+        response.sendRedirect(this.getServletContext().getContextPath());
 
         return;
 

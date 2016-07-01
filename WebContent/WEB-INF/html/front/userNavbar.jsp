@@ -1,4 +1,7 @@
-<%@ page import="fr.easypass.servlets.BaseServlet" %>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="user-image text-center">
@@ -14,17 +17,36 @@
         </div>
     </div>
     
-    <jsp:useBean id="menu" class="java.util.HashMap" scope="request"/>
-    <c:set target="${menu}" property="${BaseServlet.rootPath}/utilisateur" value="fa fa-user"/> 
-    <c:set target="${menu}" property="${BaseServlet.rootPath}/utilisateur/mots-de-passes" value="fa fa-key"/>
-    <c:set target="${menu}" property="${BaseServlet.rootPath}/utilisateur/groupes" value="fa fa-users"/>
-
+    <%
+        List<Map<String, String>> menu = new ArrayList<Map<String,String>>();
+        
+        Map<String, String> itemUser = new HashMap<>();
+        itemUser.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur");
+        itemUser.put("iclass", "fa fa-user");
+        itemUser.put("label", "Utilisateur");
+        menu.add(itemUser);
+        
+        Map<String, String> itemPasswords = new HashMap<>();
+        itemPasswords.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/mots-de-passes");
+        itemPasswords.put("iclass", "fa fa-key");
+        itemPasswords.put("label", "Mots de passes");
+        menu.add(itemPasswords);
+        
+        Map<String, String> itemGroupes = new HashMap<>();
+        itemGroupes.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/groupes");
+        itemGroupes.put("iclass", "fa fa-users");
+        itemGroupes.put("label", "Groupes");
+        menu.add(itemGroupes);
+        
+        request.setAttribute("menu", menu);
+    %>
+    
     <ul class="navigation">
         <c:forEach items="${menu}" var="item">
-            <c:set var="active" value="${requestURL == item.key ? 'active' : '' }" />
+            <c:set var="active" value="${requestURL == item.href ? 'active' : '' }" />
             <li class="${active}">
-                <a href="${item.key}">
-                    <i class="${item.value}"></i>
+                <a href="${item.href}">
+                    <i class="${item.iclass}"></i>
                 </a>
             </li>
         </c:forEach>

@@ -39,7 +39,7 @@ public class AdministrationFilter implements Filter {
             
             session.setAttribute("alertClass", "alert-warning");
             session.setAttribute("alertMessage", "Accès interdit");
-            response.sendRedirect(FrontUserServlet.baseURL);
+            response.sendRedirect(request.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
 
         } else {
             chain.doFilter(request, response);

@@ -35,8 +35,6 @@ public class BackUserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/admin/utilisateurs";
-    public static String baseURL;
-    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/back/user";
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
@@ -53,8 +51,6 @@ public class BackUserServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        BackUserServlet.rootPath = this.getServletContext().getContextPath();
-        BackUserServlet.baseURL = BackUserServlet.rootPath + BackUserServlet.prefixURL;
     }
 
     /**
@@ -147,7 +143,7 @@ public class BackUserServlet extends BaseServlet {
             }
             
         }
-        response.sendRedirect(BackUserServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
         
         return;
     }
@@ -234,7 +230,7 @@ public class BackUserServlet extends BaseServlet {
             }
         }
         
-        response.sendRedirect(BackUserServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
         return;
     }
 
@@ -266,7 +262,7 @@ public class BackUserServlet extends BaseServlet {
             session.setAttribute("alertMessage", "Accès interdit");
         }
 
-        response.sendRedirect(BackUserServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
 
         return;
     }

@@ -27,6 +27,7 @@ public class GroupManager {
     public static final String COL_FOREIGN = "group_id";
 
     public GroupManager() {
+        //Constructors do nothing (no initialing necessary)
     }
 
     /**
@@ -68,7 +69,7 @@ public class GroupManager {
 
     public Map<Integer, Group> getGroups() throws IOException {
         // Resetting the Hashmap (Prevent from caching groups into)
-        this.groups = new HashMap<Integer, Group>();
+        this.groups = new HashMap<>();
 
         Connection conn = ConnectorManager.getConnection();
 
@@ -111,19 +112,22 @@ public class GroupManager {
             stmt.setString(2, description);
             stmt.setString(3, logo);
 
-            stmt.executeUpdate();
+            stmt.executeUpdate();            
 
             // Récupération de son identifiant puis on met à jour les relations
             // utilisateurs.
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                
                 if (generatedKeys.next()) {
                     this.addUsers(generatedKeys.getInt(1), users, admins);
                 } else {
                     throw new SQLException("Creating group failed, no ID obtained.");
                 }
+                
+            } finally {
+                stmt.close();
             }
-
-            stmt.close();
+            
             conn.close();
 
             return 1;

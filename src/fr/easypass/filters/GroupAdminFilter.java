@@ -75,7 +75,7 @@ public class GroupAdminFilter implements Filter {
         
         session.setAttribute("alertClass", "alert-warning");
         session.setAttribute("alertMessage", "Accès interdit.");
-        response.sendRedirect(FrontUserServlet.baseURL);
+        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
         
     }
 

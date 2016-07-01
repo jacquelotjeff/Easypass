@@ -1,7 +1,6 @@
 package fr.easypass.filters;
 
 import java.io.IOException;
-import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -99,7 +98,7 @@ public class PasswordOwnerFilter implements Filter {
         
         session.setAttribute("alertClass", "alert-warning");
         session.setAttribute("alertMessage", "Accès interdit.");
-        response.sendRedirect(FrontUserServlet.baseURL);
+        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
         
     }
 

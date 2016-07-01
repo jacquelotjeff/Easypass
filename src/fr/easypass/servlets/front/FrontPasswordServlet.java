@@ -36,8 +36,6 @@ public class FrontPasswordServlet extends BaseServlet {
     private HashMap<String, String> errors;
 
     public static final String prefixURL = "/utilisateur/mots-de-passes";
-    public static String baseURL;
-    public static String rootPath;
     public static final String viewPathPrefix = "/WEB-INF/html/front/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -55,8 +53,6 @@ public class FrontPasswordServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        FrontPasswordServlet.rootPath = this.getServletContext().getContextPath();
-        FrontPasswordServlet.baseURL = FrontPasswordServlet.rootPath + FrontPasswordServlet.prefixURL;
     }
 
     /**
@@ -129,7 +125,7 @@ public class FrontPasswordServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(FrontPasswordServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
         return;
     }
 
@@ -144,7 +140,7 @@ public class FrontPasswordServlet extends BaseServlet {
         if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            response.sendRedirect(FrontUserServlet.baseURL);
+            response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
             return;
         }
 
@@ -174,7 +170,7 @@ public class FrontPasswordServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
                 }
                 
-                response.sendRedirect(FrontUserServlet.baseURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
 
                 return;
 
@@ -240,7 +236,7 @@ public class FrontPasswordServlet extends BaseServlet {
 
         }
         
-        response.sendRedirect(FrontUserServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
 
         return;
     }

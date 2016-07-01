@@ -40,8 +40,6 @@ public class FrontGroupServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     public static final String prefixURL = "/utilisateur/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/front/group";
-    public static String rootPath;
-    public static String baseURL;
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
@@ -61,8 +59,6 @@ public class FrontGroupServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        FrontGroupServlet.rootPath = this.getServletContext().getContextPath();
-        FrontGroupServlet.baseURL = FrontGroupServlet.rootPath + FrontGroupServlet.prefixURL;
     }
 
 
@@ -148,7 +144,7 @@ public class FrontGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(FrontGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
         return;
     }
 
@@ -188,7 +184,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
                 }
                 
-                response.sendRedirect(FrontUserServlet.baseURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
                 return;
                 
             } else {
@@ -265,7 +261,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(FrontGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
         return;
 
     }
@@ -296,7 +292,7 @@ public class FrontGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(FrontGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
 
         return;
     }
@@ -323,7 +319,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(FrontGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -340,7 +336,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(FrontGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
 
         return;
 
@@ -368,7 +364,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(FrontGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -386,7 +382,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(FrontGroupServlet.baseURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
 
         return;
 
@@ -415,7 +411,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(FrontGroupServlet.baseURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
