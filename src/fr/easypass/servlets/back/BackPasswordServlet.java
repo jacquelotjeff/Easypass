@@ -26,14 +26,14 @@ import fr.easypass.servlets.BaseServlet;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "BackPasswordServlet", description = "Password Servlet", urlPatterns = {
-        BackPasswordServlet.prefixURL, BackPasswordServlet.prefixURL + "/voir",
-        BackPasswordServlet.prefixURL + "/editer", BackPasswordServlet.prefixURL + "/creer",
-        BackPasswordServlet.prefixURL + "/supprimer" })
+        BackPasswordServlet.URL_BASE, BackPasswordServlet.URL_BASE + "/voir",
+        BackPasswordServlet.URL_BASE + "/editer", BackPasswordServlet.URL_BASE + "/creer",
+        BackPasswordServlet.URL_BASE + "/supprimer" })
 public class BackPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String prefixURL = "/admin/mot-de-passe";
+    public static final String URL_BASE = "/admin/mots-de-passes";
     public static final String viewPathPrefix = "/WEB-INF/html/back/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -115,7 +115,7 @@ public class BackPasswordServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.URL_BASE);
         return;
     }
 
@@ -161,9 +161,9 @@ public class BackPasswordServlet extends BaseServlet {
                 }
 
                 if (ownerType == Password.OWNER_TYPE_GROUP) {
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/voir?groupId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/voir?groupId=" + ownerId);
                 } else {
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL + "/voir?userId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE + "/voir?userId=" + ownerId);
                 }
 
                 return;
@@ -230,12 +230,14 @@ public class BackPasswordServlet extends BaseServlet {
 
         }
         
-        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.URL_BASE);
 
         return;
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        
+        //TODO delete password;
 
         return;
     }
@@ -247,7 +249,7 @@ public class BackPasswordServlet extends BaseServlet {
         try {
             ownerId = NumberUtils.createInteger(request.getParameter("ownerId"));
         } catch (Exception e) {
-            this.alertOwnerNotFound(request, response);
+            this.alertOwnerNotFound(request);
         }
 
         return ownerId;
@@ -276,7 +278,7 @@ public class BackPasswordServlet extends BaseServlet {
 
     }
 
-    private void alertOwnerNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertOwnerNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");

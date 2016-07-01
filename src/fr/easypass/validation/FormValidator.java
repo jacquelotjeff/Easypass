@@ -12,7 +12,7 @@ public abstract class FormValidator<T> {
 
     public HashMap<String, String> isValid() {
 
-        HashMap<String, String> errors = new HashMap<String, String>();
+        HashMap<String, String> errors = new HashMap<>();
         // do your custom validations if needed
         Set<ConstraintViolation<T>> validation = Validation.buildDefaultValidatorFactory().getValidator()
                 .validate(getObj());

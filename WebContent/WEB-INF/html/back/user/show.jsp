@@ -2,6 +2,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="fr.easypass.servlets.back.BackUserServlet"%>
+<%@ page import="fr.easypass.servlets.back.BackPasswordServlet"%>
+<%@ page import="fr.easypass.servlets.back.BackGroupServlet"%>
 <%@ page import="fr.easypass.model.Password"%>
 
 <t:genericadminpage>
@@ -87,7 +89,7 @@
                                                             <div class="input-group-addon show-password">
                                                                 <span class="fa fa-eye"></span>
                                                             </div>
-                                                            <c:url value="/admin/mot-de-passe/editer" var="editPasswordURL">
+                                                            <c:url value="${BackPasswordServlet.URL_BASE}/editer" var="editPasswordURL">
                                                                 <c:param name="passwordId" value="${password.getId()}"/>
                                                             </c:url>
                                                             <a href="${editPasswordURL}" class="input-group-addon">
@@ -98,7 +100,7 @@
                                                     <div class="clearfix"></div>
                                                 </li>
                                         </c:forEach>
-                                        <c:url value="/admin/mot-de-passe/creer" var="addPasswordURL">
+                                        <c:url value="${BackPasswordServlet.URL_BASE}/creer" var="addPasswordURL">
                                                 <c:param name="ownerId"
                                                     value="${user.getId()}" />
                                                 <c:param name="ownerType"
@@ -129,13 +131,13 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <c:url value="/admin/groupes/voir" var="showGroupURL">
+                                                        <c:url value="${BackGroupServlet.URL_BASE}/voir" var="showGroupURL">
                                                             <c:param name="groupId" value="${group.getId()}"/>
                                                         </c:url>
                                                         <a href="${showGroupURL}" title="Voir le groupe." class="btn btn-success btn-sm">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                        <c:url value="/admin/groupes/editer" var="editGroupURL">
+                                                        <c:url value="${BackGroupServlet.URL_BASE}/editer" var="editGroupURL">
                                                             <c:param name="groupId" value="${group.getId()}"/>
                                                         </c:url>
                                                         <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
@@ -148,7 +150,7 @@
                                                     <div class="clearfix"></div>
                                                 </li>
                                         </c:forEach>
-                                        <c:url value="/admin/groupes/creer" var="addGroupURL">
+                                        <c:url value="${BackGroupServlet.URL_BASE}/creer" var="addGroupURL">
                                         </c:url>
                                         <li class="list-group-item title">
                                             <a href="${addGroupURL}" class="btn btn-md btn-primary">
@@ -165,7 +167,7 @@
             </div>
             <div class="col-sm-12">
                 <div class="pull-right">
-                    <a class="btn btn-success" href="${pageContext.request.contextPath}${UserServlet.prefixURL}">Retour</a>
+                    <a class="btn btn-success" href="${pageContext.request.contextPath}${UserServlet.URL_BASE}">Retour</a>
                 </div>
             </div>
         </div>        

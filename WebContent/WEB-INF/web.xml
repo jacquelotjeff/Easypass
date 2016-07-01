@@ -57,8 +57,8 @@
     
     <filter-mapping>
         <filter-name>PasswordOwnerFilter</filter-name>
-        <url-pattern>/utilisateur/mot-de-passe/editer/*</url-pattern>
-        <url-pattern>/utilisateur/mot-de-passe/supprimer/*</url-pattern>
+        <url-pattern>/utilisateur/mots-de-passes/editer/*</url-pattern>
+        <url-pattern>/utilisateur/mots-de-passes/supprimer/*</url-pattern>
     </filter-mapping>
     
 </web-app>

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.easypass.model.Category;
 
@@ -21,6 +23,8 @@ private Map<Integer, Category> categories;
     public static final String COL_NAME = "name";
     public static final String COL_LOGO = "logo";
     public static final String COL_FOREIGN = "category_id";
+    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
     
     public CategoryManager()
     {
@@ -40,7 +44,7 @@ private Map<Integer, Category> categories;
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("SELECT * from "+CategoryManager.TABLE+" WHERE "+CategoryManager.COL_ID+"=?");
+            stmt = conn.prepareStatement("SELECT * frozm "+CategoryManager.TABLE+" WHERE "+CategoryManager.COL_ID+"=?");
             stmt.setInt(1, categoryId);
 
             ResultSet rs = stmt.executeQuery();
@@ -57,7 +61,7 @@ private Map<Integer, Category> categories;
             return category;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return null;
         }
 
@@ -65,7 +69,7 @@ private Map<Integer, Category> categories;
     
     public Map<Integer, Category> getCategories() throws IOException {
         //Resetting the Hashmap (Prevent from caching groups into)
-        this.categories = new HashMap<Integer, Category>();
+        this.categories = new HashMap<>();
         
         Connection conn = ConnectorManager.getConnection();
 
@@ -87,7 +91,7 @@ private Map<Integer, Category> categories;
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
         return this.categories;
@@ -115,8 +119,7 @@ private Map<Integer, Category> categories;
             return 1;
 
         } catch (Exception e) {
-            e.printStackTrace();
-
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
         
@@ -143,7 +146,7 @@ private Map<Integer, Category> categories;
             return number;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
         
@@ -164,8 +167,7 @@ private Map<Integer, Category> categories;
             return number;
 
         } catch (SQLException e) {
-
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
         

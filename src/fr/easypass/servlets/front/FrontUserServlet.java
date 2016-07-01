@@ -21,12 +21,12 @@ import fr.easypass.servlets.LoginServlet;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "FrontUserServlet", description = "User Servlet", urlPatterns = { FrontUserServlet.prefixURL + "",
-        FrontUserServlet.prefixURL + "/editer" })
+@WebServlet(name = "FrontUserServlet", description = "User Servlet", urlPatterns = { FrontUserServlet.URL_BASE + "",
+        FrontUserServlet.URL_BASE + "/editer" })
 public class FrontUserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String prefixURL = "/utilisateur";
+    public static final String URL_BASE = "/utilisateur";
     public static final String viewPathPrefix = "/WEB-INF/html/front/user";
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
@@ -57,7 +57,7 @@ public class FrontUserServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(prefixURL + "/editer")) {
+        if (uri.contains(URL_BASE + "/editer")) {
             this.edit(request, response);
         } else {
             this.show(request, response);
@@ -136,7 +136,7 @@ public class FrontUserServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontUserServlet.URL_BASE);
         return;
     }
 

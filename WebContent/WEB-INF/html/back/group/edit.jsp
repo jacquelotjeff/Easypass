@@ -1,5 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="fr.easypass.model.Password" %>
+<%@ page import="fr.easypass.servlets.back.BackPasswordServlet" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -86,7 +87,7 @@
                 <c:forEach var="password" items="${groupPasswords}">
                     <li class="list-group-item title">${password.getTitle()}</li>
                 </c:forEach>
-                <c:url value="/admin/mot-de-passe/creer" var="addPasswordURL">
+                <c:url value="${BackPasswordServlet.URL_BASE}/creer" var="addPasswordURL">
                     <c:param name="ownerId"
                         value="${group.getId()}" />
                     <c:param name="ownerType"

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.easypass.model.Password;
 
@@ -24,6 +26,8 @@ public class PasswordManager {
     public static final String COL_INFORMATIONS = "informations";
     public static final String COL_URL_SITE = "urlSite";
     public static final String COL_FOREIGN = "password_id";
+    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
 
     /**
      * Return list of Users
@@ -57,7 +61,7 @@ public class PasswordManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
         return passwords;
@@ -94,7 +98,7 @@ public class PasswordManager {
            conn.close();
 
        } catch (SQLException e) {
-           e.printStackTrace();
+           log.log(Level.SEVERE, "SQL error requesting", e);
 
        }
 
@@ -132,7 +136,7 @@ public class PasswordManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
         }
 
@@ -172,7 +176,7 @@ public class PasswordManager {
             return password;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return null;
         }
 
@@ -215,7 +219,7 @@ public class PasswordManager {
             return 1;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
             return 0;
         }
@@ -247,7 +251,7 @@ public class PasswordManager {
             return number;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -270,7 +274,7 @@ public class PasswordManager {
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -302,7 +306,7 @@ public class PasswordManager {
             conn.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 

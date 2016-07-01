@@ -7,11 +7,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ConnectorManager {
+    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
 
     public static JsonObject getParameters() throws IOException {
 
@@ -33,11 +37,10 @@ public class ConnectorManager {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error while requesting JDBC Driver", e);
         }
 
         try {
-            // conn = DriverManager.getConnection(connector, user, password);
 
             Properties properties = new Properties();
 
@@ -48,7 +51,7 @@ public class ConnectorManager {
             conn = DriverManager.getConnection(connector, properties);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error while building driver connection", e);
         }
 
         return conn;

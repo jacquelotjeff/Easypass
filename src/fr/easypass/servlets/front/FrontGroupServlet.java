@@ -31,14 +31,14 @@ import fr.easypass.servlets.LoginServlet;
 /**
  * Servlet implementation class GroupServlet
  */
-@WebServlet(name = "FrontGroupServlet", description = "Front Group Servlet", urlPatterns = { FrontGroupServlet.prefixURL + "",
-        FrontGroupServlet.prefixURL + "/voir", FrontGroupServlet.prefixURL + "/editer", FrontGroupServlet.prefixURL + "/creer",
-        FrontGroupServlet.prefixURL + "/supprimer", FrontGroupServlet.prefixURL + "/ajouter-utilisateur",
-        FrontGroupServlet.prefixURL + "/supprimer-utilisateur", FrontGroupServlet.prefixURL + "/admin-utilisateur" })
+@WebServlet(name = "FrontGroupServlet", description = "Front Group Servlet", urlPatterns = { FrontGroupServlet.URL_BASE + "",
+        FrontGroupServlet.URL_BASE + "/voir", FrontGroupServlet.URL_BASE + "/editer", FrontGroupServlet.URL_BASE + "/creer",
+        FrontGroupServlet.URL_BASE + "/supprimer", FrontGroupServlet.URL_BASE + "/ajouter-utilisateur",
+        FrontGroupServlet.URL_BASE + "/supprimer-utilisateur", FrontGroupServlet.URL_BASE + "/admin-utilisateur" })
 public class FrontGroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String prefixURL = "/utilisateur/groupes";
+    public static final String URL_BASE = "/utilisateur/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/front/group";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -73,19 +73,19 @@ public class FrontGroupServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(prefixURL + "/voir")) {
+        if (uri.contains(URL_BASE + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains(prefixURL + "/ajouter-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/ajouter-utilisateur")) {
             this.addUser(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/supprimer-utilisateur")) {
             this.deleteUser(request, response);
-        } else if (uri.contains(prefixURL + "/admin-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/admin-utilisateur")) {
             this.adminUser(request, response);
-        } else if (uri.contains(prefixURL + "/creer")) {
+        } else if (uri.contains(URL_BASE + "/creer")) {
             this.create(request, response);
-        } else if (uri.contains(prefixURL + "/editer")) {
+        } else if (uri.contains(URL_BASE + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer")) {
+        } else if (uri.contains(URL_BASE + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);
@@ -130,7 +130,7 @@ public class FrontGroupServlet extends BaseServlet {
             final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
 
             if (group == null) {
-                this.alertGroupNotFound(request, response);
+                this.alertGroupNotFound(request);
             } else {
 
                 request.setAttribute("group", group);
@@ -143,7 +143,7 @@ public class FrontGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
         return;
     }
 
@@ -183,7 +183,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
                 }
                 
-                response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
                 return;
                 
             } else {
@@ -216,7 +216,7 @@ public class FrontGroupServlet extends BaseServlet {
                 final Group group = this.groupManager.getGroup(groupId);
 
                 if (group == null) {
-                    this.alertGroupNotFound(request, response);
+                    this.alertGroupNotFound(request);
                 }
 
                 final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
@@ -260,7 +260,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
         return;
 
     }
@@ -291,7 +291,7 @@ public class FrontGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
 
         return;
     }
@@ -318,7 +318,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -335,7 +335,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
 
         return;
 
@@ -363,7 +363,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -381,7 +381,7 @@ public class FrontGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
 
         return;
 
@@ -410,7 +410,7 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -438,13 +438,13 @@ public class FrontGroupServlet extends BaseServlet {
         try {
             groupId = NumberUtils.createInteger(request.getParameter("groupId"));
         } catch (Exception e) {
-            this.alertGroupNotFound(request, response);
+            this.alertGroupNotFound(request);
         }
 
         return groupId;
     }
 
-    private void alertGroupNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertGroupNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");

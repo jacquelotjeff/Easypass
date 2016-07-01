@@ -13,7 +13,7 @@
         <p>Nom : ${category.getName()}</p>
         <p>Logo : ${category.getLogo()}</p>
         
-        <a class="btn btn-success" href="${pageContext.request.contextPath}${BackCategoryServlet.prefixURL}">Retour</a>
+        <a class="btn btn-success" href="${pageContext.request.contextPath}${BackCategoryServlet.URL_BASE}">Retour</a>
         
         <c:url value="editer" var="editURL">
             <c:param name="categoryId"   value="${category.getId()}" />

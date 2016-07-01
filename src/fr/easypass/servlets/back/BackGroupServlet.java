@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,20 +30,20 @@ import fr.easypass.servlets.LoginServlet;
 /**
  * Servlet implementation class GroupServlet
  */
-@WebServlet(name = "BackGroupServlet", description = "Group Servlet", urlPatterns = { BackGroupServlet.prefixURL + "",
-        BackGroupServlet.prefixURL + "/voir", BackGroupServlet.prefixURL + "/editer", BackGroupServlet.prefixURL + "/creer",
-        BackGroupServlet.prefixURL + "/supprimer", BackGroupServlet.prefixURL + "/ajouter-utilisateur",
-        BackGroupServlet.prefixURL + "/supprimer-utilisateur", BackGroupServlet.prefixURL + "/admin-utilisateur" })
+@WebServlet(name = "BackGroupServlet", description = "Group Servlet", urlPatterns = { BackGroupServlet.URL_BASE + "",
+        BackGroupServlet.URL_BASE + "/voir", BackGroupServlet.URL_BASE + "/editer", BackGroupServlet.URL_BASE + "/creer",
+        BackGroupServlet.URL_BASE + "/supprimer", BackGroupServlet.URL_BASE + "/ajouter-utilisateur",
+        BackGroupServlet.URL_BASE + "/supprimer-utilisateur", BackGroupServlet.URL_BASE + "/admin-utilisateur" })
 public class BackGroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String prefixURL = "/admin/groupes";
+    public static final String URL_BASE = "/admin/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/back/group";
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
     
-    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
     
     private HashMap<String, String> errors;
 
@@ -69,19 +71,19 @@ public class BackGroupServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(prefixURL + "/voir")) {
+        if (uri.contains(URL_BASE + "/voir")) {
             this.show(request, response);
-        } else if (uri.contains(prefixURL + "/ajouter-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/ajouter-utilisateur")) {
             this.addUser(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/supprimer-utilisateur")) {
             this.deleteUser(request, response);
-        } else if (uri.contains(prefixURL + "/admin-utilisateur")) {
+        } else if (uri.contains(URL_BASE + "/admin-utilisateur")) {
             this.adminUser(request, response);
-        } else if (uri.contains(prefixURL + "/creer")) {
+        } else if (uri.contains(URL_BASE + "/creer")) {
             this.create(request, response);
-        } else if (uri.contains(prefixURL + "/editer")) {
+        } else if (uri.contains(URL_BASE + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer")) {
+        } else if (uri.contains(URL_BASE + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);
@@ -118,7 +120,7 @@ public class BackGroupServlet extends BaseServlet {
             final Group group = this.groupManager.getGroup(groupId);
 
             if (group == null) {
-                this.alertGroupNotFound(request, response);
+                this.alertGroupNotFound(request);
             } else {
 
                 request.setAttribute("group", group);
@@ -128,7 +130,7 @@ public class BackGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
         return;
     }
 
@@ -169,7 +171,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
                 }
                 
-                response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
                 return;
                 
             } else {
@@ -202,7 +204,7 @@ public class BackGroupServlet extends BaseServlet {
                 final Group group = this.groupManager.getGroup(groupId);
 
                 if (group == null) {
-                    this.alertGroupNotFound(request, response);
+                    this.alertGroupNotFound(request);
                 }
 
                 final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
@@ -240,7 +242,7 @@ public class BackGroupServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
         return;
 
     }
@@ -271,7 +273,7 @@ public class BackGroupServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
 
         return;
     }
@@ -298,7 +300,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -309,13 +311,13 @@ public class BackGroupServlet extends BaseServlet {
             }
 
         } catch (Exception e) {
-
+            log.log(Level.SEVERE, "Error while adding a user", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
 
         return;
 
@@ -343,7 +345,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -355,13 +357,13 @@ public class BackGroupServlet extends BaseServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Error while deleting a user", e);
             session.setAttribute("alertClass", "alert-danger");
-            session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
+            session.setAttribute("alertMessage", "Impossible de supprimer l'utilisateur.");
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
 
         return;
 
@@ -390,7 +392,7 @@ public class BackGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.prefixURL + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -401,7 +403,7 @@ public class BackGroupServlet extends BaseServlet {
             }
 
         } catch (Exception e) {
-
+            log.log(Level.SEVERE, "Error while changing user status", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible de changer le statut de l'utilisateur.");
 
@@ -418,13 +420,13 @@ public class BackGroupServlet extends BaseServlet {
         try {
             groupId = NumberUtils.createInteger(request.getParameter("groupId"));
         } catch (Exception e) {
-            this.alertGroupNotFound(request, response);
+            this.alertGroupNotFound(request);
         }
 
         return groupId;
     }
 
-    private void alertGroupNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertGroupNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");

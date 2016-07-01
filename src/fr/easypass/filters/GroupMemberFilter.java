@@ -31,36 +31,28 @@ public class GroupMemberFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession();
-        
+
         User user = LoginServlet.getCurrentUser(request);
         GroupManager groupManager = new GroupManager();
-        
-        try {
-            
+
+        if (NumberUtils.isNumber(request.getParameter("groupId"))) {
+
             Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-            
+
             Map<Integer, Group> groups = groupManager.getGroupByUsers(user.getId()).get("groups");
-            
+
             if (groups.containsKey(groupId)) {
-                
                 chain.doFilter(request, response);
-                
-            } else {
-                
-                this.restrict(session, response);
-                
+                return;
             }
-            
-        } catch (Exception e) {
-            
-            e.printStackTrace();
-            this.restrict(session, response);
-            
+
         }
+
+        this.restrict(session, response);
 
     }
 
@@ -68,13 +60,13 @@ public class GroupMemberFilter implements Filter {
     public void init(FilterConfig arg0) throws ServletException {
         // Nothing to do
     }
-    
-    private void restrict(HttpSession session, HttpServletResponse response) throws IOException{
-        
+
+    private void restrict(HttpSession session, HttpServletResponse response) throws IOException {
+
         session.setAttribute("alertClass", "alert-warning");
         session.setAttribute("alertMessage", "Accès interdit.");
-        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
-        
+        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.URL_BASE);
+
     }
 
 }

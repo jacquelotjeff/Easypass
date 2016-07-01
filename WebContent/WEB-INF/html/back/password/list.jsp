@@ -1,4 +1,5 @@
 <%@ page import="fr.easypass.model.User"%>
+<%@ page import="fr.easypass.servlets.back.BackPasswordServlet"%>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -35,12 +36,12 @@
                             </div>
                         </td>
                         <td> 
-                            <c:url value="/admin/mot-de-passe/supprimer" var="deleteURL">
+                            <c:url value="${BackPasswordServlet.URL_BASE}/supprimer" var="deleteURL">
                                 <c:param name="passwordId"   value="${password.getId()}" />
                             </c:url>
                             <form action="${deleteURL}" method="POST">
                                 <div class="btn-group"> 
-                                    <c:url value="/admin/mot-de-passe/editer" var="editURL">
+                                    <c:url value="${BackPasswordServlet.URL_BASE}/editer" var="editURL">
                                         <c:param name="passwordId"   value="${password.getId()}" />
                                     </c:url>
                                     <a role="button" class="btn btn-primary" href="${editURL}">

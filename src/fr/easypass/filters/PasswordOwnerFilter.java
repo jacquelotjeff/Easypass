@@ -43,10 +43,9 @@ public class PasswordOwnerFilter implements Filter {
         PasswordManager passwordManager = new PasswordManager();
         UserManager userManager = new UserManager();
 
-        try {
+        if (NumberUtils.isNumber(request.getParameter("passwordId"))) {
 
             Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
-
             Password password = passwordManager.getPassword(passwordId);
 
             if (password.getOwnerGroup() != null) {
@@ -56,13 +55,10 @@ public class PasswordOwnerFilter implements Filter {
                 Map<Integer, User> usersAdmin = userManager.getUsersByGroup(group.getId()).get("adminsGroup");
 
                 if (usersAdmin.containsKey(user.getId())) {
-
+                    
                     chain.doFilter(request, response);
 
-                } else {
-
-                    this.restrict(session, response);
-
+                    return;
                 }
 
             } else {
@@ -70,19 +66,18 @@ public class PasswordOwnerFilter implements Filter {
                 Map<Integer, Password> passwordsUser = passwordManager.getPasswordsByUser(user.getId());
 
                 if (passwordsUser.containsKey(passwordId)) {
+                    
                     chain.doFilter(request, response);
-                } else {
-                    this.restrict(session, response);
+                    
+                    return;
                 }
 
             }
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            this.restrict(session, response);
-
         }
+
+        this.restrict(session, response);
+
     }
 
     @Override
@@ -94,7 +89,7 @@ public class PasswordOwnerFilter implements Filter {
 
         session.setAttribute("alertClass", "alert-warning");
         session.setAttribute("alertMessage", "Accès interdit.");
-        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.prefixURL);
+        response.sendRedirect(session.getServletContext().getContextPath() + FrontUserServlet.URL_BASE);
 
     }
 

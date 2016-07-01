@@ -28,14 +28,14 @@ import fr.easypass.servlets.LoginServlet;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "FrontPasswordServlet", description = "Front Password Servlet", urlPatterns = {
-        FrontPasswordServlet.prefixURL, FrontPasswordServlet.prefixURL + "/voir",
-        FrontPasswordServlet.prefixURL + "/editer", FrontPasswordServlet.prefixURL + "/creer",
-        FrontPasswordServlet.prefixURL + "/supprimer" })
+        FrontPasswordServlet.URL_BASE, FrontPasswordServlet.URL_BASE + "/voir",
+        FrontPasswordServlet.URL_BASE + "/editer", FrontPasswordServlet.URL_BASE + "/creer",
+        FrontPasswordServlet.URL_BASE + "/supprimer" })
 public class FrontPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String prefixURL = "/utilisateur/mots-de-passes";
+    public static final String URL_BASE = "/utilisateur/mots-de-passes";
     public static final String viewPathPrefix = "/WEB-INF/html/front/password";
     public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
@@ -123,7 +123,7 @@ public class FrontPasswordServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
         return;
     }
 
@@ -138,7 +138,7 @@ public class FrontPasswordServlet extends BaseServlet {
         if (!ownerType.equals(Password.OWNER_TYPE_GROUP) && !ownerType.equals(Password.OWNER_TYPE_USER)) {
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Cette page n'existe pas.");
-            response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
+            response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
             return;
         }
 
@@ -168,7 +168,7 @@ public class FrontPasswordServlet extends BaseServlet {
                     session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
                 }
                 
-                response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
+                response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
 
                 return;
 
@@ -234,7 +234,7 @@ public class FrontPasswordServlet extends BaseServlet {
 
         }
         
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
 
         return;
     }
@@ -251,7 +251,7 @@ public class FrontPasswordServlet extends BaseServlet {
         try {
             ownerId = NumberUtils.createInteger(request.getParameter("ownerId"));
         } catch (Exception e) {
-            this.alertOwnerNotFound(request, response);
+            this.alertOwnerNotFound(request);
         }
 
         return ownerId;
@@ -280,7 +280,7 @@ public class FrontPasswordServlet extends BaseServlet {
 
     }
 
-    private void alertOwnerNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertOwnerNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");

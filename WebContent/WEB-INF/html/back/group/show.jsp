@@ -14,7 +14,7 @@
         <p>Description : <c:out value="${group.getDescription()}"/></p>
         <p>Logo : <c:out value="${group.getLogo()}"/></p>
         
-        <a class="btn btn-success" href="${pageContext.request.contextPath}${GroupServlet.prefixURL}">Retour</a>
+        <a class="btn btn-success" href="${pageContext.request.contextPath}${GroupServlet.URL_BASE}">Retour</a>
         
         <c:url value="editer" var="editURL">
             <c:param name="userId"   value="${group.getId()}" />

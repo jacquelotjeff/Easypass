@@ -53,7 +53,7 @@
         </ul>
         
         <div class="col-sm-12">
-            <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontGroupServlet.prefixURL}">Retour</a>
+            <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontGroupServlet.URL_BASE}">Retour</a>
             <c:if test="${groupAdmins.containsKey(sessionScope.user.getId())}">
                 <c:url value="editer" var="editURL">
                     <c:param name="userId"   value="${group.getId()}" />

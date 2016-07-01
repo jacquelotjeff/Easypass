@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.easypass.model.Group;
 
@@ -25,6 +27,8 @@ public class GroupManager {
     public static final String COL_LOGO = "logo";
 
     public static final String COL_FOREIGN = "group_id";
+    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
 
     public GroupManager() {
         //Constructors do nothing (no initialing necessary)
@@ -61,7 +65,7 @@ public class GroupManager {
             return group;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return null;
         }
 
@@ -91,7 +95,7 @@ public class GroupManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
         return groups;
@@ -133,7 +137,7 @@ public class GroupManager {
             return 1;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
             return 0;
         }
@@ -161,7 +165,7 @@ public class GroupManager {
             return number;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -184,7 +188,7 @@ public class GroupManager {
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -217,7 +221,7 @@ public class GroupManager {
             conn.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -243,7 +247,7 @@ public class GroupManager {
             conn.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -272,7 +276,7 @@ public class GroupManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             System.out.println(sql);
         }
 
@@ -300,7 +304,7 @@ public class GroupManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
         }
 
@@ -351,7 +355,7 @@ public class GroupManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
         }
 

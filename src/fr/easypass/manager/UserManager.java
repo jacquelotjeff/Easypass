@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -28,6 +30,8 @@ public class UserManager {
     public static final String COL_EMAIL = "email";
     public static final String COL_FOREIGN = "user_id";
     public static final String COL_ADMIN = "admin";
+    
+    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
 
     public UserManager() {
         this.users = new HashMap<>();
@@ -64,7 +68,7 @@ public class UserManager {
             return user;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return null;
         }
     }
@@ -100,7 +104,7 @@ public class UserManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
         return users;
@@ -152,7 +156,7 @@ public class UserManager {
             conn.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
 
         }
 
@@ -201,7 +205,7 @@ public class UserManager {
 
         } catch (SQLException e) {
             System.out.println(query);
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
         return groupUsersAvailable;
@@ -230,7 +234,7 @@ public class UserManager {
             return number;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
     }
@@ -269,7 +273,7 @@ public class UserManager {
             return number;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
     }
@@ -291,7 +295,7 @@ public class UserManager {
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
 
@@ -340,7 +344,7 @@ public class UserManager {
             connection.close();
             
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "SQL error requesting", e);
         }
         
         

@@ -28,13 +28,13 @@ import fr.easypass.servlets.front.FrontUserServlet;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet(name = "BackUserServlet", description = "User Servlet", urlPatterns = { BackUserServlet.prefixURL + "",
-        BackUserServlet.prefixURL + "/voir", BackUserServlet.prefixURL + "/editer", "/inscription",
-        BackUserServlet.prefixURL + "/supprimer" })
+@WebServlet(name = "BackUserServlet", description = "User Servlet", urlPatterns = { BackUserServlet.URL_BASE + "",
+        BackUserServlet.URL_BASE + "/voir", BackUserServlet.URL_BASE + "/editer", "/inscription",
+        BackUserServlet.URL_BASE + "/supprimer" })
 public class BackUserServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
-    public static final String prefixURL = "/admin/utilisateurs";
+    public static final String URL_BASE = "/admin/utilisateurs";
     public static final String viewPathPrefix = "/WEB-INF/html/back/user";
     public final UserManager userManager = new UserManager();
     public final GroupManager groupManager = new GroupManager();
@@ -64,13 +64,13 @@ public class BackUserServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(prefixURL + "/voir")) {
+        if (uri.contains(URL_BASE + "/voir")) {
             this.show(request, response);
         } else if (uri.contains("/inscription")) {
             this.signUp(request, response);
-        } else if (uri.contains(prefixURL + "/editer")) {
+        } else if (uri.contains(URL_BASE + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer")) {
+        } else if (uri.contains(URL_BASE + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);
@@ -125,7 +125,7 @@ public class BackUserServlet extends BaseServlet {
             final User user = this.userManager.getUser(userId);
 
             if (user == null) {
-                this.alertUserNotFound(request, response);
+                this.alertUserNotFound(request);
             } else {
 
                 Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
@@ -142,7 +142,7 @@ public class BackUserServlet extends BaseServlet {
             }
             
         }
-        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
         
         return;
     }
@@ -195,7 +195,7 @@ public class BackUserServlet extends BaseServlet {
                 final User user = this.userManager.getUser(userId);
                 
                 if (user == null) {
-                    this.alertUserNotFound(request, response);
+                    this.alertUserNotFound(request);
                 } else {
                     request.setAttribute("user", user);
                     request.setAttribute("formAction", "editer");
@@ -229,7 +229,7 @@ public class BackUserServlet extends BaseServlet {
             }
         }
         
-        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
         return;
     }
 
@@ -261,7 +261,7 @@ public class BackUserServlet extends BaseServlet {
             session.setAttribute("alertMessage", "Accès interdit");
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
 
         return;
     }
@@ -273,7 +273,7 @@ public class BackUserServlet extends BaseServlet {
         try {
             userId = NumberUtils.createInteger(request.getParameter("userId"));
         } catch (Exception e) {
-            this.alertUserNotFound(request, response);
+            this.alertUserNotFound(request);
         }
 
         return userId;
@@ -300,7 +300,7 @@ public class BackUserServlet extends BaseServlet {
         
     }
 
-    private void alertUserNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertUserNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");

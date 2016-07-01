@@ -20,15 +20,15 @@ import fr.easypass.servlets.BaseServlet;
 /**
  * Servlet implementation class CategoryServlet
  */
-@WebServlet(name = "BackCategoryServlet", description = "Category Servlet", urlPatterns = { BackCategoryServlet.prefixURL + "",
-        BackCategoryServlet.prefixURL + "/creer", BackCategoryServlet.prefixURL + "/voir",
-        BackCategoryServlet.prefixURL + "/editer", BackCategoryServlet.prefixURL + "/supprimer" })
+@WebServlet(name = "BackCategoryServlet", description = "Category Servlet", urlPatterns = { BackCategoryServlet.URL_BASE + "",
+        BackCategoryServlet.URL_BASE + "/creer", BackCategoryServlet.URL_BASE + "/voir",
+        BackCategoryServlet.URL_BASE + "/editer", BackCategoryServlet.URL_BASE + "/supprimer" })
 public class BackCategoryServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
 
-    public static final String prefixURL = "/admin/categories";
+    public static final String URL_BASE = "/admin/categories";
     public static final String viewPathPrefix = "/WEB-INF/html/back/category";
     public final CategoryManager categoryManager = new CategoryManager();
 
@@ -37,7 +37,7 @@ public class BackCategoryServlet extends BaseServlet {
      */
     public BackCategoryServlet() {
         super();
-        this.errors = new HashMap<String, String>();
+        this.errors = new HashMap<>();
     }
 
     @Override
@@ -56,13 +56,13 @@ public class BackCategoryServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains(prefixURL + "/voir")) {
+        if (uri.contains(URL_BASE + "/voir")) {
             this.show(request, response);
         } else if (uri.contains("/creer")) {
             this.create(request, response);
-        } else if (uri.contains(prefixURL + "/editer")) {
+        } else if (uri.contains(URL_BASE + "/editer")) {
             this.edit(request, response);
-        } else if (uri.contains(prefixURL + "/supprimer")) {
+        } else if (uri.contains(URL_BASE + "/supprimer")) {
             this.delete(request, response);
         } else {
             this.list(request, response);
@@ -99,7 +99,7 @@ public class BackCategoryServlet extends BaseServlet {
             final Category category = this.categoryManager.getCategory(categoryId);
 
             if (category == null) {
-                this.alertCategoryNotFound(request, response);
+                this.alertCategoryNotFound(request);
             } else {
 
                 request.setAttribute("category", category);
@@ -109,7 +109,7 @@ public class BackCategoryServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
         return;
     }
 
@@ -155,7 +155,7 @@ public class BackCategoryServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
         return;
 
     }
@@ -173,7 +173,7 @@ public class BackCategoryServlet extends BaseServlet {
                 final Category category = this.categoryManager.getCategory(categoryId);
 
                 if (category == null) {
-                    this.alertCategoryNotFound(request, response);
+                    this.alertCategoryNotFound(request);
                 }
 
                 request.setAttribute("category", category);
@@ -203,7 +203,7 @@ public class BackCategoryServlet extends BaseServlet {
 
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
         return;
 
     }
@@ -234,7 +234,7 @@ public class BackCategoryServlet extends BaseServlet {
             }
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.prefixURL);
+        response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
 
         return;
     }
@@ -246,13 +246,13 @@ public class BackCategoryServlet extends BaseServlet {
         try {
             categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
         } catch (Exception e) {
-            this.alertCategoryNotFound(request, response);
+            this.alertCategoryNotFound(request);
         }
 
         return categoryId;
     }
 
-    private void alertCategoryNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void alertCategoryNotFound(HttpServletRequest request) throws IOException {
 
         HttpSession session = request.getSession();
         session.setAttribute("alertClass", "alert-danger");
