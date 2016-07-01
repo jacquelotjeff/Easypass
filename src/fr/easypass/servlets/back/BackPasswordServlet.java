@@ -45,7 +45,6 @@ public class BackPasswordServlet extends BaseServlet {
      */
     public BackPasswordServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -83,7 +82,6 @@ public class BackPasswordServlet extends BaseServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         doGet(request, response);
     }
 

@@ -38,7 +38,6 @@ public class BackCategoryServlet extends BaseServlet {
     public BackCategoryServlet() {
         super();
         this.errors = new HashMap<String, String>();
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -77,7 +76,6 @@ public class BackCategoryServlet extends BaseServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
         doGet(request, response);
     }
 

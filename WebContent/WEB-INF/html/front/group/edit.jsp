@@ -109,7 +109,7 @@
                      <li class="list-group-item text-left">
                         <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
                         <label class="name">${user.getUsername()}<br></label> 
-                        <span class="pull-right">
+                        <div class="pull-right">
                             <c:url value="ajouter-utilisateur"
                                 var="addUserURL">
                                 <c:param name="userId"
@@ -121,7 +121,7 @@
                                 <button type="submit"
                                     class="btn btn-success btn-sm fa fa-plus"></button>
                             </form>
-                        </span>
+                        </div>
                         <div class="break"></div>
                        </li>
                     </c:forEach>

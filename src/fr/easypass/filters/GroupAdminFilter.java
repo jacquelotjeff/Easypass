@@ -25,8 +25,7 @@ public class GroupAdminFilter implements Filter {
 
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
-
+        // Nothing to do
     }
 
     @Override
@@ -67,8 +66,7 @@ public class GroupAdminFilter implements Filter {
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        // TODO Auto-generated method stub
-
+        // Nothing to do
     }
     
     private void restrict(HttpSession session, HttpServletResponse response) throws IOException{
