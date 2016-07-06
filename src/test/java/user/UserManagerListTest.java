@@ -66,8 +66,6 @@ public class UserManagerListTest extends TestCase {
                 
         User userDb = usersDb.get(id);
         
-        //assertEquals(usersDb.size(), expectedUsers.length);
-        
         assertNotNull(userDb);
         
         assertEquals(id, userDb.getId());
