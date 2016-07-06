@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import fr.easypass.model.Password;
+import fr.easypass.utils.Encryptor;
 
 public class PasswordManager {
 
@@ -199,7 +200,11 @@ public class PasswordManager {
             stmt.setString(1, title);
             stmt.setInt(2, category);
             stmt.setString(3, site);
-            stmt.setString(4, password);
+            
+            Encryptor encryptor = new Encryptor();
+            encryptor.setPlainPassword(password);
+            stmt.setString(4, encryptor.getEncryptedPassword());
+            
             stmt.setString(5, informations);
 
             stmt.executeUpdate();
@@ -328,7 +333,10 @@ public class PasswordManager {
         password.setTitle(rs.getString(PasswordManager.COL_TITLE));
         password.setCategory(rs.getInt(CategoryManager.COL_FOREIGN));
         password.setInformations(rs.getString(PasswordManager.COL_INFORMATIONS));
-        password.setPassword(rs.getString(PasswordManager.COL_PASSWORD));
+        
+        Encryptor encryptor = new Encryptor();
+        String decryptedPassword = encryptor.decryptPassword(rs.getString(PasswordManager.COL_PASSWORD));
+        password.setPassword(decryptedPassword);
         password.setSiteUrl(rs.getString(COL_URL_SITE));
 
         return password;
