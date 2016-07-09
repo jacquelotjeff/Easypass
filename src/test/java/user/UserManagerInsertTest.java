@@ -30,8 +30,8 @@ public class UserManagerInsertTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"anguyen", "Albert", "Nguyen", "admin1234", "anguyen@gmail.com", false, 0, 45},
-                {"ykeoxay", "Yoann", "Keoxay", "admin1234", "ykeoxay@gmail.com", true, 0, 46},
+                {"anguyen", "Albert", "Nguyen", "admin1234", "anguyen@gmail.com", false, 0, 5},
+                {"ykeoxay", "Yoann", "Keoxay", "admin1234", "ykeoxay@gmail.com", true, 0, 6},
                 {"", "Jonathan", "Cholet", "admin1234", "jcholet@gmail.com", false, 1, 0},
                 {"jcholet", "", "Cholet", "admin1234", "jcholet@gmail.com", false, 1, 0},
                 {"jcholet", "Jonathan", "", "admin1234", "jcholet@gmail.com", false, 1, 0},

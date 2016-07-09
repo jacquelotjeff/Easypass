@@ -5,7 +5,7 @@
         <c:param name="categoryId" value="${category.getId()}"/>
     </c:if>
 </c:url>
-<form action="${submitURL}" method="POST">
+<form action="${submitURL}" method="POST" enctype="multipart/form-data">
 	<div class="form-group ${not empty errors.get('name')?'has-error':''}">
    		<label for="name">Nom : </label>
 		<input type="text" name="name" class="form-control" value='<c:out value="${category.getName()}"/>'>
@@ -13,13 +13,15 @@
 	    	<small class="help-block">${errors.get("name")}</small>
     	</c:if>
     </div>
-   	<div class="form-group ${not empty errors.get('logo')?'has-error':''}">
+   	<div class="form-group">
         <label for="logo">Logo de la catégorie : </label>
-        <input type="text" name="logo" class="form-control" value='<c:out value="${category.getLogo()}"/>'>
-           <c:if test="${not empty errors.get('logo')}">
-	    	<small class="help-block">${errors.get("logo")}</small>
-    	</c:if>
+        <input type="file" name="logo" id="file" />
 	</div>
+    <c:if test="${not empty category.getLogo()}">
+        <label for="logo">Logo actuel : </label>
+        <img width=250 class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.request.contextPath}/fichier?path=${category.getLogo()}">
+    </c:if>
+    
      <br />
     <button type="submit" class="btn btn-default">Enregistrer</button>
 </form>

@@ -18,7 +18,7 @@ public class Encryptor {
     
     public Encryptor() {
         
-        InputStream stream = ConnectorManager.class.getClassLoader().getResourceAsStream("config.properties");
+        InputStream stream = Encryptor.class.getClassLoader().getResourceAsStream("config.properties");
         JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
         this.password = jsonObject.get("encryptor").getAsJsonObject().get("password").getAsString();
         

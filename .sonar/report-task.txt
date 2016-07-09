@@ -1,0 +1,5 @@
+projectKey=esgi:easypass
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/esgi:easypass
+ceTaskId=AVXA7WtxSzmXqleqMo94
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVXA7WtxSzmXqleqMo94

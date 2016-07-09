@@ -27,14 +27,16 @@ import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
 import fr.easypass.servlets.LoginServlet;
+import fr.easypass.utils.FileUploader;
 
 /**
  * Servlet implementation class GroupServlet
  */
-@WebServlet(name = "FrontGroupServlet", description = "Front Group Servlet", urlPatterns = { FrontGroupServlet.URL_BASE + "",
-        FrontGroupServlet.URL_BASE + "/voir", FrontGroupServlet.URL_BASE + "/editer", FrontGroupServlet.URL_BASE + "/creer",
-        FrontGroupServlet.URL_BASE + "/supprimer", FrontGroupServlet.URL_BASE + "/ajouter-utilisateur",
-        FrontGroupServlet.URL_BASE + "/supprimer-utilisateur", FrontGroupServlet.URL_BASE + "/admin-utilisateur" })
+@WebServlet(name = "FrontGroupServlet", description = "Front Group Servlet", urlPatterns = {
+        FrontGroupServlet.URL_BASE + "", FrontGroupServlet.URL_BASE + "/voir", FrontGroupServlet.URL_BASE + "/editer",
+        FrontGroupServlet.URL_BASE + "/creer", FrontGroupServlet.URL_BASE + "/supprimer",
+        FrontGroupServlet.URL_BASE + "/ajouter-utilisateur", FrontGroupServlet.URL_BASE + "/supprimer-utilisateur",
+        FrontGroupServlet.URL_BASE + "/admin-utilisateur" })
 public class FrontGroupServlet extends BaseServlet {
 
     private static final long serialVersionUID = 1L;
@@ -44,9 +46,7 @@ public class FrontGroupServlet extends BaseServlet {
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
-    
-    
-    
+
     private HashMap<String, String> errors;
 
     /**
@@ -55,12 +55,11 @@ public class FrontGroupServlet extends BaseServlet {
     public FrontGroupServlet() {
         super();
     }
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
     }
-
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -68,7 +67,7 @@ public class FrontGroupServlet extends BaseServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         super.doGet(request, response);
 
         final String uri = request.getRequestURI();
@@ -100,7 +99,7 @@ public class FrontGroupServlet extends BaseServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-    
+
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Integer userId = LoginServlet.getCurrentUser(request).getId();
@@ -155,44 +154,57 @@ public class FrontGroupServlet extends BaseServlet {
 
         if (method == "POST") {
 
-            String name = request.getParameter("name");
-            String description = request.getParameter("description");
-            String logo = request.getParameter("logo");
-            List<String> users = new ArrayList<>(Arrays.asList(request.getParameterValues("users")));
+            Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+
+            String name = (String) uploadResult.get("name");
+            String logo = (String) uploadResult.get("logo");
+            String description = (String) uploadResult.get("description");
+            List<String> users = (List<String>) uploadResult.get("users");
             List<String> admins = new ArrayList<>();
-            
+
             users.add(user.getId().toString());
             admins.add(user.getId().toString());
-            
+
             Group group = new Group(name, description, logo);
-            
+
             errors = group.isValid();
-            
+
             if (errors.isEmpty()) {
                 
-                final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
+                if (!uploadResult.containsKey("errors")) {
+                    
+                    final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
 
-                if (success == 1) {
+                    if (success == 1) {
 
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le groupe à bien été créé");
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "Le groupe à bien été créé");
 
+                    } else {
+
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                    }
+                    
                 } else {
-
+                    
                     session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                    session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                    session.setAttribute("alertMessages", uploadResult.get("errors"));
+                    
                 }
-                
+
                 response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
+                
                 return;
-                
+
             } else {
-                
+
                 request.setAttribute("errors", errors);
             }
-            
+
         }
-        
+
         final Map<Integer, User> users = userManager.getUsers();
         users.remove(user.getId());
         request.setAttribute("users", users.values());
@@ -211,53 +223,81 @@ public class FrontGroupServlet extends BaseServlet {
         Integer groupId = this.checkGroupParam(request, response);
         if (groupId > 0) {
 
-            if (method == "GET") {
+            Group group = this.groupManager.getGroup(groupId);
 
-                final Group group = this.groupManager.getGroup(groupId);
+            if (group == null) {
 
-                if (group == null) {
-                    this.alertGroupNotFound(request);
-                }
-
-                final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
-                final Map<String, Map<Integer, User>> users = userManager.getUsersByGroup(groupId);
-                final Map<Integer, User> groupUsers = users.get("groupUsers");
-                final Map<Integer, User> groupAdmins = users.get("groupAdmins");
-                final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
-                final Map<Integer, Category> categories = categoryManager.getCategories();
-
-                request.setAttribute("users", availableUsers);
-                request.setAttribute("groupUsers", groupUsers);
-                request.setAttribute("groupAdmins", groupAdmins);
-                request.setAttribute("groupPasswords", groupPasswords);
-                request.setAttribute("categories", categories);
-                
-                request.setAttribute("group", group);
-                request.setAttribute("formAction", "editer");
-
-                request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-
-                return;
+                this.alertGroupNotFound(request);
 
             } else {
 
-                String name = request.getParameter("name");
-                String description = request.getParameter("description");
-                String logo = request.getParameter("logo");
+                if (method == "GET") {
 
-                final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
+                    final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
+                    final Map<String, Map<Integer, User>> users = userManager.getUsersByGroup(groupId);
+                    final Map<Integer, User> groupUsers = users.get("groupUsers");
+                    final Map<Integer, User> groupAdmins = users.get("groupAdmins");
+                    final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
+                    final Map<Integer, Category> categories = categoryManager.getCategories();
 
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+                    request.setAttribute("users", availableUsers);
+                    request.setAttribute("groupUsers", groupUsers);
+                    request.setAttribute("groupAdmins", groupAdmins);
+                    request.setAttribute("groupPasswords", groupPasswords);
+                    request.setAttribute("categories", categories);
+
+                    request.setAttribute("group", group);
+                    request.setAttribute("formAction", "editer");
+
+                    request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/edit.jsp").forward(request,
+                            response);
+
+                    return;
 
                 } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+
+                    Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+
+                    String name = (String) uploadResult.get("name");
+                    String logo = (String) uploadResult.get("logo");
+                    String description = (String) uploadResult.get("description");
+                    
+                    if (logo == null) {
+                        logo = group.getLogo();
+                    }
+                    
+                    group = new Group(name, description, logo);
+
+                    Map<String, String> errors = group.isValid();
+
+                    if (errors.isEmpty()) {
+                        
+                        if (!uploadResult.containsKey("errors")) {
+                            
+                            final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
+
+                            if (success == 1) {
+                                session.setAttribute("alertClass", "alert-success");
+                                session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+
+                            } else {
+                                session.setAttribute("alertClass", "alert-danger");
+                                session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+                            }
+                            
+                        } else {
+                            
+                            session.setAttribute("alertClass", "alert-danger");
+                            session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                            session.setAttribute("alertMessages", uploadResult.get("errors"));
+                            
+                        }
+
+                    } else {
+                        request.setAttribute("errors", errors);
+                    }
                 }
-
             }
-
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE);
@@ -318,7 +358,8 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE
+                            + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }
@@ -363,7 +404,8 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE
+                            + "/editer" + "?groupId=" + groupId);
 
                     return;
 
@@ -410,7 +452,8 @@ public class FrontGroupServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-success");
                     session.setAttribute("alertMessage", "Le statut de l'utilisateur a été mis à jour.");
 
-                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE
+                            + "/editer" + "?groupId=" + groupId);
 
                     return;
                 }

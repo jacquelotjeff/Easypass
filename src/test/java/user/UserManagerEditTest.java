@@ -30,7 +30,7 @@ public class UserManagerEditTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"aturcey", "Adrien", "Turcey", "admin1234", "adrienturcey@outlook.com", true, 40}
+                {"aturcey", "Adrien", "Turcey", "admin1234", "adrienturcey@outlook.com", true, 1}
             }
         );
     }

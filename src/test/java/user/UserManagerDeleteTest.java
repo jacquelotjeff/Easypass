@@ -29,7 +29,7 @@ public class UserManagerDeleteTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"useless", "Use", "Less", "admin1234", "useless@gmail.com", false, 43},
+                {"useless", "Use", "Less", "admin1234", "useless@gmail.com", false, 4},
             }
         );
     }
@@ -62,7 +62,6 @@ public class UserManagerDeleteTest extends TestCase {
     
     @Test
     public void testDeleteUser(){
-        /*
         try {
             
             log.log(Level.INFO, "We're testing an user deletion...");
@@ -88,6 +87,5 @@ public class UserManagerDeleteTest extends TestCase {
         } catch (IOException e) {
             log.log(Level.SEVERE, "Impossible to get user from UserManager", e);
         }
-        */
     }
 }

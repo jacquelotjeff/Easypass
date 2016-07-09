@@ -1,6 +1,7 @@
 package fr.easypass.manager;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ private Map<Integer, Category> categories;
             Connection conn = ConnectorManager.getConnection();
             PreparedStatement stmt;
 
-            stmt = conn.prepareStatement("SELECT * frozm "+CategoryManager.TABLE+" WHERE "+CategoryManager.COL_ID+"=?");
+            stmt = conn.prepareStatement("SELECT * from "+CategoryManager.TABLE+" WHERE "+CategoryManager.COL_ID+"=?");
             stmt.setInt(1, categoryId);
 
             ResultSet rs = stmt.executeQuery();

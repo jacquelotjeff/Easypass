@@ -2,6 +2,7 @@ package fr.easypass.servlets.back;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.model.Category;
 import fr.easypass.servlets.BaseServlet;
+import fr.easypass.utils.FileUploader;
 
 /**
  * Servlet implementation class CategoryServlet
@@ -126,28 +128,41 @@ public class BackCategoryServlet extends BaseServlet {
             return;
 
         } else {
+            
+            Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
 
-            String name = request.getParameter("name");
-            String logo = request.getParameter("logo");
-
+            String name = (String) uploadResult.get("name");
+            String logo = (String) uploadResult.get("logo");
+            
             Category ctg = new Category(name, logo);
 
             errors = ctg.isValid();
 
             if (errors.isEmpty()) {
+                
+                if (!uploadResult.containsKey("errors")) {
+                    
+                    final Integer success = this.categoryManager.insertCategory(name, logo);
 
-                final Integer success = this.categoryManager.insertCategory(name, logo);
+                    if (success == 1) {
 
-                if (success == 1) {
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "La catégorie à bien été créée");
 
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "La catégorie à bien été créée");
+                    } else {
 
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
+                    }
+                    
                 } else {
-
+                    
                     session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le catégorie n'a pas pu être créée");
+                    session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                    session.setAttribute("alertMessages", uploadResult.get("errors"));
+                    
                 }
+
             } else {
                 request.setAttribute("errors", errors);
                 request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
@@ -167,14 +182,14 @@ public class BackCategoryServlet extends BaseServlet {
 
         Integer categoryId = this.checkCategoryParam(request, response);
         if (categoryId > 0) {
+            
+            Category category = this.categoryManager.getCategory(categoryId);
+
+            if (category == null) {
+                this.alertCategoryNotFound(request);
+            }
 
             if (method == "GET") {
-
-                final Category category = this.categoryManager.getCategory(categoryId);
-
-                if (category == null) {
-                    this.alertCategoryNotFound(request);
-                }
 
                 request.setAttribute("category", category);
                 request.setAttribute("formAction", "editer");
@@ -184,23 +199,51 @@ public class BackCategoryServlet extends BaseServlet {
                 return;
 
             } else {
+                
+                Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+                
+                String name = (String) uploadResult.get("name");
+                String logo = (String) uploadResult.get("logo");
 
-                String name = request.getParameter("name");
-                String logo = request.getParameter("logo");
-
-                final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
-
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
-
-                } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
+                //Get the old picture if a new one doesn't exist.
+                if (logo.isEmpty()) {
+                    logo = category.getLogo();
                 }
+                
+                category = new Category(name, logo);
+                
+                Map<String, String> errors = category.isValid();
+                
+                if (errors.isEmpty()) {
+                    
+                    if (!uploadResult.containsKey("errors")) {
+                        
+                        final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
 
+                        if (success == 1) {
+                            session.setAttribute("alertClass", "alert-success");
+                            session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
+
+                        } else {
+                            session.setAttribute("alertClass", "alert-danger");
+                            session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
+                        }
+                        
+                    } else {
+                        
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                        session.setAttribute("alertMessages", uploadResult.get("errors"));
+                        
+                    }
+                    
+                } else {
+                    
+                    request.setAttribute("errors", errors);
+                    request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                    
+                }
             }
-
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);

@@ -21,7 +21,7 @@
                         <c:param name="groupId" value="${group.getId()}" />
                     </c:if>
                 </c:url>
-                <form action="${submitURL}" method="POST">
+                <form action="${submitURL}" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name">Nom du groupe : </label> <input type="text" name="name" class="form-control" value="${group.getName()}">
                     </div>
@@ -32,9 +32,13 @@
                         </textarea>
                     </div>
                     <div class="form-group">
-                        <label for="logo">Logo du groupe : </label> 
-                        <input type="text" name="logo" class="form-control" value="${group.getLogo()}">
-                    </div>                    
+                        <label for="logo">Logo du groupe : </label>
+                        <input type="file" name="logo" id="file" />
+                    </div>
+                    <c:if test="${not empty group.getLogo()}">
+                        <label for="logo">Logo actuel : </label>
+                        <img width=250 class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.request.contextPath}/fichier?path=${group.getLogo()}">
+                    </c:if>                 
                     <button type="submit" class="btn btn-primary text-center">Enregistrer</button>
                 </form>
               </div>
