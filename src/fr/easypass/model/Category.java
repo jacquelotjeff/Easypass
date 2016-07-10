@@ -1,6 +1,5 @@
 package fr.easypass.model;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ public class Category extends FormValidator<Category> {
     private Integer id;
     private String name;
     private String logo;
-    private URL logoURL;
     
     private List<Integer> passwords;
 
@@ -48,21 +46,15 @@ public class Category extends FormValidator<Category> {
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    @NotNull(message = "Un logo doit être existant")
+    @Size(min=1,  message = "Le chemin ne peut-être vide.")
     public String getLogo() {
         return logo;
     }
 
     public void setLogo(String logo) {
         this.logo = logo;
-    }
-    
-    public URL getLogoURL(){
-        return this.logoURL;
-    }
-    
-    public void setLogoURL(URL url){
-        this.logoURL = url;
     }
 
     public void addPassword(Integer passwordId) {

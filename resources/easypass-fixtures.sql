@@ -29,12 +29,12 @@ CREATE TABLE IF NOT EXISTS `categories` (
 DELETE FROM `categories`;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id`, `name`, `logo`) VALUES
-  (1, 'Forums', 'http://www.team-site.com/uploads/5/8/9/0/5890900/2365667.png'),
-  (2, 'Réseaux sociaux', 'http://www.euskalnet.fr/agence-web-pays-basque/images/menu-reseaux-sociaux.png'),
-  (3, 'Autre', 'http://moba-champion.com/wiki/images/f/f0/License-unknown.png'),
-  (4, 'Boîte mail', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Aiga_mail.svg/2000px-Aiga_mail.svg.png'),
-  (5, 'Travail', 'http://icons.iconarchive.com/icons/dapino/office-men/256/Man-Black-icon.png'),
-  (6, 'Useless', 'http://www.icone-png.com/png/54/54150.png');
+  (1, 'Forums', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\2365667.png"),
+  (2, 'Réseaux sociaux', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\menu-reseaux-sociaux.png"),
+  (3, 'Autre', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\License-unknown.png"),
+  (4, 'Boîte mail', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\2000px-Aiga_mail.svg.png"),
+  (5, 'Travail', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\Man-Black-icon.png"),
+  (6, 'Useless', "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\54150.png");
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 
 
