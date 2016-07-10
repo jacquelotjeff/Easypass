@@ -29,12 +29,12 @@ CREATE TABLE IF NOT EXISTS `categories` (
 DELETE FROM `categories`;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id`, `name`, `logo`) VALUES
-	(1, 'Forums', 'http://www.team-site.com/uploads/5/8/9/0/5890900/2365667.png'),
-	(2, 'Réseaux sociaux', 'http://www.euskalnet.fr/agence-web-pays-basque/images/menu-reseaux-sociaux.png'),
-	(3, 'Autre', 'http://moba-champion.com/wiki/images/f/f0/License-unknown.png'),
-	(4, 'Boîte mail', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Aiga_mail.svg/2000px-Aiga_mail.svg.png'),
-	(5, 'Travail', 'http://icons.iconarchive.com/icons/dapino/office-men/256/Man-Black-icon.png'),
-	(6, 'Useless', 'http://www.icone-png.com/png/54/54150.png');
+  (1, 'Forums', 'http://www.team-site.com/uploads/5/8/9/0/5890900/2365667.png'),
+  (2, 'Réseaux sociaux', 'http://www.euskalnet.fr/agence-web-pays-basque/images/menu-reseaux-sociaux.png'),
+  (3, 'Autre', 'http://moba-champion.com/wiki/images/f/f0/License-unknown.png'),
+  (4, 'Boîte mail', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Aiga_mail.svg/2000px-Aiga_mail.svg.png'),
+  (5, 'Travail', 'http://icons.iconarchive.com/icons/dapino/office-men/256/Man-Black-icon.png'),
+  (6, 'Useless', 'http://www.icone-png.com/png/54/54150.png');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 
 
@@ -110,10 +110,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `email`, `admin`) VALUES
-	(1, 'Adrien', 'Turcey', 'aturcey', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'adrienturcey@gmail.com', 1),
-	(2, 'Jonathan', 'Cholet', 'jcholet', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'jcholet@gmail.com', 0),
+  (1, 'Adrien', 'Turcey', 'aturcey', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'adrienturcey@gmail.com', 1),
+  (2, 'Jonathan', 'Cholet', 'jcholet', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'jcholet@gmail.com', 0),
   (3, 'Jeff', 'Jacquelot', 'jjacquelot', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'jjacquelot@gmail.com', 0),
-	(4, 'Use', 'Less', 'useless', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'useless@gmail.com', 0);
+  (4, 'Use', 'Less', 'useless', '7b902e6ff1db9f560443f2048974fd7d386975b0', 'useless@gmail.com', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 

@@ -100,7 +100,6 @@ public class FileUploader {
                                     
                                     result.put("errors", errors);
                                 }
-                            	
                             }
                             
                         } else {

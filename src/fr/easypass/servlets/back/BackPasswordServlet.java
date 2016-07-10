@@ -241,7 +241,7 @@ public class BackPasswordServlet extends BaseServlet {
 
         return;
     }
-
+    
     private Integer checkOwnerParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Integer ownerId = 0;

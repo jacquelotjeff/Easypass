@@ -15,7 +15,7 @@
             </div> 
             <div class="col-sm-5">
                 <c:url value="${formAction}" var="submitURL"/>
-                <form action="${submitURL}" method="POST">
+                <form action="${submitURL}" method="POST" enctype="multipart/form-data">
                     <div class='form-group ${not empty errors.get("name")?"has-error":""}'>
                         <label for="name">Nom du groupe : </label> 
                         <input type="text" name="name" class="form-control" value="${group.getName()}">
@@ -32,12 +32,9 @@
                             <small class="help-block">${errors.get("description")}</small>
                         </c:if>
                     </div>
-                    <div class='form-group ${not empty errors.get("logo")?"has-error":""}'> 
-                        <label for="logo">Logo du groupe : </label> 
-                        <input type="text" name="logo" class="form-control" value="${group.getLogo()}">
-                        <c:if test="${not empty errors.get('logo')}">
-                            <small class="help-block">${errors.get("logo")}</small>
-                        </c:if>
+                    <div class="form-group">
+                        <label for="logo">Logo du groupe : </label>
+                        <input type="file" name="logo" id="file" />
                     </div>
                     <div class="form-group">
                         <label for="users">Utilisateurs : </label>

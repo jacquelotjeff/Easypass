@@ -3,6 +3,8 @@ package fr.easypass.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.jasypt.util.text.BasicTextEncryptor;
+
 import fr.easypass.validation.FormValidator;
 
 public class Password extends FormValidator<Password> {
