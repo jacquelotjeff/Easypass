@@ -184,16 +184,44 @@ public class BackCategoryServlet extends BaseServlet {
                 return;
 
             } else {
+                
+                Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+                
+                String name = (String) uploadResult.get("name");
+                String logo = (String) uploadResult.get("logo");
 
-                String name = request.getParameter("name");
-                String logo = request.getParameter("logo");
+                //Get the old picture if a new one doesn't exist.
+                if (logo == null) {
+                    logo = category.getLogo();
+                }
+                
+                category = new Category(name, logo);
+                
+                Map<String, String> errors = category.isValid();
+                
+                if (errors.isEmpty()) {
+                    
+                    if (!uploadResult.containsKey("errors")) {
+                        
+                        final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
 
-                final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
+                        if (success == 1) {
+                            session.setAttribute("alertClass", "alert-success");
+                            session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
 
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
-
+                        } else {
+                            session.setAttribute("alertClass", "alert-danger");
+                            session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
+                        }
+                        
+                    } else {
+                        
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                        session.setAttribute("alertMessages", uploadResult.get("errors"));
+                        
+                    }
+                    
                 } else {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");

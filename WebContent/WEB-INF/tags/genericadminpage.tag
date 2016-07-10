@@ -29,7 +29,7 @@
             </div>
             <%@ include file="/WEB-INF/html/footer.jsp" %>
         </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-2.2.4.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap-select.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/i18n/defaults-fr_FR.js"></script>

@@ -29,7 +29,7 @@ public class UserManagerDeleteTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"useless", "Use", "Less", "admin1234", "useless@gmail.com", false, 43},
+                {"useless", "Use", "Less", "7b902e6ff1db9f560443f2048974fd7d386975b0", "useless@gmail.com", false, 4},
             }
         );
     }
@@ -62,7 +62,6 @@ public class UserManagerDeleteTest extends TestCase {
     
     @Test
     public void testDeleteUser(){
-        /*
         try {
             
             log.log(Level.INFO, "We're testing an user deletion...");
@@ -72,12 +71,11 @@ public class UserManagerDeleteTest extends TestCase {
             assertEquals(username, userDb.getUsername());
             assertEquals(firstname, userDb.getFirstname());
             assertEquals(lastname, userDb.getLastname());
-            //TODO Checking the SHA1 crypt
-            //assertEquals(password, userDb.getPassword());
+            assertEquals(password, userDb.getPassword());
             assertEquals(email, userDb.getEmail());
             assertEquals(admin, userDb.getAdmin());
             
-            Integer success = userManager.deleteUser(43);
+            Integer success = userManager.deleteUser(id);
             assertEquals(success, (Integer) 1);
             
             userDb = userManager.getUser(id);
@@ -88,6 +86,5 @@ public class UserManagerDeleteTest extends TestCase {
         } catch (IOException e) {
             log.log(Level.SEVERE, "Impossible to get user from UserManager", e);
         }
-        */
     }
 }
