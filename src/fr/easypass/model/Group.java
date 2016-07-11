@@ -65,6 +65,7 @@ public class Group extends FormValidator<Group>{
     }
     
     @NotNull(message = "Le logo ne peut pas être vide")
+    @Size(min=1, message = "Le chemin du logo ne peut pas être vide.")
     public String getLogo() {
         return logo;
     }
