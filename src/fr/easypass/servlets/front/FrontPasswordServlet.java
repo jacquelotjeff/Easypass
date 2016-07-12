@@ -216,24 +216,30 @@ public class FrontPasswordServlet extends BaseServlet {
                 String title = request.getParameter("title");
                 Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
                 String site = request.getParameter("site");
-                String password = request.getParameter("password");
+                String plainPassword = request.getParameter("password");
                 String informations = request.getParameter("informations");
                 
-                //TODO Validate password...
+                Password password = new Password(title, site, plainPassword, informations, category);
                 
-                final Integer success = this.passwordManager.editPassword(passwordId, title, site, password, category, informations);
+                errors = password.isValid();
                 
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
+                if (errors.isEmpty()) {
+                    
+                    final Integer success = this.passwordManager.editPassword(passwordId, title, site, plainPassword, category, informations);
+                    
+                    if (success == 1) {
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
 
-                } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
-                }
-                
+                    } else {
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
+                    }
+                    
+               } else {
+                   request.setAttribute("errors", errors);
+               }
             }
-
         }
         
         response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);

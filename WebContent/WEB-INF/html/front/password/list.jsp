@@ -18,7 +18,7 @@
                     <li class="list-group-item title">
                         <span class="col-sm-2">
                             <c:set var="category" value="${categories.get(password.getCategory())}"/>
-                            <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
+                            <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.request.contextPath}/fichier?path=${category.getLogo()}">
                         </span>
                         <div class="col-sm-6">
                             <h4 class="list-group-item-heading">${password.getTitle()}</h4>
