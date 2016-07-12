@@ -69,8 +69,8 @@ public class CategoryManagerEditTest extends TestCase {
                 Category catgoryDb = categoryManager.getCategory(id);
                 
                 log.log(Level.INFO, "We're checking the category is correctly edited...");
-                assertEquals(name, category.getName());
-                assertEquals(logo, category.getLogo());
+                assertEquals(name, catgoryDb.getName());
+                assertEquals(logo, catgoryDb.getLogo());
                 
             } catch (IOException e) {
                 log.log(Level.SEVERE, "Impossible to get users", e);

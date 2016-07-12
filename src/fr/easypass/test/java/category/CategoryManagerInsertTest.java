@@ -15,9 +15,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import fr.easypass.manager.CategoryManager;
-import fr.easypass.manager.UserManager;
 import fr.easypass.model.Category;
-import fr.easypass.model.User;
 import junit.framework.TestCase;
 
 @RunWith(Parameterized.class)

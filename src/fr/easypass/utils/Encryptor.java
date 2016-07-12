@@ -8,8 +8,6 @@ import org.jasypt.util.text.StrongTextEncryptor;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import fr.easypass.manager.ConnectorManager;
-
 public class Encryptor {
     
     String encryptedPassword;

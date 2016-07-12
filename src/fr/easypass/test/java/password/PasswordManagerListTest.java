@@ -67,8 +67,6 @@ public class PasswordManagerListTest extends TestCase {
     @Test
     public void testListPassword() {
         
-        String newLine = System.getProperty("line.separator");
-        
         Password passwordDb = passwordsDb.get(id);
         
         log.log(Level.INFO, "We're testing list password...");
