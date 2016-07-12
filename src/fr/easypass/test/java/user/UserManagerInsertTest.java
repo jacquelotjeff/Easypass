@@ -1,4 +1,4 @@
-package test.java.user;
+package fr.easypass.test.java.user;
 
 import java.io.IOException;
 import java.util.Arrays;

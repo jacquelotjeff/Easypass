@@ -1,4 +1,4 @@
-package test.java.group;
+package fr.easypass.test.java.group;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ import fr.easypass.model.User;
 import junit.framework.TestCase;
 
 @RunWith(Parameterized.class)
-public class GroupManagerUserAdminTest extends TestCase {
+public class GroupManagerDeleteUserTest extends TestCase {
     
     private static GroupManager groupManager;
     private static UserManager userManager;
@@ -35,8 +35,7 @@ public class GroupManagerUserAdminTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {4, 1, false},
-                {4, 2, true},
+                {1, 2},
             }
         );
     }
@@ -47,9 +46,6 @@ public class GroupManagerUserAdminTest extends TestCase {
     @Parameter(1)
     public Integer userId;
     
-    @Parameter(2)
-    public Boolean admin;
-    
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         groupManager = new GroupManager();
@@ -57,30 +53,31 @@ public class GroupManagerUserAdminTest extends TestCase {
     }
     
     @Test
-    public void testUserAdminGroup(){
+    public void testDeleteUserGroup(){
+        
+        Map<String, Map <Integer, User>> result;
+        Map<Integer, User> usersDb;
+        Integer success;
         
         try {
+                
+            log.log(Level.INFO, "We're testing delete user in group...");
             
-            Integer success = groupManager.setUserAdmin(groupId, userId, admin);
-            assertEquals(1, success.intValue());
-            
-            Map<String, Map <Integer, User>> result = userManager.getUsersByGroup(groupId);
-            
-            Map<Integer, User> usersDb = result.get("groupUsers");
-            Map<Integer, User> adminsDb = result.get("groupAdmins");
-            
+            result = userManager.getUsersByGroup(groupId);
+            usersDb = result.get("groupUsers");
             assertTrue(usersDb.containsKey(userId));
             
-            if (admin) {
-                assertTrue(adminsDb.containsKey(userId));
-            } else {
-                assertFalse(adminsDb.containsKey(userId));
-            }
+            success = groupManager.deleteUser(groupId, userId);
+            assertEquals(1, success.intValue());
+            
+            result = userManager.getUsersByGroup(groupId);
+            usersDb = result.get("groupUsers");
+            assertFalse(usersDb.containsKey(userId));
             
             
-        } catch (IOException e) {
+        } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e1.printStackTrace();
         }
         
     }

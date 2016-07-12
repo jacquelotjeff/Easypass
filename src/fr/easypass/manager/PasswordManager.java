@@ -245,7 +245,11 @@ public class PasswordManager {
             stmt.setString(1, title);
             stmt.setInt(2, category);
             stmt.setString(3, site);
-            stmt.setString(4, password);
+            
+            Encryptor encryptor = new Encryptor();
+            encryptor.setPlainPassword(password);
+            stmt.setString(4, encryptor.getEncryptedPassword());
+            
             stmt.setString(5, informations);
             stmt.setInt(6, passwordId);
 

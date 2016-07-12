@@ -219,6 +219,8 @@ public class FrontPasswordServlet extends BaseServlet {
                 String password = request.getParameter("password");
                 String informations = request.getParameter("informations");
                 
+                //TODO Validate password...
+                
                 final Integer success = this.passwordManager.editPassword(passwordId, title, site, password, category, informations);
                 
                 if (success == 1) {

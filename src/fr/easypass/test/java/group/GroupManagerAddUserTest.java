@@ -1,4 +1,4 @@
-package test.java.group;
+package fr.easypass.test.java.group;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ import fr.easypass.model.User;
 import junit.framework.TestCase;
 
 @RunWith(Parameterized.class)
-public class GroupManagerDeleteUserTest extends TestCase {
+public class GroupManagerAddUserTest extends TestCase {
     
     private static GroupManager groupManager;
     private static UserManager userManager;
@@ -35,7 +35,7 @@ public class GroupManagerDeleteUserTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {1, 2},
+                {1, 3},
             }
         );
     }
@@ -53,7 +53,7 @@ public class GroupManagerDeleteUserTest extends TestCase {
     }
     
     @Test
-    public void testDeleteUserGroup(){
+    public void testInsertUserGroup(){
         
         Map<String, Map <Integer, User>> result;
         Map<Integer, User> usersDb;
@@ -61,16 +61,18 @@ public class GroupManagerDeleteUserTest extends TestCase {
         
         try {
             
-            result = userManager.getUsersByGroup(groupId);
-            usersDb = result.get("groupUsers");
-            assertTrue(usersDb.containsKey(userId));
-            
-            success = groupManager.deleteUser(groupId, userId);
-            assertEquals(1, success.intValue());
+            log.log(Level.INFO, "We're testing add user in group...");
             
             result = userManager.getUsersByGroup(groupId);
             usersDb = result.get("groupUsers");
             assertFalse(usersDb.containsKey(userId));
+            
+            success = groupManager.addUser(groupId, userId);
+            assertEquals(1, success.intValue());
+            
+            result = userManager.getUsersByGroup(groupId);
+            usersDb = result.get("groupUsers");
+            assertTrue(usersDb.containsKey(userId));
             
             
         } catch (IOException e1) {

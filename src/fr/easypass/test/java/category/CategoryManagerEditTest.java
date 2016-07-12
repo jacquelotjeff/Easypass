@@ -1,4 +1,4 @@
-package test.java.category;
+package fr.easypass.test.java.category;
 
 import java.io.IOException;
 import java.util.Arrays;

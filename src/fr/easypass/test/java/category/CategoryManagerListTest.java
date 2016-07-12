@@ -1,4 +1,4 @@
-package test.java.category;
+package fr.easypass.test.java.category;
 
 import java.util.Map;
 import java.util.logging.Logger;
