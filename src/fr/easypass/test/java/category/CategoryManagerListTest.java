@@ -31,12 +31,12 @@ public class CategoryManagerListTest extends TestCase {
     public static Object data() {
         
         return new Object[][] {
-            {1, "Forums", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\2365667.png"},
-            {2, "Réseaux sociaux", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\menu-reseaux-sociaux.png"},
-            {3, "Autre", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\License-unknown.png"},
-            {4, "Boîte mail", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\2000px-Aiga_mail.svg.png"},
-            {5, "Travail", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\Man-Black-icon.png"},
-            {6, "Useless", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\54150.png"},
+            {1, "Forums", "forum1.png"},
+            {2, "Réseaux sociaux", "social.png"},
+            {3, "Autre", "fake-path.png"},
+            {4, "Boîte mail", "mail_2.png"},
+            {5, "Travail", "Sad-after-having-a-work-load.png"},
+            {6, "Useless", "12670213_1957609551131792_6738362166244948893_n.png"},
         };
         
     }

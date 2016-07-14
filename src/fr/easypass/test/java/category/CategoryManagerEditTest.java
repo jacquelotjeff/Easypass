@@ -28,7 +28,7 @@ public class CategoryManagerEditTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"Autres", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\License-unknown.png", 3}
+                {"Autres", "License-unknown.png", 3}
             }
         );
     }

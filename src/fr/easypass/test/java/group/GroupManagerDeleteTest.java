@@ -29,7 +29,7 @@ public class GroupManagerDeleteTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"Useless", "Groupe useless", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\12670213_1957609551131792_6738362166244948893_n.png", 2},
+                {"Useless", "Groupe useless", "12670213_1957609551131792_6738362166244948893_n.png", 2},
             }
         );
     }

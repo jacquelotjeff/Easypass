@@ -12,7 +12,7 @@
         <h1>Consulter la catégorie ${category.getName()}</h1>
         <p>Nom : ${category.getName()}</p>
         <p>Logo :
-            <img width="250" class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.request.contextPath}/fichier?path=${category.getLogo()}">
+            <img width="250" class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
         </p>
         
         

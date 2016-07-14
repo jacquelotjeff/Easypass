@@ -30,7 +30,7 @@ public class GroupManagerEditTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"Forum Photographies", "Administrateur du forum de photographes",  "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\12670213_1957609551131792_6738362166244948893_n.png", 4},
+                {"Forum Photographies", "Administrateur du forum de photographes",  "appareil-photo-reflex.jpg", 4},
             }
         );
     }

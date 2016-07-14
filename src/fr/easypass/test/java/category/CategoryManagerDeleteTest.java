@@ -28,7 +28,7 @@ public class CategoryManagerDeleteTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"Useless", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\54150.png", 6},
+                {"Useless", "12670213_1957609551131792_6738362166244948893_n.png", 6},
             }
         );
     }

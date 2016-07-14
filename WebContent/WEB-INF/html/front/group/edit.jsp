@@ -37,7 +37,7 @@
                     </div>
                     <c:if test="${not empty group.getLogo()}">
                         <label for="logo">Logo actuel : </label>
-                        <img width=250 class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.request.contextPath}/fichier?path=${group.getLogo()}">
+                        <img width=250 class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${group.getLogo()}">
                     </c:if>                 
                     <button type="submit" class="btn btn-primary text-center">Enregistrer</button>
                 </form>

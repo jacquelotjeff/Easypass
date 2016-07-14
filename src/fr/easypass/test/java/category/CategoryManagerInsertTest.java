@@ -29,7 +29,7 @@ public class CategoryManagerInsertTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {"Divertissement", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\hobbies[1].png", 0, 7},
+                {"Divertissement", "hobbies.png", 0, 7},
                 {"Invalide 1", "", 1, 8},
                 {"", "C:\\Users\\Adrien\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\easypass\\upload\\2365667.png", 1, 9},
             }

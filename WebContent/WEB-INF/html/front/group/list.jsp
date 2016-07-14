@@ -17,7 +17,7 @@
             <c:forEach var="group" items="${groups}">
                 <li class="list-group-item title">
                         <span class="col-sm-2">
-                            <img class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.request.contextPath}/fichier?path=${group.getLogo()}">
+                            <img class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${group.getLogo()}">
                         </span>
                         <div class="col-sm-6">
                             <h4 class="list-group-item-heading">${group.getName()}</h4>

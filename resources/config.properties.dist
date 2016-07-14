@@ -1,8 +1,16 @@
 {
   "database":
       {
-      		"connector": "jdbc:mysql://localhost:3306/easypass",
-       		"user": "root",
-       		"password": "root"
+            "connector": "jdbc:mysql://localhost:3306/easypass?useEncoding=true&characterEncoding=UTF-8",
+            "user": "root",
+            "password": ""
+      },
+  "encryptor":
+      {
+            "password": "PutStrongPasswordHere"
+      },
+   "uploader":
+      {
+            "uploadDirPath": "C:\\servers\\apache-tomcat-8.0.33\\uploads\\easypass"
       }
 }

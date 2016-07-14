@@ -32,11 +32,11 @@ public class GroupManagerListTest extends TestCase {
     public static Object data() {
         
         return new Object[][] {
-            {1, "Site Zoo", "Administrateur du site du Zoo", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\elephants_8.1.2012_whytheymatter1_HI_247511.jpg"},
-            {2, "Useless", "Groupe useless", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\12670213_1957609551131792_6738362166244948893_n.png"},
-            {3, "Page Facebook ESGI", "Facebook", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\logo.png.jpg"},
-            {4, "Forum Photographes", "Administrateur du forum de photographies", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\appareil-photo-reflex.jpg"},
-            {5, "Champions de Tennis", "Les meilleurs joueurs sur un seul site.", "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\slide-image-3.jpg"}
+            {1, "Site Zoo", "Administrateur du site du Zoo", "Monkey-Mia-MJK-Australia-650x433.jpg"},
+            {2, "Useless", "Groupe useless", "12670213_1957609551131792_6738362166244948893_n.png"},
+            {3, "Page Facebook ESGI", "Facebook", "logo.png.jpg"},
+            {4, "Forum Photographes", "Administrateur du forum de photographies", "fake-path.jpg"},
+            {5, "Champions de Tennis", "Les meilleurs joueurs sur un seul site.","slide-image-3.jpg"}
         };
         
     }

@@ -1,8 +1,13 @@
 package fr.easypass.utils;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +19,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class FileUploader {
     
-    private static final String UPLOAD_DIRECTORY = "upload";
+    public static final String UPLOAD_DIRECTORY = "upload";
     private static final List<String> ALLOWED_MIME_TYPE = Arrays.asList(new String[]{"image/jpeg", "image/png", "image/gif"});
     private static final double MAX_MEGABYTES_FILE_SIZE = 2;
     
@@ -47,7 +55,9 @@ public class FileUploader {
             
             ServletFileUpload upload = new ServletFileUpload(factory);
             
-            String uploadPath = servletContext.getRealPath("")  + File.separator + UPLOAD_DIRECTORY;
+            InputStream stream = Encryptor.class.getClassLoader().getResourceAsStream("config.properties");
+            JsonObject jsonObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+            String uploadPath = jsonObject.get("uploader").getAsJsonObject().get("uploadDirPath").getAsString();
             
             File uploadDir = new File(uploadPath);
             
@@ -66,7 +76,12 @@ public class FileUploader {
                         if (!item.isFormField()) {
                             
                             File file = new File(item.getName());
-                            String fileName = file.getName();
+                            
+                            Date date = new Date();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                            
+                            String fileName = sdf.format(date) + '-' + file.getName();
+                            
                             
                             //If no file, just return without the fieldName inside result (For edit form)
                             if (!fileName.equals("")) {
@@ -89,9 +104,8 @@ public class FileUploader {
                                     
                                     String filePath = uploadPath + File.separator + fileName;
                                     File storeFile = new File(filePath);
-                                    String path = storeFile.getAbsolutePath();
                                     
-                                    result.put(item.getFieldName(), path);
+                                    result.put(item.getFieldName(), fileName);
              
                                     // saves the file on disk
                                     item.write(storeFile);

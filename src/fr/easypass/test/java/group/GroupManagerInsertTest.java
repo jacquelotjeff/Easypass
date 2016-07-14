@@ -35,7 +35,7 @@ public class GroupManagerInsertTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {6, "Youtube", "Chaîne Youtube",  "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\New_youtube_logo.png", "1;2;3", "1;3", 0},
+                {6, "Youtube", "Chaîne Youtube",  "New_youtube_logo.png", "1;2;3", "1;3", 0},
                 {7, "Useless edited", "",  "C:\\Users\\Adrien\\workspace\\easypass\\target\\m2e-wtp\\web-resources\\upload\\edited.png", "1|2|3", "1", 1},
                 {8, "Useless edited", "Description edited",  "", "1|2|3", "1", 1},
             }

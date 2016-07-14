@@ -163,8 +163,11 @@ public class BackCategoryServlet extends BaseServlet {
                 }
 
             } else {
+                
                 request.setAttribute("errors", errors);
                 request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                
+                return;
             }
 
         }

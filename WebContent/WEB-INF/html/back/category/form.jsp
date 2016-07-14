@@ -19,7 +19,7 @@
 	</div>
     <c:if test="${not empty category.getLogo()}">
         <label for="logo">Logo actuel : </label>
-        <img width=250 class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.request.contextPath}/fichier?path=${category.getLogo()}">
+        <img width=250 class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
     </c:if>
     
      <br />
