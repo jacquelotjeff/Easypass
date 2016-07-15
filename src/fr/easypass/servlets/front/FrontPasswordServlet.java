@@ -28,9 +28,8 @@ import fr.easypass.servlets.LoginServlet;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "FrontPasswordServlet", description = "Front Password Servlet", urlPatterns = {
-        FrontPasswordServlet.URL_BASE, FrontPasswordServlet.URL_BASE + "/voir",
-        FrontPasswordServlet.URL_BASE + "/editer", FrontPasswordServlet.URL_BASE + "/creer",
-        FrontPasswordServlet.URL_BASE + "/supprimer" })
+        FrontPasswordServlet.URL_BASE, FrontPasswordServlet.URL_BASE + "/editer",
+        FrontPasswordServlet.URL_BASE + "/creer", FrontPasswordServlet.URL_BASE + "/supprimer" })
 public class FrontPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     private HashMap<String, String> errors;
@@ -65,9 +64,7 @@ public class FrontPasswordServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains("/voir")) {
-            this.show(request, response);
-        } else if (uri.contains("/creer")) {
+        if (uri.contains("/creer")) {
             this.create(request, response);
         } else if (uri.contains("/editer")) {
             this.edit(request, response);
@@ -86,7 +83,7 @@ public class FrontPasswordServlet extends BaseServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-    
+
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Integer userId = LoginServlet.getCurrentUser(request).getId();
@@ -101,29 +98,6 @@ public class FrontPasswordServlet extends BaseServlet {
         request.setAttribute("user", user);
         request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/list.jsp").forward(request, response);
 
-        return;
-    }
-    
-    private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        Integer passwordId = this.checkPasswordParam(request, response);
-
-        if (passwordId > 0) {
-
-            final Group group = this.groupManager.getGroup(passwordId);
-
-            if (group == null) {
-                this.alertPasswordNotFound(request, response);
-            } else {
-
-                request.setAttribute("group", group);
-                request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-
-                return;
-            }
-        }
-
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
         return;
     }
 
@@ -167,7 +141,7 @@ public class FrontPasswordServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
                 }
-                
+
                 response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
 
                 return;
@@ -193,61 +167,92 @@ public class FrontPasswordServlet extends BaseServlet {
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Integer passwordId = this.checkPasswordParam(request, response);
+        Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
+
         final String method = request.getMethod();
         HttpSession session = request.getSession();
-        
-        if (passwordId > 0) {
-            
-            if (method == "GET") {
-                
-                Password password = this.passwordManager.getPassword(passwordId);
+
+        if (method == "GET") {
+
+            Password password = this.passwordManager.getPassword(passwordId);
+
+            if (password != null) {
+
                 Map<Integer, Category> categories = this.categoryManager.getCategories();
-                
+
                 request.setAttribute("password", password);
                 request.setAttribute("categories", categories);
-                
-                request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-                
-                return;
-                
-            } else {
-                
-                String title = request.getParameter("title");
-                Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
-                String site = request.getParameter("site");
-                String plainPassword = request.getParameter("password");
-                String informations = request.getParameter("informations");
-                
-                Password password = new Password(title, site, plainPassword, informations, category);
-                
-                errors = password.isValid();
-                
-                if (errors.isEmpty()) {
-                    
-                    final Integer success = this.passwordManager.editPassword(passwordId, title, site, plainPassword, category, informations);
-                    
-                    if (success == 1) {
-                        session.setAttribute("alertClass", "alert-success");
-                        session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
 
-                    } else {
-                        session.setAttribute("alertClass", "alert-danger");
-                        session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
-                    }
-                    
-               } else {
-                   request.setAttribute("errors", errors);
-               }
+                request.getRequestDispatcher(FrontPasswordServlet.viewPathPrefix + "/edit.jsp").forward(request,
+                        response);
+
+                return;
+
+            } else {
+                this.alertPasswordNotFound(request, response);
+            }
+
+        } else {
+
+            String title = request.getParameter("title");
+            Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
+            String site = request.getParameter("site");
+            String plainPassword = request.getParameter("password");
+            String informations = request.getParameter("informations");
+
+            Password password = new Password(title, site, plainPassword, informations, category);
+
+            errors = password.isValid();
+
+            if (errors.isEmpty()) {
+
+                final Integer success = this.passwordManager.editPassword(passwordId, title, site, plainPassword,
+                        category, informations);
+
+                if (success == 1) {
+                    session.setAttribute("alertClass", "alert-success");
+                    session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
+
+                } else {
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
+                }
+
+            } else {
+                request.setAttribute("errors", errors);
             }
         }
-        
+
         response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
 
         return;
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        HttpSession session = request.getSession();
+        final String method = request.getMethod();
+
+        Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
+
+        if (method == "POST") {
+
+            final Integer success = this.passwordManager.deletePassword(passwordId);
+
+            if (success == 0) {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être supprimé.");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "Le mot de passe a bien été supprimé.");
+            }
+
+        } else {
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Accès interdit");
+        }
+
+        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
 
         return;
     }
@@ -263,19 +268,6 @@ public class FrontPasswordServlet extends BaseServlet {
         }
 
         return ownerId;
-    }
-
-    private Integer checkPasswordParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        Integer passwordId = 0;
-
-        try {
-            passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
-        } catch (Exception e) {
-            this.alertPasswordNotFound(request, response);
-        }
-
-        return passwordId;
     }
 
     private void alertPasswordNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {

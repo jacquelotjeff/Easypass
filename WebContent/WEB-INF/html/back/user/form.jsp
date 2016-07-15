@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="fr.easypass.servlets.back.BackUserServlet"%>
 
 <c:url value="${formAction}" var="submitURL">
     <c:if test="${not empty user}">
@@ -66,5 +67,11 @@
         </div>
     </div>
     <br />
-    <button type="submit" class="btn btn-default">Enregistrer</button>
+    <div class="col-sm-12">
+        <div class="pull-right">
+            <a class="btn btn-default" href="${pageContext.request.contextPath}${BackUserServlet.URL_BASE}">Retour</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </div>
+    
 </form>

@@ -26,8 +26,7 @@ import fr.easypass.servlets.BaseServlet;
  * Servlet implementation class PasswordServlet
  */
 @WebServlet(name = "BackPasswordServlet", description = "Password Servlet", urlPatterns = {
-        BackPasswordServlet.URL_BASE, BackPasswordServlet.URL_BASE + "/voir",
-        BackPasswordServlet.URL_BASE + "/editer", BackPasswordServlet.URL_BASE + "/creer",
+        BackPasswordServlet.URL_BASE, BackPasswordServlet.URL_BASE + "/editer", BackPasswordServlet.URL_BASE + "/creer",
         BackPasswordServlet.URL_BASE + "/supprimer" })
 public class BackPasswordServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
@@ -63,9 +62,7 @@ public class BackPasswordServlet extends BaseServlet {
 
         final String uri = request.getRequestURI();
 
-        if (uri.contains("/voir")) {
-            this.show(request, response);
-        } else if (uri.contains("/creer")) {
+        if (uri.contains("/creer")) {
             this.create(request, response);
         } else if (uri.contains("/editer")) {
             this.edit(request, response);
@@ -88,34 +85,11 @@ public class BackPasswordServlet extends BaseServlet {
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         Map<Integer, Password> passwords = this.passwordManager.getPasswords();
-        
+
         request.setAttribute("passwords", passwords.values());
 
         request.getRequestDispatcher(BackPasswordServlet.viewPathPrefix + "/list.jsp").forward(request, response);
 
-        return;
-    }
-
-    private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        Integer passwordId = this.checkPasswordParam(request, response);
-
-        if (passwordId > 0) {
-
-            final Group group = this.groupManager.getGroup(passwordId);
-
-            if (group == null) {
-                this.alertPasswordNotFound(request, response);
-            } else {
-
-                request.setAttribute("group", group);
-                request.getRequestDispatcher(BackPasswordServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-
-                return;
-            }
-        }
-
-        response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.URL_BASE);
         return;
     }
 
@@ -161,9 +135,11 @@ public class BackPasswordServlet extends BaseServlet {
                 }
 
                 if (ownerType == Password.OWNER_TYPE_GROUP) {
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/voir?groupId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE
+                            + "/voir?groupId=" + ownerId);
                 } else {
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE + "/voir?userId=" + ownerId);
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE
+                            + "/voir?userId=" + ownerId);
                 }
 
                 return;
@@ -189,59 +165,65 @@ public class BackPasswordServlet extends BaseServlet {
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Integer passwordId = this.checkPasswordParam(request, response);
+        Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
+
         final String method = request.getMethod();
         HttpSession session = request.getSession();
-        
-        if (passwordId > 0) {
+
+        if (method == "GET") {
+
+            Password password = this.passwordManager.getPassword(passwordId);
             
-            if (method == "GET") {
+            if (password != null) {
                 
-                Password password = this.passwordManager.getPassword(passwordId);
                 Map<Integer, Category> categories = this.categoryManager.getCategories();
-                
+
                 request.setAttribute("password", password);
                 request.setAttribute("categories", categories);
-                
+
                 request.getRequestDispatcher(BackPasswordServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-                
+
                 return;
+
                 
             } else {
                 
-                String title = request.getParameter("title");
-                Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
-                String site = request.getParameter("site");
-                String password = request.getParameter("password");
-                String informations = request.getParameter("informations");
-                
-                final Integer success = this.passwordManager.editPassword(passwordId, title, site, password, category, informations);
-                
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
+                this.alertPasswordNotFound(request, response);
+            }
+            
+        } else {
 
-                } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
-                }
-                
+            String title = request.getParameter("title");
+            Integer category = NumberUtils.createInteger(request.getParameter("categoryId"));
+            String site = request.getParameter("site");
+            String password = request.getParameter("password");
+            String informations = request.getParameter("informations");
+
+            final Integer success = this.passwordManager.editPassword(passwordId, title, site, password, category,
+                    informations);
+
+            if (success == 1) {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "Le mot de passe a bien été édité.");
+
+            } else {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être édité.");
             }
 
         }
-        
+
         response.sendRedirect(this.getServletContext().getContextPath() + BackPasswordServlet.URL_BASE);
 
         return;
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
-        //TODO delete password;
+
 
         return;
     }
-    
+
     private Integer checkOwnerParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Integer ownerId = 0;
@@ -253,19 +235,6 @@ public class BackPasswordServlet extends BaseServlet {
         }
 
         return ownerId;
-    }
-
-    private Integer checkPasswordParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        Integer passwordId = 0;
-
-        try {
-            passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
-        } catch (Exception e) {
-            this.alertPasswordNotFound(request, response);
-        }
-
-        return passwordId;
     }
 
     private void alertPasswordNotFound(HttpServletRequest request, HttpServletResponse response) throws IOException {

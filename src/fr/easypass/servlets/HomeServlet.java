@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HelloServlet
  */
-@WebServlet(name = "HomeServlet", description = "Home Servlet", urlPatterns = {"", "/admin"})
+@WebServlet(name = "HomeServlet", description = "Home Servlet", urlPatterns = {""})
 public class HomeServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     
@@ -31,14 +31,8 @@ public class HomeServlet extends BaseServlet {
             throws ServletException, IOException {
         
         super.doGet(request, response);
-
-        final String uri = request.getRequestURI();
+        this.home(request, response);
         
-        if (uri.contains("/admin")) {
-            this.admin(request, response);
-        } else {
-            this.home(request, response);
-        }
     }
 
     /**
@@ -56,14 +50,4 @@ public class HomeServlet extends BaseServlet {
 
         return;
     }
-    
-    private void admin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        //User test = this.getCurrentUser(request);
-        //request.setAttribute("currentUser", test);
-        request.getRequestDispatcher("/WEB-INF/html/back/home.jsp").forward(request, response);
-
-        return;
-    }
-
 }

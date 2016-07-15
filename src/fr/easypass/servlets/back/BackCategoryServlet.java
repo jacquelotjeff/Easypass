@@ -90,27 +90,26 @@ public class BackCategoryServlet extends BaseServlet {
 
         return;
     }
-
+    
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        
+        Integer categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
 
-        Integer categoryId = this.checkCategoryParam(request, response);
+        final Category category = this.categoryManager.getCategory(categoryId);
 
-        if (categoryId > 0) {
+        if (category == null) {
+            this.alertCategoryNotFound(request);
+            
+        } else {
 
-            final Category category = this.categoryManager.getCategory(categoryId);
+            request.setAttribute("category", category);
+            request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
-            if (category == null) {
-                this.alertCategoryNotFound(request);
-            } else {
-
-                request.setAttribute("category", category);
-                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-
-                return;
-            }
+            return;
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
+        
         return;
     }
 
@@ -181,71 +180,68 @@ public class BackCategoryServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
-
-        Integer categoryId = this.checkCategoryParam(request, response);
-        if (categoryId > 0) {
+        Integer categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
             
-            Category category = this.categoryManager.getCategory(categoryId);
+        Category category = this.categoryManager.getCategory(categoryId);
 
-            if (category == null) {
-                this.alertCategoryNotFound(request);
+        if (category == null) {
+            this.alertCategoryNotFound(request);
+        }
+
+        if (method == "GET") {
+
+            request.setAttribute("category", category);
+            request.setAttribute("formAction", "editer");
+
+            request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+
+            return;
+
+        } else {
+            
+            Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+            
+            String name = (String) uploadResult.get("name");
+            String logo = (String) uploadResult.get("logo");
+
+            //Get the old picture if a new one doesn't exist.
+            if (logo == null) {
+
+                logo = category.getLogo();
             }
-
-            if (method == "GET") {
-
-                request.setAttribute("category", category);
-                request.setAttribute("formAction", "editer");
-
-                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-
-                return;
-
-            } else {
+            
+            category = new Category(name, logo);
+            
+            Map<String, String> errors = category.isValid();
+            
+            if (errors.isEmpty()) {
                 
-                Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
-                
-                String name = (String) uploadResult.get("name");
-                String logo = (String) uploadResult.get("logo");
-
-                //Get the old picture if a new one doesn't exist.
-                if (logo == null) {
-
-                    logo = category.getLogo();
-                }
-                
-                category = new Category(name, logo);
-                
-                Map<String, String> errors = category.isValid();
-                
-                if (errors.isEmpty()) {
+                if (!uploadResult.containsKey("errors")) {
                     
-                    if (!uploadResult.containsKey("errors")) {
-                        
-                        final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
+                    final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
 
-                        if (success == 1) {
-                            session.setAttribute("alertClass", "alert-success");
-                            session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
+                    if (success == 1) {
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
 
-                        } else {
-                            session.setAttribute("alertClass", "alert-danger");
-                            session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
-                        }
-                        
                     } else {
-                        
                         session.setAttribute("alertClass", "alert-danger");
-                        session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
-                        session.setAttribute("alertMessages", uploadResult.get("errors"));
-                        
+                        session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
                     }
                     
                 } else {
                     
-                    request.setAttribute("errors", errors);
-                    request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                    session.setAttribute("alertClass", "alert-danger");
+                    session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                    session.setAttribute("alertMessages", uploadResult.get("errors"));
                     
                 }
+                
+            } else {
+                
+                request.setAttribute("errors", errors);
+                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+                
             }
         }
 
@@ -258,44 +254,27 @@ public class BackCategoryServlet extends BaseServlet {
 
         HttpSession session = request.getSession();
         final String method = request.getMethod();
+        Integer categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
 
-        Integer categoryId = this.checkCategoryParam(request, response);
+        if (method == "POST") {
+            final Integer success = this.categoryManager.deleteCategory(categoryId);
 
-        if (categoryId > 0) {
-
-            if (method == "POST") {
-                final Integer success = this.categoryManager.deleteCategory(categoryId);
-
-                if (success == 0) {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "La catégorie n'a pas pu être supprimée.");
-                } else {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "La catégorie a bien été supprimée.");
-                }
-
-            } else {
+            if (success == 0) {
                 session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Accès interdit");
+                session.setAttribute("alertMessage", "La catégorie n'a pas pu être supprimée.");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "La catégorie a bien été supprimée.");
             }
+
+        } else {
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Accès interdit");
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
 
         return;
-    }
-
-    private Integer checkCategoryParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        Integer categoryId = 0;
-
-        try {
-            categoryId = NumberUtils.createInteger(request.getParameter("categoryId"));
-        } catch (Exception e) {
-            this.alertCategoryNotFound(request);
-        }
-
-        return categoryId;
     }
 
     private void alertCategoryNotFound(HttpServletRequest request) throws IOException {

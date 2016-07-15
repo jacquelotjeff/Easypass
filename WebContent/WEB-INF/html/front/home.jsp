@@ -18,7 +18,7 @@
         <div class="col-md-4">
           <h2>Admin</h2>
           <p>Accès temporaire à l'espace d'administration</p>
-          <p><a class="btn btn-default" href="admin" role="button">Voir l'admin</a></p>
+          <p><a class="btn btn-default" href="admin/utilisateurs" role="button">Voir l'admin</a></p>
         </div>
         <div class="col-md-4">
           <h2>Inscrivez-vous</h2>

@@ -21,11 +21,16 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
+import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
+import fr.easypass.model.Category;
 import fr.easypass.model.Group;
+import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
 import fr.easypass.servlets.LoginServlet;
+import fr.easypass.servlets.front.FrontGroupServlet;
+import fr.easypass.utils.FileUploader;
 
 /**
  * Servlet implementation class GroupServlet
@@ -39,6 +44,7 @@ public class BackGroupServlet extends BaseServlet {
     private static final long serialVersionUID = 1L;
     public static final String URL_BASE = "/admin/groupes";
     public static final String viewPathPrefix = "/WEB-INF/html/back/group";
+    public final PasswordManager passwordManager = new PasswordManager();
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
@@ -113,21 +119,18 @@ public class BackGroupServlet extends BaseServlet {
 
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Integer groupId = this.checkGroupParam(request, response);
+        Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
 
-        if (groupId > 0) {
+        final Group group = this.groupManager.getGroup(groupId);
 
-            final Group group = this.groupManager.getGroup(groupId);
+        if (group == null) {
+            this.alertGroupNotFound(request);
+        } else {
 
-            if (group == null) {
-                this.alertGroupNotFound(request);
-            } else {
+            request.setAttribute("group", group);
+            request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
-                request.setAttribute("group", group);
-                request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-
-                return;
-            }
+            return;
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
@@ -136,56 +139,68 @@ public class BackGroupServlet extends BaseServlet {
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         
-        final User user = LoginServlet.getCurrentUser(request);
-
         HttpSession session = request.getSession();
         final String method = request.getMethod();
+        final User user = LoginServlet.getCurrentUser(request);
 
         if (method == "POST") {
 
-            String name = request.getParameter("name");
-            String description = request.getParameter("description");
-            String logo = request.getParameter("logo");
-            List<String> users = new ArrayList<>(Arrays.asList(request.getParameterValues("users")));
+            Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+
+            String name = (String) uploadResult.get("name");
+            String logo = (String) uploadResult.get("logo");
+            String description = (String) uploadResult.get("description");
+            List<String> users = (List<String>) uploadResult.get("users");
             List<String> admins = new ArrayList<>();
-            
-            Group group = new Group(name, description, logo);
-            
+
             users.add(user.getId().toString());
             admins.add(user.getId().toString());
-            
+
+            Group group = new Group(name, description, logo);
+
             errors = group.isValid();
-            
+
             if (errors.isEmpty()) {
                 
-                final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
+                if (!uploadResult.containsKey("errors")) {
+                    
+                    final Integer success = this.groupManager.insertGroup(name, description, logo, users, admins);
 
-                if (success == 1) {
+                    if (success == 1) {
 
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le groupe à bien été créé");
+                        session.setAttribute("alertClass", "alert-success");
+                        session.setAttribute("alertMessage", "Le groupe à bien été créé");
 
+                    } else {
+
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                    }
+                    
                 } else {
-
+                    
                     session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être créé");
+                    session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                    session.setAttribute("alertMessages", uploadResult.get("errors"));
+                    
                 }
-                
+
                 response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
+                
                 return;
-                
+
             } else {
-                
+
                 request.setAttribute("errors", errors);
             }
-            
+
         }
-        
+
         final Map<Integer, User> users = userManager.getUsers();
-        users.remove(LoginServlet.getCurrentUser(request).getId());
+        users.remove(user.getId());
         request.setAttribute("users", users.values());
         request.setAttribute("formAction", "creer");
-        request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
+        request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/create.jsp").forward(request, response);
 
         return;
 
@@ -196,50 +211,82 @@ public class BackGroupServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
-        Integer groupId = this.checkGroupParam(request, response);
-        if (groupId > 0) {
+        Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+
+        Group group = this.groupManager.getGroup(groupId);
+
+        if (group == null) {
+            
+            this.alertGroupNotFound(request);
+            
+        } else {
 
             if (method == "GET") {
 
-                final Group group = this.groupManager.getGroup(groupId);
-
-                if (group == null) {
-                    this.alertGroupNotFound(request);
-                }
-
                 final Map<Integer, User> availableUsers = userManager.getUsersAvailableByGroup(groupId);
-                final Map<Integer, User> groupUsers = userManager.getUsersByGroup(groupId).get("groupUsers");
-                final Map<Integer, User> groupAdmins = userManager.getUsersByGroup(groupId).get("groupAdmins");
+                final Map<String, Map<Integer, User>> users = userManager.getUsersByGroup(groupId);
+                final Map<Integer, User> groupUsers = users.get("groupUsers");
+                final Map<Integer, User> groupAdmins = users.get("groupAdmins");
+                final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
+                final Map<Integer, Category> categories = categoryManager.getCategories();
 
                 request.setAttribute("users", availableUsers.values());
                 request.setAttribute("groupUsers", groupUsers.values());
                 request.setAttribute("groupAdmins", groupAdmins);
+                request.setAttribute("groupPasswords", groupPasswords.values());
+                request.setAttribute("categories", categories);
+
                 request.setAttribute("group", group);
                 request.setAttribute("formAction", "editer");
 
-                request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                request.getRequestDispatcher(BackGroupServlet.viewPathPrefix + "/edit.jsp").forward(request,
+                        response);
 
                 return;
 
             } else {
 
-                String name = request.getParameter("name");
-                String description = request.getParameter("description");
-                String logo = request.getParameter("logo");
+                Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
 
-                final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
+                String name = (String) uploadResult.get("name");
+                String logo = (String) uploadResult.get("logo");
+                String description = (String) uploadResult.get("description");
+                
+                if (logo == null) {
+                    logo = group.getLogo();
+                }
+                
+                group = new Group(name, description, logo);
 
-                if (success == 1) {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+                Map<String, String> errors = group.isValid();
+
+                if (errors.isEmpty()) {
+                    
+                    if (!uploadResult.containsKey("errors")) {
+                        
+                        final Integer success = this.groupManager.editGroup(groupId, name, description, logo);
+
+                        if (success == 1) {
+                            session.setAttribute("alertClass", "alert-success");
+                            session.setAttribute("alertMessage", "Le groupe a bien été édité.");
+
+                        } else {
+                            session.setAttribute("alertClass", "alert-danger");
+                            session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+                        }
+                        
+                    } else {
+                        
+                        session.setAttribute("alertClass", "alert-danger");
+                        session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                        session.setAttribute("alertMessages", uploadResult.get("errors"));
+                        
+                    }
 
                 } else {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être édité.");
+                    request.setAttribute("errors", errors);
                 }
-
             }
-
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
@@ -252,25 +299,22 @@ public class BackGroupServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
-        Integer groupId = this.checkGroupParam(request, response);
+        Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
 
-        if (groupId > 0) {
+        if (method == "POST") {
+            final Integer success = this.groupManager.deleteGroup(groupId);
 
-            if (method == "POST") {
-                final Integer success = this.groupManager.deleteGroup(groupId);
-
-                if (success == 0) {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
-                } else {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
-                }
-
-            } else {
+            if (success == 0) {
                 session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Accès interdit");
+                session.setAttribute("alertMessage", "Le groupe n'a pas pu être supprimé.");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "Le groupe a bien été supprimé.");
             }
+
+        } else {
+            session.setAttribute("alertClass", "alert-danger");
+            session.setAttribute("alertMessage", "Accès interdit");
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
@@ -284,38 +328,31 @@ public class BackGroupServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
-        try {
+        if (method == "POST") {
 
-            if (method == "POST") {
+            Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+            Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
 
-                Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-                Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
+            final Integer success = this.groupManager.addUser(groupId, userId);
 
-                final Integer success = this.groupManager.addUser(groupId, userId);
-
-                if (success == 0) {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "L'utilisateur  n'a pas pu être ajouté au groupe.");
-                } else {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
-
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
-
-                    return;
-                }
-
-            } else {
+            if (success == 0) {
                 session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Accès interdit");
+                session.setAttribute("alertMessage", "L'utilisateur  n'a pas pu être ajouté au groupe.");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "L'utilisateur a été ajouté au groupe.");
+
+                response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
+
+                return;
             }
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "Error while adding a user", e);
+        } else {
             session.setAttribute("alertClass", "alert-danger");
-            session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
-
+            session.setAttribute("alertMessage", "Accès interdit");
         }
+
+
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
 
@@ -329,38 +366,29 @@ public class BackGroupServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
 
-        try {
+        Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
+        Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
 
-            Integer groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-            Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
+        if (method == "POST") {
 
-            if (method == "POST") {
+            final Integer success = this.groupManager.deleteUser(groupId, userId);
 
-                final Integer success = this.groupManager.deleteUser(groupId, userId);
-
-                if (success == 0) {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être retiré du groupe");
-                } else {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
-
-                    response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
-
-                    return;
-
-                }
-
-            } else {
+            if (success == 0) {
                 session.setAttribute("alertClass", "alert-danger");
-                session.setAttribute("alertMessage", "Accès interdit");
+                session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être retiré du groupe");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "L'utilisateur a été retiré du groupe.");
+
+                response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE + "/editer" + "?groupId=" + groupId);
+
+                return;
+
             }
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "Error while deleting a user", e);
+        } else {
             session.setAttribute("alertClass", "alert-danger");
-            session.setAttribute("alertMessage", "Impossible de supprimer l'utilisateur.");
-
+            session.setAttribute("alertMessage", "Accès interdit");
         }
 
         response.sendRedirect(this.getServletContext().getContextPath() + BackGroupServlet.URL_BASE);
@@ -411,19 +439,6 @@ public class BackGroupServlet extends BaseServlet {
 
         return;
 
-    }
-
-    private Integer checkGroupParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        Integer groupId = 0;
-
-        try {
-            groupId = NumberUtils.createInteger(request.getParameter("groupId"));
-        } catch (Exception e) {
-            this.alertGroupNotFound(request);
-        }
-
-        return groupId;
     }
 
     private void alertGroupNotFound(HttpServletRequest request) throws IOException {

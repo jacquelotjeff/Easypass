@@ -118,30 +118,27 @@ public class BackUserServlet extends BaseServlet {
      */
     private void show(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Integer userId = this.checkUserParam(request, response);
-        
-        if (userId>0) {
+        Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
             
-            final User user = this.userManager.getUser(userId);
+        final User user = this.userManager.getUser(userId);
 
-            if (user == null) {
-                this.alertUserNotFound(request);
-            } else {
+        if (user == null) {
+            this.alertUserNotFound(request);
+        } else {
 
-                Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
-            	Map<Integer, Password> passwords = this.passwordManager.getPasswordsByUser(userId);
-            	Map<Integer, Category> categories = this.categoryManager.getCategories();
-            	
-            	request.setAttribute("groups", groups.get("groups").values());
-            	request.setAttribute("groupsAdmin", groups.get("groupsAdmin"));
-            	request.setAttribute("passwords", passwords.values());
-                request.setAttribute("categories", categories);
-                request.setAttribute("user", user);
-                request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
-                return;
-            }
-            
+            Map<String, Map<Integer, Group>> groups = this.groupManager.getGroupByUsers(userId);
+        	Map<Integer, Password> passwords = this.passwordManager.getPasswordsByUser(userId);
+        	Map<Integer, Category> categories = this.categoryManager.getCategories();
+        	
+        	request.setAttribute("groups", groups.get("groups").values());
+        	request.setAttribute("groupsAdmin", groups.get("groupsAdmin"));
+        	request.setAttribute("passwords", passwords.values());
+            request.setAttribute("categories", categories);
+            request.setAttribute("user", user);
+            request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/show.jsp").forward(request, response);
+            return;
         }
+            
         response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
         
         return;
@@ -187,9 +184,8 @@ public class BackUserServlet extends BaseServlet {
         HttpSession session = request.getSession();
         final String method = request.getMethod();
         
-        Integer userId = this.checkUserParam(request, response);
+        Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
         
-        if (userId > 0) {
             if (method == "GET") {
 
                 final User user = this.userManager.getUser(userId);
@@ -226,7 +222,7 @@ public class BackUserServlet extends BaseServlet {
                     request.setAttribute("errors", errors);
                     request.getRequestDispatcher(BackUserServlet.viewPathPrefix + "/signUp.jsp").forward(request, response);
                 }
-            }
+                
         }
         
         response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
@@ -241,19 +237,16 @@ public class BackUserServlet extends BaseServlet {
 
         if (method == "POST") {
             
-            Integer userId = this.checkUserParam(request, response);
-            if (userId > 0) {
+            Integer userId = NumberUtils.createInteger(request.getParameter("userId"));
                 
-                final Integer success = this.userManager.deleteUser(userId);
+            final Integer success = this.userManager.deleteUser(userId);
 
-                if (success == 0) {
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être supprimé.");
-                } else {
-                    session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "L'utilisateur a bien été supprimé.");
-                }
-                
+            if (success == 0) {
+                session.setAttribute("alertClass", "alert-danger");
+                session.setAttribute("alertMessage", "L'utilisateur n'a pas pu être supprimé.");
+            } else {
+                session.setAttribute("alertClass", "alert-success");
+                session.setAttribute("alertMessage", "L'utilisateur a bien été supprimé.");
             }
 
         } else {
@@ -266,19 +259,6 @@ public class BackUserServlet extends BaseServlet {
         return;
     }
 
-    private Integer checkUserParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
-        Integer userId = 0;
-        
-        try {
-            userId = NumberUtils.createInteger(request.getParameter("userId"));
-        } catch (Exception e) {
-            this.alertUserNotFound(request);
-        }
-
-        return userId;
-    }
-    
     private User createUserFromParam(HttpServletRequest request) throws IOException {
 
         Boolean admin = BooleanUtils.toBooleanObject(request.getParameter("admin"));

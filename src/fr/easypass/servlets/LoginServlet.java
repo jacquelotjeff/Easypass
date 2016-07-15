@@ -13,6 +13,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
+import fr.easypass.servlets.back.BackUserServlet;
+import fr.easypass.servlets.front.FrontUserServlet;
 
 /**
  * Servlet implementation class LoginServlet
@@ -85,9 +87,9 @@ public class LoginServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Vous êtes bien connecté.");
 
                 if (user.getAdmin()) {
-                    response.sendRedirect(this.getServletContext().getContextPath() + "/admin");
+                    response.sendRedirect(this.getServletContext().getContextPath() + BackUserServlet.URL_BASE);
                 } else {
-                    response.sendRedirect(this.getServletContext().getContextPath() + "/utilisateur");
+                    response.sendRedirect(this.getServletContext().getContextPath() + FrontUserServlet.URL_BASE);
                 }
 
                 return;

@@ -27,16 +27,14 @@
                                 <span class="help-block">${user.getEmail()}</span>
                             </div>
                             <div>
+                                <c:url value="supprimer" var="deleteURL">
+                                    <c:param name="userId"   value="${user.getId()}" />
+                                </c:url>
                                 <form action="${deleteURL}" method="POST" class="form-group">
                                     <c:url value="editer" var="editURL">
                                         <c:param name="userId"   value="${user.getId()}" />
                                     </c:url>
                                     <a class="btn btn-primary" href="${editURL}">Editer</a>
-                                    
-                                    <c:url value="utilisateurs/supprimer" var="deleteURL">
-                                        <c:param name="userId"   value="${user.getId()}" />
-                                    </c:url>
-                
                                     <button type="submit" class="btn btn-danger">Supprimer</button>
                                 </form>
                             </div>
@@ -75,7 +73,7 @@
                                                 <li class="list-group-item title">
                                                     <span class="col-sm-2">
                                                         <c:set var="category" value="${categories.get(password.getCategory())}"/>
-                                                        <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
+                                                        <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
                                                     </span>
                                                     <div class="col-sm-6">
                                                         <h4 class="list-group-item-heading">${password.getTitle()}</h4>
@@ -122,7 +120,7 @@
                                         <c:forEach var="group" items="${groups}">
                                             <li class="list-group-item title">
                                                     <span class="col-sm-2">
-                                                        <img class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${group.getLogo()}">
+                                                        <img class="thumbnail" alt="Logo du groupe ${group.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${group.getLogo()}">
                                                     </span>
                                                     <div class="col-sm-6">
                                                         <h4 class="list-group-item-heading">${group.getName()}</h4>
@@ -130,23 +128,28 @@
                                                             ${group.getDescription()}
                                                         </p>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <c:url value="${BackGroupServlet.URL_BASE}/voir" var="showGroupURL">
-                                                            <c:param name="groupId" value="${group.getId()}"/>
-                                                        </c:url>
-                                                        <a href="${showGroupURL}" title="Voir le groupe." class="btn btn-success btn-sm">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                        <c:url value="${BackGroupServlet.URL_BASE}/editer" var="editGroupURL">
-                                                            <c:param name="groupId" value="${group.getId()}"/>
-                                                        </c:url>
-                                                        <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        <a href="${exitGroupURL}" title="Quitter le groupe." class="btn btn-danger btn-sm">
-                                                            <i class="fa fa-sign-out"></i>
-                                                        </a>
-                                                    </div>
+                                                    <c:url value="${BackGroupServlet.URL_BASE}/supprimer" var="deleteURL">
+                                                        <c:param name="groupId"   value="${group.getId()}" />
+                                                    </c:url>
+                                                    <form action="${deleteURL}" method="POST">
+                                                        <div class="btn-group">
+                                                            <c:url value="${BackGroupServlet.URL_BASE}/voir" var="showGroupURL">
+                                                                <c:param name="groupId" value="${group.getId()}"/>
+                                                            </c:url>
+                                                            <a href="${showGroupURL}" title="Voir le groupe." class="btn btn-success btn-sm">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                            <c:url value="${BackGroupServlet.URL_BASE}/editer" var="editGroupURL">
+                                                                <c:param name="groupId" value="${group.getId()}"/>
+                                                            </c:url>
+                                                            <a href="${editGroupURL}" title="Editer le groupe." class="btn btn-primary btn-sm">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                            <button type="submit"  title="Supprimer le groupe" class="btn btn-sm btn-danger">
+                                                                <i class="fa fa-remove"></i>
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                     <div class="clearfix"></div>
                                                 </li>
                                         </c:forEach>
@@ -167,7 +170,7 @@
             </div>
             <div class="col-sm-12">
                 <div class="pull-right">
-                    <a class="btn btn-success" href="${pageContext.request.contextPath}${UserServlet.URL_BASE}">Retour</a>
+                    <a class="btn btn-success" href="${pageContext.request.contextPath}${BackUserServlet.URL_BASE}">Retour</a>
                 </div>
             </div>
         </div>        

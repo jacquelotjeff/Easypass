@@ -18,7 +18,6 @@
                 <tr>
                     <th>Titre</th>
                     <th>Site</th>
-                    <th>Mot de passe</th>
                     <th class="col-sm-2">Action</th>
                 </tr>
             </thead>
@@ -27,14 +26,6 @@
                     <tr>
                         <td>${password.getTitle()}</td>
                         <td>${password.getSiteUrl()}</td>
-                        <td>    
-                            <div class="input-group">
-                                <input type="password" class="form-control password-field" value="${password.getPassword()}">
-                                <div class="input-group-addon show-password">
-                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                </div>
-                            </div>
-                        </td>
                         <td> 
                             <c:url value="${BackPasswordServlet.URL_BASE}/supprimer" var="deleteURL">
                                 <c:param name="passwordId"   value="${password.getId()}" />
