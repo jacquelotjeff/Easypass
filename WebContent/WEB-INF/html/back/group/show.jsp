@@ -19,7 +19,7 @@
                 <c:forEach var="user" items="${users.values()}">
                  <li class="list-group-item text-left">
                     <img class="img-thumbnail"
-                                src="http://bootdey.com/img/Content/User_for_snippets.png">
+                                src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
                     <label class="name">${user.getUsername()}<br></label> 
                     <div class="break"></div>
                   </li>

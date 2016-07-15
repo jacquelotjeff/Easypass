@@ -111,7 +111,7 @@
                     <li class="list-group-item title">Utilisateurs disponibles</li>
                     <c:forEach var="user" items="${users.values()}">
                      <li class="list-group-item text-left">
-                        <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
+                        <img class="img-thumbnail" src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
                         <label class="name">${user.getUsername()}<br></label> 
                         <div class="pull-right">
                             <c:url value="ajouter-utilisateur"
@@ -132,6 +132,8 @@
                 </ul>
             </div>
         </div>
-        
+        <div class="col-sm-12 text-right">
+            <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontGroupServlet.URL_BASE}">Retour</a>
+        </div>
     </jsp:body>
 </t:genericuserpage>

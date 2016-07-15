@@ -23,7 +23,7 @@
                     <tr>
                         <td>${category.getName()}</td>
                         <td>
-                            <img width="30" class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
+                            <img width="30" class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
                         </td>
                         <td>   
                             <c:url value="categories/supprimer" var="deleteURL">

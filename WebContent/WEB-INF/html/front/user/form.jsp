@@ -26,7 +26,6 @@
                 <small class="help-block">${errors.get("firstname")}</small>
             </c:if>
         </div>
-        
         <div class="form-group ${not empty errors.get('email')?'has-error':''}">
             <label class="control-label" for="email">Email : </label>
             <div class="input-group">
@@ -47,7 +46,7 @@
                 <small class="help-block">${errors.get("password")}</small>
             </c:if>
         </div>
-        <div class="form-group">
+        <div class="form-group text-right">
             <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
     </form>

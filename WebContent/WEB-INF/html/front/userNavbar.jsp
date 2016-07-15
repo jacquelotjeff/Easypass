@@ -5,7 +5,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="user-image text-center">
-    <img src="http://bootdey.com/img/Content/User_for_snippets.png" alt="Utilisateur" title="Utilisateur" class="img-circle" width="100">
+    <img src="${pageContext.servletContext.contextPath}/fichier?nom=User.png" alt="Utilisateur" title="Utilisateur" class="img-circle" width="100">
 </div>
 <div class="user-info-block">
     <div class="user-heading">

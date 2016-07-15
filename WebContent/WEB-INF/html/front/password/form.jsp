@@ -81,5 +81,8 @@
             <input type="hidden" name="passwordId" value='${password.getId()}'>
         </c:otherwise>
     </c:choose>
-    <button type="submit" class="btn btn-default">Enregistrer</button>
+    <div class="col-sm-12 text-right">
+        <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontPasswordServlet.URL_BASE}">Retour</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
 </form>

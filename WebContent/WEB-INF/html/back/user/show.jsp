@@ -17,7 +17,7 @@
         <div class="row"> 
             <div class="col-sm-12">
                 <div class="user-image text-center">
-                    <img src="http://bootdey.com/img/Content/User_for_snippets.png" alt="Utilisateur" title="Utilisateur" class="img-circle" width="100">
+                    <img src="${pageContext.servletContext.contextPath}/fichier?nom=User.png" alt="Utilisateur" title="Utilisateur" class="img-circle" width="100">
                 </div>
                 <div class="user-info-block">
                     <div class="user-heading">
@@ -73,7 +73,7 @@
                                                 <li class="list-group-item title">
                                                     <span class="col-sm-2">
                                                         <c:set var="category" value="${categories.get(password.getCategory())}"/>
-                                                        <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
+                                                        <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
                                                     </span>
                                                     <div class="col-sm-6">
                                                         <h4 class="list-group-item-heading">${password.getTitle()}</h4>

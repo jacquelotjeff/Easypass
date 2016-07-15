@@ -46,6 +46,7 @@
                     </div>
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontGroupServlet.URL_BASE}">Retour</a>
                     </div>
                 </form>
             </div>

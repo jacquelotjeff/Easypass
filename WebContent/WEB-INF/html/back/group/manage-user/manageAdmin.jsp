@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <li class="list-group-item text-left">
-    <img class="img-thumbnail" src="http://bootdey.com/img/Content/User_for_snippets.png">
+    <img class="img-thumbnail" src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
     <label class="name">${user.getUsername()} (Admin)<br></label> 
     <div class="pull-right"> 
         <c:url value="admin-utilisateur" var="adminUserURL">

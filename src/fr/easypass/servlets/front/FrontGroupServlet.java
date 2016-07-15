@@ -130,8 +130,8 @@ public class FrontGroupServlet extends BaseServlet {
         } else {
 
             request.setAttribute("group", group);
-            request.setAttribute("users", groupUsers);
-            request.setAttribute("groupsAdmins", groupsAdmins);
+            request.setAttribute("groupUsers", groupUsers);
+            request.setAttribute("groupAdmins", groupsAdmins);
             request.setAttribute("passwords", groupPasswords);
             request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
