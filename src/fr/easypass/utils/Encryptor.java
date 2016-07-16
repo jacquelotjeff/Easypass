@@ -3,6 +3,7 @@ package fr.easypass.utils;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.jasypt.util.text.StrongTextEncryptor;
 
 import com.google.gson.JsonObject;
@@ -11,7 +12,7 @@ import com.google.gson.JsonParser;
 public class Encryptor {
     
     String encryptedPassword;
-    StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
+    BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
     String password;
     
     public Encryptor() {

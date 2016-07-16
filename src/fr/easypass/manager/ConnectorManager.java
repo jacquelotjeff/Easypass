@@ -47,6 +47,9 @@ public class ConnectorManager {
             properties.setProperty("user", user);
             properties.setProperty("password", password);
             properties.setProperty("connector", connector);
+            
+            log.log(Level.FINE, "@@@" + properties.toString());
+            log.log(Level.FINE, "@@@" + connector.toString());
 
             conn = DriverManager.getConnection(connector, properties);
 

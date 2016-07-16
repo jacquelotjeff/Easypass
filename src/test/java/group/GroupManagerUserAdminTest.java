@@ -1,4 +1,4 @@
-package fr.easypass.test.java.group;
+package test.java.group;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ import fr.easypass.model.User;
 import junit.framework.TestCase;
 
 @RunWith(Parameterized.class)
-public class GroupManagerAddUserTest extends TestCase {
+public class GroupManagerUserAdminTest extends TestCase {
     
     private static GroupManager groupManager;
     private static UserManager userManager;
@@ -33,7 +33,8 @@ public class GroupManagerAddUserTest extends TestCase {
         
         return Arrays.asList(
             new Object[][] {
-                {1, 3},
+                {4, 1, false},
+                {4, 2, true},
             }
         );
     }
@@ -44,6 +45,9 @@ public class GroupManagerAddUserTest extends TestCase {
     @Parameter(1)
     public Integer userId;
     
+    @Parameter(2)
+    public Boolean admin;
+    
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         groupManager = new GroupManager();
@@ -51,31 +55,32 @@ public class GroupManagerAddUserTest extends TestCase {
     }
     
     @Test
-    public void testInsertUserGroup(){
-        
-        Map<String, Map <Integer, User>> result;
-        Map<Integer, User> usersDb;
-        Integer success;
+    public void testUserAdminGroup(){
         
         try {
+                
+            log.log(Level.INFO, "We're testing user admin in group...");
             
-            log.log(Level.INFO, "We're testing add user in group...");
-            
-            result = userManager.getUsersByGroup(groupId);
-            usersDb = result.get("groupUsers");
-            assertFalse(usersDb.containsKey(userId));
-            
-            success = groupManager.addUser(groupId, userId);
+            Integer success = groupManager.setUserAdmin(groupId, userId, admin);
             assertEquals(1, success.intValue());
             
-            result = userManager.getUsersByGroup(groupId);
-            usersDb = result.get("groupUsers");
+            Map<String, Map <Integer, User>> result = userManager.getUsersByGroup(groupId);
+            
+            Map<Integer, User> usersDb = result.get("groupUsers");
+            Map<Integer, User> adminsDb = result.get("groupAdmins");
+            
             assertTrue(usersDb.containsKey(userId));
             
+            if (admin) {
+                assertTrue(adminsDb.containsKey(userId));
+            } else {
+                assertFalse(adminsDb.containsKey(userId));
+            }
             
-        } catch (IOException e1) {
+            
+        } catch (IOException e) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            e.printStackTrace();
         }
         
     }

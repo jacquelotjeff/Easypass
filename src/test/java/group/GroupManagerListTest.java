@@ -1,4 +1,4 @@
-package fr.easypass.test.java.group;
+package test.java.group;
 
 import java.util.Map;
 import java.util.logging.Logger;

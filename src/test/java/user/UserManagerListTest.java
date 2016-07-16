@@ -1,4 +1,4 @@
-package fr.easypass.test.java.user;
+package test.java.user;
 
 import java.util.Map;
 import java.util.logging.Logger;

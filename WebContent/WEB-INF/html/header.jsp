@@ -16,14 +16,14 @@
         <div id="navbar" class="navbar-collapse collapse">
             <c:choose>
                 <c:when test='${sessionScope.user  != null}'>
-                    <form class="navbar-form navbar-right" method="post"
+                    <form id="form-logout" class="navbar-form navbar-right" method="post"
                         action="${pageContext.request.contextPath}/user/logout">
                         <a href="${pageContext.request.contextPath}/utilisateur">${sessionScope.user.getUsername()}</a>
-                        <button type="submit" class="btn btn-success">Déconnexion</button>
+                        <button id="btn-logout" type="submit" class="btn btn-success">Déconnexion</button>
                     </form>
                 </c:when>
                 <c:otherwise>
-                    <form class="navbar-form navbar-right" method="post"
+                    <form id="form-sign-in" class="navbar-form navbar-right" method="post"
                         action="${pageContext.request.contextPath}/user/login">
                         <div class="form-group">
                             <input type="text" placeholder="E-mail"
@@ -35,7 +35,7 @@
                                 name="password" placeholder="Mot de passe"
                                 class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-success">Connexion</button>
+                        <button id="btn-sign-in" type="submit" class="btn btn-success">Connexion</button>
                     </form>
                 </c:otherwise>
             </c:choose>

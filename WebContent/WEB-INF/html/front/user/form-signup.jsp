@@ -4,7 +4,7 @@
 </c:url>
 
 <div class="col-sm-4 col-md-offset-4">
-    <form action="${submitURL}" method="POST" class="form-horizontal">
+    <form id="form-sign-up" action="${submitURL}" method="POST" class="form-horizontal">
         <div class="form-group ${not empty errors.get('username')?'has-error':''}">
             <label class="control-label" for="username">Nom d'utilisateur : </label>
             <div class="input-group"> 
@@ -59,7 +59,7 @@
             </c:if>
         </div>
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">Je m'inscris</button>
+            <button id="btn-sign-up" type="submit" class="btn btn-primary">Je m'inscris</button>
         </div>
     </form>
 </div>

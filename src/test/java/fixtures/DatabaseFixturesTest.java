@@ -1,4 +1,4 @@
-package fr.easypass.test.java.fixtures;
+package test.java.fixtures;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

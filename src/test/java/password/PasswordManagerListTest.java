@@ -1,4 +1,4 @@
-package fr.easypass.test.java.password;
+package test.java.password;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -33,12 +33,12 @@ public class PasswordManagerListTest extends TestCase {
     public static Object data() {
         
         return new Object[][] {
-            {1, 7, "Accès club de tennis", "", "Tennis club Moussy", "U6RpvFu4I6Hy2bYQ9eDv2A==", "tennis"},
-            {2, 7, "Code d'accès au gymnase", "", "Aucun", "fg6thlSeT3nd1fc7iT1gFw==", "1354968"},
-            {3, 7, "Mot de passe Membre VIP", "", "www.zone-tennis.com", "fnWavx2Od3Cgg8ZDrUWJ9tvQpgf8xI4z", "viptennis"},
-            {4, 3, "Useless", "A supprimer !", "www.useless.fr", "s+2r4JWNe+Zxs7s9hka98A==", "useless"},
-            {5, 2, "Facebook", "", "www.facebook.com", "TEOvR1lnPkicMfhsag3wEg==", "fbjeff"},
-            {6, 5, "VIP Imagine Dragons", "", "www.imagine-dragons.fr", "dVuL7rT8uuVgf3wV1PxeYOA9/0qyDhc+", "imaginedragons"},
+            {1, 7, "Accès club de tennis", "", "Tennis club Moussy", "0Ipa7/jpJ6xlDHxcC9GnLQ==", "tennis"},
+            {2, 7, "Code d'accès au gymnase", "", "Aucun", "JDiaeMPVCdLOYTOa23p71w==", "1354968"},
+            {3, 7, "Mot de passe Membre VIP", "", "www.zone-tennis.com", "d84WZpBmkUvQZDSzJQb1euZRlUEDDjrp", "viptennis"},
+            {4, 3, "Useless", "A supprimer !", "www.useless.fr", "URIOOHEqs/QpnXKubLpfqg==", "useless"},
+            {5, 2, "Facebook", "", "www.facebook.com", "MGiwWxw4Fbd3+rplO5ohwg==", "fbjeff"},
+            {6, 5, "VIP Imagine Dragons", "", "www.imagine-dragons.fr", "1A2o2KtPuAGqZYSBXZ6mdhpVHslqMHEf", "imaginedragons"},
         };
         
     }

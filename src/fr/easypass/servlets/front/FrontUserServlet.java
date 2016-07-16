@@ -114,8 +114,10 @@ public class FrontUserServlet extends BaseServlet {
         } else {
 
             User user = this.createUserFromParam(request);
-
+            
+            user.setUsername(LoginServlet.getCurrentUser(request).getUsername());
             errors = user.isValid();
+            
 
             if (errors.isEmpty()) {
 
@@ -133,6 +135,7 @@ public class FrontUserServlet extends BaseServlet {
             } else {
                 request.setAttribute("errors", errors);
                 request.getRequestDispatcher(FrontUserServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+                return;
             }
         }
 

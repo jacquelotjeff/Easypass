@@ -1,4 +1,4 @@
-package fr.easypass.test.java.group;
+package test.java.group;
 
 import java.io.IOException;
 import java.util.Arrays;
