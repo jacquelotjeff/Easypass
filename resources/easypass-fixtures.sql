@@ -104,12 +104,12 @@ CREATE TABLE IF NOT EXISTS `passwords` (
 DELETE FROM `passwords`;
 /*!40000 ALTER TABLE `passwords` DISABLE KEYS */;
 INSERT INTO `passwords` (`id`, `category_id`, `title`, `informations`, `urlSite`, `password`) VALUES
-  (1, 7, 'Accès club de tennis', '', 'Tennis club Moussy', 'U6RpvFu4I6Hy2bYQ9eDv2A=='),
-  (2, 7, 'Code d\'accès au gymnase', '', 'Aucun', 'fg6thlSeT3nd1fc7iT1gFw=='),
-  (3, 7, 'Mot de passe Membre VIP', '', 'www.zone-tennis.com', 'fnWavx2Od3Cgg8ZDrUWJ9tvQpgf8xI4z'),
-  (4, 3, 'Useless', 'A supprimer !', 'www.useless.fr', 's+2r4JWNe+Zxs7s9hka98A=='),
-  (5, 2, 'Facebook', '', 'www.facebook.com', 'TEOvR1lnPkicMfhsag3wEg=='),
-  (6, 5, 'VIP Imagine Dragons', '', 'www.imagine-dragons.fr', 'dVuL7rT8uuVgf3wV1PxeYOA9/0qyDhc+');
+  (1, 7, 'Accès club de tennis', '', 'Tennis club Moussy', '0Ipa7/jpJ6xlDHxcC9GnLQ=='),
+  (2, 7, 'Code d\'accès au gymnase', '', 'Aucun', 'JDiaeMPVCdLOYTOa23p71w=='),
+  (3, 7, 'Mot de passe Membre VIP', '', 'www.zone-tennis.com', 'd84WZpBmkUvQZDSzJQb1euZRlUEDDjrp'),
+  (4, 3, 'Useless', 'A supprimer !', 'www.useless.fr', 'URIOOHEqs/QpnXKubLpfqg=='),
+  (5, 2, 'Facebook', '', 'www.facebook.com', 'MGiwWxw4Fbd3+rplO5ohwg=='),
+  (6, 5, 'VIP Imagine Dragons', '', 'www.imagine-dragons.fr', '1A2o2KtPuAGqZYSBXZ6mdhpVHslqMHEf');
 /*!40000 ALTER TABLE `passwords` ENABLE KEYS */;
 
 
