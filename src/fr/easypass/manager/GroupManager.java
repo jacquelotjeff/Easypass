@@ -128,7 +128,9 @@ public class GroupManager {
                     throw new SQLException("Creating group failed, no ID obtained.");
                 }
                 
-            } finally {
+            } catch (IOException e) {
+				log.log(Level.SEVERE, "Error while insert group from manager", e);
+			} finally {
                 stmt.close();
             }
             
@@ -136,9 +138,8 @@ public class GroupManager {
 
             return 1;
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "SQL error requesting", e);
-
+        } catch (SQLException | IOException e) {
+            log.log(Level.SEVERE, "Error while insert group from manager", e);
             return 0;
         }
 
@@ -220,7 +221,7 @@ public class GroupManager {
             stmt.close();
             conn.close();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
@@ -246,7 +247,7 @@ public class GroupManager {
             stmt.close();
             conn.close();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }
@@ -277,7 +278,6 @@ public class GroupManager {
 
         } catch (SQLException e) {
             log.log(Level.SEVERE, "SQL error requesting", e);
-            System.out.println(sql);
         }
 
         return number;

@@ -57,7 +57,7 @@ public class UserManagerEditTest extends TestCase {
     public Integer id;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         userManager = new UserManager();
     }
     

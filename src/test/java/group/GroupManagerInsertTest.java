@@ -64,7 +64,7 @@ public class GroupManagerInsertTest extends TestCase {
     public int countErrors;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         groupManager = new GroupManager();
         userManager = new UserManager();
     }

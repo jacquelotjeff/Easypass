@@ -20,7 +20,7 @@
             <div>
                 <c:url value="utilisateur/editer" var="editURL">
                 </c:url>
-                <a class="btn btn-primary" href="${editURL}">Editer</a>
+                <a id="btn-edit-profile" class="btn btn-primary" href="${editURL}">Editer</a>
             </div>    
         </div>
     </jsp:body>

@@ -18,7 +18,6 @@ import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.PasswordManager;
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.Category;
-import fr.easypass.model.Group;
 import fr.easypass.model.Password;
 import fr.easypass.model.User;
 import fr.easypass.servlets.BaseServlet;
@@ -263,7 +262,7 @@ public class FrontPasswordServlet extends BaseServlet {
 
         try {
             ownerId = NumberUtils.createInteger(request.getParameter("ownerId"));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             this.alertOwnerNotFound(request);
         }
 

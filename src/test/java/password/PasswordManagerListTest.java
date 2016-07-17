@@ -1,5 +1,6 @@
 package test.java.password;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ public class PasswordManagerListTest extends TestCase {
     public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException, IOException {
         passwordManager = new PasswordManager();
         passwordsDb = passwordManager.getPasswords();
     }

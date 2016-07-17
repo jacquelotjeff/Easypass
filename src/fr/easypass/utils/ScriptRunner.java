@@ -105,8 +105,6 @@ public class ScriptRunner {
             }
         } catch (IOException | SQLException e) {
             throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error running script.  Cause: " + e, e);
         }
     }
 
@@ -161,7 +159,7 @@ public class ScriptRunner {
             if (!autoCommit) {
                 conn.commit();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IOException(String.format("Error executing '%s': %s", command, e.getMessage()), e);
         } finally {
             conn.rollback();

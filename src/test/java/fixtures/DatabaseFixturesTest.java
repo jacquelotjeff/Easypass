@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.easypass.manager.ConnectorManager;
@@ -17,10 +16,6 @@ import fr.easypass.utils.ScriptRunner;
 public class DatabaseFixturesTest {
     
     public static final Logger log = Logger.getLogger(DatabaseFixturesTest.class.getName());
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
 
     @Test
     public void testDatabaseFixtures() {

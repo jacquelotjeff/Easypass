@@ -73,7 +73,7 @@ public class PasswordManagerInsertTest extends TestCase {
     public int countErrors;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         passwordManager = new PasswordManager();
     }
     

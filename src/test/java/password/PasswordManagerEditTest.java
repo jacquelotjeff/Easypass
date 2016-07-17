@@ -54,7 +54,7 @@ public class PasswordManagerEditTest extends TestCase {
     public String pass;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         passwordManager = new PasswordManager();
     }
     

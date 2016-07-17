@@ -204,7 +204,6 @@ public class UserManager {
             conn.close();
 
         } catch (SQLException e) {
-            System.out.println(query);
             log.log(Level.SEVERE, "SQL error requesting", e);
         }
 
@@ -233,8 +232,8 @@ public class UserManager {
 
             return number;
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "SQL error requesting", e);
+        } catch (SQLException | IOException e) {
+            log.log(Level.SEVERE, "Error while requesting available users for a group from manager.", e);
             return 0;
         }
     }

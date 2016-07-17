@@ -223,9 +223,8 @@ public class PasswordManager {
 
             return 1;
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "SQL error requesting", e);
-
+        } catch (SQLException | IOException e) {
+            log.log(Level.SEVERE, "Error while inserting password from manager", e);
             return 0;
         }
 
@@ -314,7 +313,7 @@ public class PasswordManager {
             stmt.close();
             conn.close();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.log(Level.SEVERE, "SQL error requesting", e);
             return 0;
         }

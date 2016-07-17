@@ -22,18 +22,21 @@
         
         Map<String, String> itemUser = new HashMap<>();
         itemUser.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur");
-        itemUser.put("iclass", "fa fa-user");
+        itemUser.put("id", "btn-user");
+        itemUser.put("iclass", "fa fa-users");
         itemUser.put("label", "Utilisateur");
         menu.add(itemUser);
         
         Map<String, String> itemPasswords = new HashMap<>();
         itemPasswords.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/mots-de-passes");
+        itemPasswords.put("id", "btn-passwords");
         itemPasswords.put("iclass", "fa fa-key");
         itemPasswords.put("label", "Mots de passes");
         menu.add(itemPasswords);
         
         Map<String, String> itemGroupes = new HashMap<>();
         itemGroupes.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/groupes");
+        itemGroupes.put("id", "btn-groups");
         itemGroupes.put("iclass", "fa fa-users");
         itemGroupes.put("label", "Groupes");
         menu.add(itemGroupes);
@@ -45,7 +48,7 @@
         <c:forEach items="${menu}" var="item">
             <c:set var="active" value="${requestURL == item.href ? 'active' : '' }" />
             <li class="${active}">
-                <a href="${item.href}">
+                <a id="${item.id}" href="${item.href}">
                     <i class="${item.iclass}"></i>
                 </a>
             </li>

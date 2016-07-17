@@ -26,12 +26,12 @@
                     <form id="form-sign-in" class="navbar-form navbar-right" method="post"
                         action="${pageContext.request.contextPath}/user/login">
                         <div class="form-group">
-                            <input type="text" placeholder="E-mail"
+                            <input id="email" type="text" placeholder="E-mail"
                                 id="email" name="email"
                                 class="form-control">
                         </div>
                         <div class="form-group">
-                            <input type="password" id="password"
+                            <input id="password" type="password" id="password"
                                 name="password" placeholder="Mot de passe"
                                 class="form-control">
                         </div>

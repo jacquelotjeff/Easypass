@@ -1,5 +1,6 @@
 package test.java.group;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,7 +24,7 @@ public class GroupManagerListTest extends TestCase {
     public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException, IOException {
         groupManager = new GroupManager();
         groupsDb = groupManager.getGroups();
     }

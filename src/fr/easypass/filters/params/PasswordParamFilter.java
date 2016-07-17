@@ -17,7 +17,6 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import fr.easypass.servlets.back.BackGroupServlet;
 import fr.easypass.servlets.back.BackPasswordServlet;
-import fr.easypass.servlets.front.FrontGroupServlet;
 import fr.easypass.servlets.front.FrontPasswordServlet;
 
 public class PasswordParamFilter implements Filter {

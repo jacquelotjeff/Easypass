@@ -53,7 +53,7 @@ public class PasswordManagerDeleteTest extends TestCase {
     public String plainPassword;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         passwordManager = new PasswordManager();
     }
     

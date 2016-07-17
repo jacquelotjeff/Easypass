@@ -118,8 +118,8 @@ private Map<Integer, Category> categories;
          
             return 1;
 
-        } catch (Exception e) {
-            log.log(Level.SEVERE, "SQL error requesting", e);
+        } catch (SQLException | IOException e) {
+            log.log(Level.SEVERE, "Error while insert category from manager.", e);
             return 0;
         }
         

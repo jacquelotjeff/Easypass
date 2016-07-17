@@ -4,12 +4,13 @@
 </c:url>
 
 <div class="col-sm-5">
-    <form action="${submitURL}" method="POST" class="form-horizontal">
+    <form id="edit-profile" action="${submitURL}" method="POST" class="form-horizontal">
+    
         <div class="form-group ${not empty errors.get('lastname')?'has-error':''}">
             <label class="control-label" for="lastname">Nom : </label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span> 
-                <input type="text" name="lastname" class="form-control" value="${user.getLastname()}">
+                <input id="lastname" type="text" name="lastname" class="form-control" value="${user.getLastname()}">
             </div>
             <c:if test="${not empty errors.get('lastname')}">
                 <small class="help-block">${errors.get("lastname")}</small>
@@ -20,7 +21,7 @@
             <label class="control-label" for="firstname">Prenom : </label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
-                <input type="text" name="firstname" class="form-control" value="${user.getFirstname()}">
+                <input id="firstname" type="text" name="firstname" class="form-control" value="${user.getFirstname()}">
             </div>
             <c:if test="${not empty errors.get('firstname')}">
                 <small class="help-block">${errors.get("firstname")}</small>
@@ -30,7 +31,7 @@
             <label class="control-label" for="email">Email : </label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                <input type="text" name="email" class="form-control" value="${user.getEmail()}">
+                <input id="email" type="text" name="email" class="form-control" value="${user.getEmail()}">
             </div>
             <c:if test="${not empty errors.get('email')}">
                 <small class="help-block">${errors.get("email")}</small>
@@ -40,14 +41,14 @@
             <label class="control-label" for="password">Mot de passe : </label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span> 
-                <input type="password" name="password" class="form-control" value="${user.getPassword()}">
+                <input id="password" type="password" name="password" class="form-control" value="${user.getPassword()}">
             </div>
             <c:if test="${not empty errors.get('password')}">
                 <small class="help-block">${errors.get("password")}</small>
             </c:if>
         </div>
         <div class="form-group text-right">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button id="btn-edit-profile" type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
     </form>
 </div>

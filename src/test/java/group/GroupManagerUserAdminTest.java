@@ -49,7 +49,7 @@ public class GroupManagerUserAdminTest extends TestCase {
     public Boolean admin;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         groupManager = new GroupManager();
         userManager = new UserManager();
     }
@@ -79,8 +79,7 @@ public class GroupManagerUserAdminTest extends TestCase {
             
             
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	log.log(Level.SEVERE, "An error occured while change user group status.", e);
         }
         
     }

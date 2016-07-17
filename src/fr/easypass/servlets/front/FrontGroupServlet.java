@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,6 +47,7 @@ public class FrontGroupServlet extends BaseServlet {
     public final GroupManager groupManager = new GroupManager();
     public final UserManager userManager = new UserManager();
     public final CategoryManager categoryManager = new CategoryManager();
+    public static final Logger log = Logger.getLogger(FrontGroupServlet.class.getName());
 
     private HashMap<String, String> errors;
 
@@ -360,8 +363,9 @@ public class FrontGroupServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Accès interdit");
             }
 
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+        	
+        	log.log(Level.SEVERE, "An error occured while add user to group from FrontUserServlet", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
 
@@ -407,8 +411,9 @@ public class FrontGroupServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Accès interdit");
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+        	
+        	log.log(Level.SEVERE, "An error occured while deleting a user.", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible d'ajouter l'utilisateur.");
 
@@ -454,8 +459,9 @@ public class FrontGroupServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Accès interdit");
             }
 
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+        	
+        	log.log(Level.SEVERE, "An error occured while change user group status from FrontGroupServlet", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible de changer le statut de l'utilisateur.");
 

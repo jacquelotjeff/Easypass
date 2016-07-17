@@ -45,7 +45,7 @@ public class GroupManagerDeleteUserTest extends TestCase {
     public Integer userId;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         groupManager = new GroupManager();
         userManager = new UserManager();
     }
@@ -74,8 +74,7 @@ public class GroupManagerDeleteUserTest extends TestCase {
             
             
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        	log.log(Level.SEVERE, "An error occured while testing the delete user from group.", e1);
         }
         
     }

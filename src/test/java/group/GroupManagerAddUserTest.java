@@ -14,7 +14,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import fr.easypass.manager.CategoryManager;
 import fr.easypass.manager.GroupManager;
 import fr.easypass.manager.UserManager;
 import fr.easypass.model.User;
@@ -26,7 +25,7 @@ public class GroupManagerAddUserTest extends TestCase {
     private static GroupManager groupManager;
     private static UserManager userManager;
     
-    public static final Logger log = Logger.getLogger(CategoryManager.class.getName());
+    public static final Logger log = Logger.getLogger(GroupManagerAddUserTest.class.getName());
     
     @Parameters(name = "Insert group {0}")
     public static List<Object[]> data() {
@@ -45,7 +44,7 @@ public class GroupManagerAddUserTest extends TestCase {
     public Integer userId;
     
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws InstantiationException {
         groupManager = new GroupManager();
         userManager = new UserManager();
     }
@@ -74,8 +73,7 @@ public class GroupManagerAddUserTest extends TestCase {
             
             
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            log.log(Level.SEVERE, "An occured while testing user group adding.", e1);
         }
         
     }

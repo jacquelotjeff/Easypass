@@ -2,7 +2,6 @@ package fr.easypass.servlets.back;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -430,7 +429,7 @@ public class BackGroupServlet extends BaseServlet {
                 session.setAttribute("alertMessage", "Accès interdit");
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.log(Level.SEVERE, "Error while changing user status", e);
             session.setAttribute("alertClass", "alert-danger");
             session.setAttribute("alertMessage", "Impossible de changer le statut de l'utilisateur.");

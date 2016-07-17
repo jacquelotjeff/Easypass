@@ -186,65 +186,65 @@ public class BackCategoryServlet extends BaseServlet {
 
         if (category == null) {
             this.alertCategoryNotFound(request);
-        }
-
-        if (method == "GET") {
-
-            request.setAttribute("category", category);
-            request.setAttribute("formAction", "editer");
-
-            request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
-
-            return;
-
         } else {
-            
-            Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
-            
-            String name = (String) uploadResult.get("name");
-            String logo = (String) uploadResult.get("logo");
+        	
+        	if (method == "GET") {
 
-            //Get the old picture if a new one doesn't exist.
-            if (logo == null) {
+                request.setAttribute("category", category);
+                request.setAttribute("formAction", "editer");
 
-                logo = category.getLogo();
-            }
-            
-            category = new Category(name, logo);
-            
-            Map<String, String> errors = category.isValid();
-            
-            if (errors.isEmpty()) {
+                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/edit.jsp").forward(request, response);
+
+                return;
+
+            } else {
                 
-                if (!uploadResult.containsKey("errors")) {
+                Map<String, Object> uploadResult = FileUploader.uploadPicture(request);
+                
+                String name = (String) uploadResult.get("name");
+                String logo = (String) uploadResult.get("logo");
+
+                //Get the old picture if a new one doesn't exist.
+                if (logo == null) {
+                    logo = category.getLogo();
+                }
+                
+                category = new Category(name, logo);
+                
+                Map<String, String> errors = category.isValid();
+                
+                if (errors.isEmpty()) {
                     
-                    final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
+                    if (!uploadResult.containsKey("errors")) {
+                        
+                        final Integer success = this.categoryManager.editCategory(categoryId, name, logo);
 
-                    if (success == 1) {
-                        session.setAttribute("alertClass", "alert-success");
-                        session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
+                        if (success == 1) {
+                            session.setAttribute("alertClass", "alert-success");
+                            session.setAttribute("alertMessage", "La catégorie a bien été éditée.");
 
+                        } else {
+                            session.setAttribute("alertClass", "alert-danger");
+                            session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
+                        }
+                        
                     } else {
+                        
                         session.setAttribute("alertClass", "alert-danger");
-                        session.setAttribute("alertMessage", "Le catégorie n'a pas pu être éditée.");
+                        session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
+                        session.setAttribute("alertMessages", uploadResult.get("errors"));
+                        
                     }
                     
                 } else {
                     
-                    session.setAttribute("alertClass", "alert-danger");
-                    session.setAttribute("alertMessage", "Impossible d'uploader le fichier.");
-                    session.setAttribute("alertMessages", uploadResult.get("errors"));
+                    request.setAttribute("errors", errors);
+                    request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
                     
                 }
-                
-            } else {
-                
-                request.setAttribute("errors", errors);
-                request.getRequestDispatcher(BackCategoryServlet.viewPathPrefix + "/create.jsp").forward(request, response);
-                
             }
         }
-
+        
         response.sendRedirect(this.getServletContext().getContextPath() + BackCategoryServlet.URL_BASE);
         return;
 

@@ -7,12 +7,12 @@
     </c:if>
 </c:url>
 
-<form action="${submitURL}" method="POST">
+<form id="form-password" action="${submitURL}" method="POST">
     <div class="form-group">
         <div class="form-group row ${not empty errors.get('title')?'has-error':''}">
             <div class="col-sm-5">
                 <label for="title">Titre : </label>
-                <input type="text" name="title" class="form-control" value="${password.getTitle()}">
+                <input id="title" type="text" name="title" class="form-control" value="${password.getTitle()}">
                 <c:if test="${not empty errors.get('title')}">
                     <small class="help-block">${errors.get("title")}</small>
                 </c:if>
@@ -21,7 +21,7 @@
         <div class="form-group row ${not empty errors.get('siteUrl')?'has-error':''}">
             <div class="col-sm-4">
                 <label for="site">Site : </label> 
-                <input type="text" name="site" class="form-control" value="${password.getSiteUrl()}">
+                <input id="site" type="text" name="site" class="form-control" value="${password.getSiteUrl()}">
                 <c:if test="${not empty errors.get('siteUrl')}">
                     <small class="help-block">${errors.get("siteUrl")}</small>
                 </c:if>
@@ -31,7 +31,7 @@
             <div class="col-sm-4">
             <label for="password">Mot de passe : </label>
                 <div class="input-group"> 
-                    <input name="password" type="password" class="form-control password-field" value="${password.getPassword()}">
+                    <input id="password" name="password" type="password" class="form-control password-field" value="${password.getPassword()}">
                     <div class="input-group-addon show-password">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </div>
@@ -44,7 +44,7 @@
         <div class="form-group row ${not empty errors.get('category')?'has-error':''}">
             <div class="col-sm-4">
                 <label for="categoryId">Catégorie : </label> 
-                <select name="categoryId" class="form-control selectpicker">
+                <select id="categoryId" name="categoryId" class="form-control selectpicker">
                     <c:forEach var="category" items="${categories.values()}">
                         <option 
                             value="${category.getId()}"
@@ -62,7 +62,7 @@
         <div class="form-group row">
             <div class="col-sm-5">
                 <label for="informations">Informations : </label> 
-                <textarea name="informations" class="form-control">
+                <textarea id="informations" name="informations" class="form-control">
                     ${password.getInformations()}
                 </textarea>
                 <c:if test="${not empty errors.get('informations')}">
@@ -82,7 +82,7 @@
         </c:otherwise>
     </c:choose>
     <div class="col-sm-12 text-right">
-        <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontPasswordServlet.URL_BASE}">Retour</a>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a id="btn-back" class="btn btn-success" href="${pageContext.request.contextPath}${FrontPasswordServlet.URL_BASE}">Retour</a>
+        <button id="btn-save" type="submit" class="btn btn-primary">Enregistrer</button>
     </div>
 </form>
