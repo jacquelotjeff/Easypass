@@ -62,9 +62,7 @@
         <div class="form-group row">
             <div class="col-sm-5">
                 <label for="informations">Informations : </label> 
-                <textarea id="informations" name="informations" class="form-control">
-                    ${password.getInformations()}
-                </textarea>
+                <textarea id="informations" name="informations" class="form-control">${password.getInformations()}</textarea>
                 <c:if test="${not empty errors.get('informations')}">
                     <small class="help-block">${errors.get("informations")}</small>
                 </c:if>
@@ -82,7 +80,7 @@
         </c:otherwise>
     </c:choose>
     <div class="col-sm-12 text-right">
-        <a id="btn-back" class="btn btn-success" href="${pageContext.request.contextPath}${FrontPasswordServlet.URL_BASE}">Retour</a>
+        <a id="btn-back" class="btn btn-default" href="${pageContext.request.contextPath}${FrontPasswordServlet.URL_BASE}">Retour</a>
         <button id="btn-save" type="submit" class="btn btn-primary">Enregistrer</button>
     </div>
 </form>

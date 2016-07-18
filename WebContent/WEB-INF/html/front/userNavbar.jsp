@@ -23,22 +23,22 @@
         Map<String, String> itemUser = new HashMap<>();
         itemUser.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur");
         itemUser.put("id", "btn-user");
-        itemUser.put("iclass", "fa fa-users");
-        itemUser.put("label", "Utilisateur");
+        itemUser.put("iclass", "fa fa-user");
+        itemUser.put("label", "Mon profil");
         menu.add(itemUser);
         
         Map<String, String> itemPasswords = new HashMap<>();
         itemPasswords.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/mots-de-passes");
         itemPasswords.put("id", "btn-passwords");
         itemPasswords.put("iclass", "fa fa-key");
-        itemPasswords.put("label", "Mots de passes");
+        itemPasswords.put("label", "Mes mots de passes");
         menu.add(itemPasswords);
         
         Map<String, String> itemGroupes = new HashMap<>();
         itemGroupes.put("href", pageContext.getServletContext().getContextPath() + "/utilisateur/groupes");
         itemGroupes.put("id", "btn-groups");
         itemGroupes.put("iclass", "fa fa-users");
-        itemGroupes.put("label", "Groupes");
+        itemGroupes.put("label", "Mes groupes");
         menu.add(itemGroupes);
         
         request.setAttribute("menu", menu);

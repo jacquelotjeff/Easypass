@@ -164,7 +164,7 @@ public class BackUserServlet extends BaseServlet {
             
                 if (success == 1) {
                     session.setAttribute("alertClass", "alert-success");
-                    session.setAttribute("alertMessage", "Vous êtes bien inscrit");
+                    session.setAttribute("alertMessage", "Vous êtes bien inscrit. Vous pouvez maintenant vous connecter.");
                 } else {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "L'inscription a échoué");

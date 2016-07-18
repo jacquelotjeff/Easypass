@@ -80,8 +80,7 @@ public class FileUploader {
                             File file = new File(item.getName());
                             
                             Date date = new Date();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                            
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
                             String fileName = sdf.format(date) + '-' + file.getName();
                             
                             

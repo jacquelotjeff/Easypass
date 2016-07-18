@@ -1,8 +1,12 @@
 package fr.easypass.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -134,4 +138,22 @@ public class User extends FormValidator<User> {
     public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
+    
+    public HashMap<String, String> isValidWithoutPassword() {
+
+        HashMap<String, String> errors = new HashMap<>();
+        // do your custom validations if needed
+        Set<ConstraintViolation<User>> validation = Validation.buildDefaultValidatorFactory().getValidator()
+                .validate(getObj());
+        if (validation.size() > 0) {
+            for (ConstraintViolation<User> error : validation) {
+            	String propertyPath = error.getPropertyPath().toString();
+            	if (!propertyPath.equals("password")) {
+            		errors.put(error.getPropertyPath().toString(), error.getMessage());
+            	}
+            }
+        }
+        return errors;
+    }
+
 }

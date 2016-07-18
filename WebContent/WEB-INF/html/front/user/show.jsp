@@ -13,7 +13,7 @@
     </jsp:attribute>
     <jsp:body>
         <div id="information" class="tab-pane active">
-            <h3>Informations générales</h3>
+            <h3>Mes informations</h3>
             <p>Prenom : <c:out value="${user.getFirstname()}"/></p>
             <p>Nom : <c:out value="${user.getLastname()}"/></p>
             <p>Email : <c:out value="${user.getEmail()}"/></p>

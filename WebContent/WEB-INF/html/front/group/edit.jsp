@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="fr.easypass.model.Password" %>
 <%@ page import="fr.easypass.servlets.front.FrontPasswordServlet" %>
+<%@ page import="fr.easypass.servlets.front.FrontGroupServlet" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -28,9 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Description du groupe : </label> 
-                        <textarea name="description" class="form-control">
-                            ${group.getDescription()}
-                        </textarea>
+                        <textarea name="description" class="form-control">${group.getDescription()}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="logo">Logo du groupe : </label>
