@@ -50,6 +50,7 @@
             <li class="${active}">
                 <a id="${item.id}" href="${item.href}">
                     <i class="${item.iclass}"></i>
+                    <span>${item.label}</span>
                 </a>
             </li>
         </c:forEach>

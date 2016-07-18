@@ -11,7 +11,9 @@
                     class="icon-bar"></span> <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}">Easypass</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}">
+                Easypass
+            </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <c:choose>

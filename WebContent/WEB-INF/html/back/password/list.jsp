@@ -48,6 +48,5 @@
                 </c:forEach>
             </tbody>
         </table>
-        <a href="creer" class="btn btn-primary">Créer</a>
     </jsp:body>
 </t:genericadminpage>

@@ -127,6 +127,7 @@ public class FrontGroupServlet extends BaseServlet {
         final Map<Integer, User> groupUsers = users.get("groupUsers");
         final Map<Integer, User> groupsAdmins = users.get("groupAdmins");
         final Map<Integer, Password> groupPasswords = passwordManager.getPasswordsByGroup(groupId);
+        final Map<Integer, Category> categories = categoryManager.getCategories();
 
         if (group == null) {
             this.alertGroupNotFound(request);
@@ -136,6 +137,7 @@ public class FrontGroupServlet extends BaseServlet {
             request.setAttribute("groupUsers", groupUsers);
             request.setAttribute("groupAdmins", groupsAdmins);
             request.setAttribute("passwords", groupPasswords);
+            request.setAttribute("categories", categories);
             request.getRequestDispatcher(FrontGroupServlet.viewPathPrefix + "/show.jsp").forward(request, response);
 
             return;

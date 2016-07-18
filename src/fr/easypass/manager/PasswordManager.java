@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.jdt.internal.compiler.env.ISourceMethod;
+import org.omg.CORBA.UShortSeqHolder;
+
 import fr.easypass.model.Password;
 import fr.easypass.utils.Encryptor;
 
@@ -175,6 +178,59 @@ public class PasswordManager {
             conn.close();
 
             return password;
+
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "SQL error requesting", e);
+            return null;
+        }
+
+    }
+    
+    /**
+     * Return PasswordOwner object if existing into data
+     * 
+     * @param username
+     * @return
+     * @throws IOException
+     */
+    public Map<String, String> getPasswordOwner(Integer passwordId) throws IOException {
+    	
+    	Map<String, String> result = new HashMap<>();
+
+        try {
+
+            Connection conn = ConnectorManager.getConnection();
+            PreparedStatement stmt;
+
+            stmt = conn.prepareStatement("SELECT * from " + PasswordManager.TABLE_REL_OWNER + " WHERE " + PasswordManager.COL_FOREIGN + "=?");
+            stmt.setInt(1, passwordId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+            	
+            	Integer ownerGroup = rs.getInt(GroupManager.COL_FOREIGN);
+            	Integer ownerUser = rs.getInt(UserManager.COL_FOREIGN);
+            	
+                if (ownerGroup != 0) {
+                	
+                	result.put("type", Password.OWNER_TYPE_GROUP);
+                	result.put("ownerId", ownerGroup.toString());
+                	
+                } else {
+                	
+                	result.put("type", Password.OWNER_TYPE_USER);
+                	result.put("ownerId", ownerUser.toString());
+                	
+                }
+                
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+            return result;
 
         } catch (SQLException e) {
             log.log(Level.SEVERE, "SQL error requesting", e);

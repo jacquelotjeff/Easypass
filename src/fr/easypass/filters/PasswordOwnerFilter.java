@@ -46,13 +46,13 @@ public class PasswordOwnerFilter implements Filter {
         if (NumberUtils.isNumber(request.getParameter("passwordId"))) {
 
             Integer passwordId = NumberUtils.createInteger(request.getParameter("passwordId"));
-            Password password = passwordManager.getPassword(passwordId);
+            Map<String, String> owner = passwordManager.getPasswordOwner(passwordId);
 
-            if (password.getOwnerGroup() != null) {
+            if (owner.get("type").equals(Password.OWNER_TYPE_GROUP)) {
 
                 GroupManager groupManager = new GroupManager();
-                Group group = groupManager.getGroup(password.getOwnerGroup());
-                Map<Integer, User> usersAdmin = userManager.getUsersByGroup(group.getId()).get("adminsGroup");
+                Group group = groupManager.getGroup(NumberUtils.createInteger(owner.get("ownerId")));
+                Map<Integer, User> usersAdmin = userManager.getUsersByGroup(group.getId()).get("groupAdmins");
 
                 if (usersAdmin.containsKey(user.getId())) {
                     
