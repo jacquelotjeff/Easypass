@@ -231,19 +231,22 @@ casper.test.begin('Adding personnal password test', 12, function suite(test) {
 				this.evaluate(function() {
 	        		return $(".password-title").eq(1).text();
 	    		}),
-	    	 'My casper password'
+	    	 'My casper password',
+	    	 "The password title is correctly displayed"
 	    	);
 	    	test.assertEquals(
 				this.evaluate(function() {
 	        		return $(".password-informations").eq(1).text().trim();
 	    		}),
-	    	 'This is the casperjs password'
+	    	 'This is the casperjs password',
+	    	 "The password description is correctly displayed"
 	    	);
 	    	test.assertEquals(
 				this.evaluate(function() {
 	        		return $(".password-field").eq(1).val();
 	    		}),
-	    	 'casperpass'
+	    	 'casperpass',
+	    	 "The password field is correctly displayed"
 	    	);
 
 			test.assertExists('img.img-password-category[src="/easypass/fichier?nom=forum1.png"]', "A category picture is displayed");
@@ -284,16 +287,17 @@ casper.test.begin('Edit personnal password test', 17, function suite(test) {
 
 		test.assertTitle("Easypass - Edition du mot de passe Bureau Windows", "Easypass edit password page has correct title.");
 
-		test.assertEquals(this.getElementAttribute('#title', 'value'), 'Bureau Windows');
-		test.assertEquals(this.getElementAttribute('#site', 'value'), 'Aucun site');
-		test.assertEquals(this.getElementAttribute('#password', 'value'), 'mdpwindows98');
-		test.assertEquals(this.getElementAttribute('#categoryId option[selected]', 'value'), "5");
+		test.assertEquals(this.getElementAttribute('#title', 'value'), 'Bureau Windows', "The password title is correctly displayed");
+		test.assertEquals(this.getElementAttribute('#site', 'value'), 'Aucun site', "The password site is correctly displayed");
+		test.assertEquals(this.getElementAttribute('#password', 'value'), 'mdpwindows98', "The password is correctly displayed");
+		test.assertEquals(this.getElementAttribute('#categoryId option[selected]', 'value'), "5", "The category is correct");
 
 		test.assertEquals(
 			this.evaluate(function() {
         		return $("#informations").val().trim();
 	    	}),
-			'Mot de passe du bureau.'
+			'Mot de passe du bureau.',
+			"The password informations is correctly displayed"
 		);
 		
 		this.fillSelectors('#form-password', {
@@ -317,19 +321,22 @@ casper.test.begin('Edit personnal password test', 17, function suite(test) {
 				this.evaluate(function() {
 	        		return $(".password-title").eq(0).text();
 	    		}),
-	    	 'Bureau Windows edited'
+	    	 'Bureau Windows edited',
+	    	 "The password title is correctly edited."
 	    	);
 	    	test.assertEquals(
 				this.evaluate(function() {
 	        		return $(".password-informations").eq(0).text().trim();
 	    		}),
-	    	 'Aucune information'
+	    	 'Aucune information',
+	    	 "The password informations is correctly edited"
 	    	);
 	    	test.assertEquals(
 				this.evaluate(function() {
 	        		return $(".password-field").eq(0).val();
 	    		}),
-	    	 'mdpwindows2000'
+	    	 'mdpwindows2000',
+	    	 "The password is correctly edited."
 	    	);
 
 			test.assertExists('img.img-password-category[src="/easypass/fichier?nom=License-unknown.png"]', "A category picture is displayed after editing a password");
