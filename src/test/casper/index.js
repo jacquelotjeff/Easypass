@@ -1,4 +1,4 @@
-casper.options.viewportSize = {width: 1600, height: 950};
+casper.options.viewportSize = {width: 1366, height: 768};
 casper.test.begin('Acess permission testing', 5, function suite(test) {
 
     casper.start("http://localhost:8080/easypass", function() {
