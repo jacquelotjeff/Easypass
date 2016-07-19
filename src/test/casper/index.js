@@ -5,7 +5,7 @@ casper.test.begin('Acess permission testing', 5, function suite(test) {
 
         test.assertTitle("Easypass - Accueil", "Easypass home page has correct title.");
 
-    }).thenClick('a[href="admin/utilisateurs"]', function() {
+    }).thenOpen('http://localhost:8080/easypass/admin/utilisateurs', function() {
 
         test.assertExists('div.alert.alert-warning', "Alert admin connexion is found.");
         test.assertSelectorHasText('div.alert.alert-warning', 'Message : Veuillez vous identifier.');
@@ -110,7 +110,7 @@ casper.test.begin('Sign in testing', 13, function suite(test) {
 
 });
 
-casper.test.begin('User profile edition testing', 15, function suite(test) {
+casper.test.begin('User profile edition testing', 13, function suite(test) {
 
     casper.start("http://localhost:8080/easypass", function() {
 
@@ -127,29 +127,26 @@ casper.test.begin('User profile edition testing', 15, function suite(test) {
 
 		test.assertSelectorHasText('div.col-sm-12>h3', 'Editer mon profil jjacquelot');
 		
-		test.assertEquals(this.getElementAttribute('#firstname', 'value'), 'Jeff');
-		test.assertEquals(this.getElementAttribute('#lastname', 'value'), 'Jacquelot');
-		test.assertEquals(this.getElementAttribute('#password', 'value'), '7b902e6ff1db9f560443f2048974fd7d386975b0');
-		test.assertEquals(this.getElementAttribute('#email', 'value'), 'jjacquelot@gmail.com');
+		test.assertEquals(this.getElementAttribute('#firstname', 'value'), 'Jeff', "The firstname is correctly displayed");
+		test.assertEquals(this.getElementAttribute('#lastname', 'value'), 'Jacquelot', "The lastname is correctly displayed");
+		test.assertEquals(this.getElementAttribute('#email', 'value'), 'jjacquelot@gmail.com', "The email is correctly displayed");
 
 		this.fillSelectors('#edit-profile', {
 	        '#lastname':    '',
 	        '#firstname':   '',
 	        '#email':      'jlkjlkj',
-	        '#password':   '',
     	}, false);
 
 	}).thenClick('#btn-edit-profile', function(){
 
 		casper.wait(1000, function(){
 
-			test.assertElementCount('div.form-group.has-error', 4, "All editing profile fields are validated");
+			test.assertElementCount('div.form-group.has-error', 3, "All editing profile fields are validated");
 
 			this.fillSelectors('#edit-profile', {
 		        '#lastname':    'Martins',
 		        '#firstname':   'Jeff',
 		        '#email':      'jeff-martins@gmail.com',
-		        '#password':   'user1234',
 	    	}, false);
 
 		});
@@ -173,12 +170,6 @@ casper.test.begin('User profile edition testing', 15, function suite(test) {
 	        'input[name="password"]':    'user1234',
     	}, false);
 
-
-	}).thenClick('#btn-sign-in', function(){
-
-    	test.assertExists('div.alert.alert-success', "Casper user has successfully sign up (After edit his password and email).");
-
-	}).thenClick('#btn-logout', function(){
 	});
 
 	casper.run(function() {
