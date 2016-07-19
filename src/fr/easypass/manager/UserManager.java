@@ -276,6 +276,44 @@ public class UserManager {
             return 0;
         }
     }
+    
+    /**
+     * Edit a User in database
+     * 
+     * @param userId
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    public Integer editUserWithoutPassword(Integer userId, User user) throws IOException {
+
+        try {
+            Connection conn = ConnectorManager.getConnection();
+            PreparedStatement stmt;
+
+            stmt = conn.prepareStatement("UPDATE " + UserManager.TABLE + " SET " + UserManager.COL_USERNAME
+                    + "=?, " + UserManager.COL_FIRSTNAME + "=?, " + UserManager.COL_LASTNAME + "=?, "
+                    + UserManager.COL_EMAIL + "=?," + UserManager.COL_ADMIN + "=?" + " WHERE id=?");
+
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getFirstname());
+            stmt.setString(3, user.getLastname());
+            stmt.setString(4, user.getEmail());
+            stmt.setBoolean(5, user.getAdmin());
+
+            stmt.setInt(6, userId);
+
+            Integer number = stmt.executeUpdate();
+            stmt.close();
+            conn.close();
+
+            return number;
+
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "SQL error requesting", e);
+            return 0;
+        }
+    }
 
     public Integer deleteUser(Integer userId) throws IOException {
 

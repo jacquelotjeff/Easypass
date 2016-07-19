@@ -118,9 +118,16 @@ public class LoginServlet extends BaseServlet {
 
         UserManager userManager = new UserManager();
         User user = (User) session.getAttribute("user");
-        user = userManager.getUser(user.getId());
-
-        return user;
+        
+        if (user != null) {
+        	
+        	user = userManager.getUser(user.getId());
+        	return user;
+        	
+        } else {
+        	
+        	return null;
+        }
     }
 
 }

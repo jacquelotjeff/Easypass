@@ -37,16 +37,6 @@
                 <small class="help-block">${errors.get("email")}</small>
             </c:if>
         </div>
-        <div class="form-group ${not empty errors.get('password')?'has-error':''}">
-            <label class="control-label" for="password">Mot de passe : </label>
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span> 
-                <input id="password" type="password" name="password" class="form-control" value="${user.getPassword()}">
-            </div>
-            <c:if test="${not empty errors.get('password')}">
-                <small class="help-block">${errors.get("password")}</small>
-            </c:if>
-        </div>
         <div class="form-group text-right">
             <button id="btn-edit-profile" type="submit" class="btn btn-primary">Enregistrer</button>
         </div>

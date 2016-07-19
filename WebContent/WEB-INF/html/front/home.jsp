@@ -7,30 +7,23 @@
       Easypass - Accueil
     </jsp:attribute>
     <jsp:body>
-      <div class="container">
+      <div class="col-md-6">
         <h1>Easypass</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        <p>
+            Easypass vous simplifie la vie. Il vous permet de stocker rapidement l’ensemble de vos mots de passes, 
+            de les partager avec d’autres utilisateurs,
+            de créer des groupes de travail en ajoutant des mots de passe liés à vos différents groupes.
+            Essayez le, c’est gratuit !
+        </p>
       </div>
-    <div class="container">
+    <div class="col-md-6">
       <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Admin</h2>
-          <p>Accès temporaire à l'espace d'administration</p>
-          <p><a class="btn btn-default" href="admin/utilisateurs" role="button">Voir l'admin</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Inscrivez-vous</h2>
-          <p>Accès temporaire à l'inscription</p>
-          <p><a class="btn btn-default" href="inscription" role="button">Inscription</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+      <h2>Inscrivez-vous</h2>
+      <p>
+        Inscrivez-vous et commencez dès à présents à créer vos différents groupes de travail
+        en y attribuant les mots de passes tout en invitant les différents membres de votre équipe.
+      </p>
+      <p><a class="btn btn-primary" href="inscription" role="button">Inscription</a></p>
     </div>
     </jsp:body>
 </t:genericuserpage>

@@ -12,7 +12,7 @@
         <script src="${pageContext.request.contextPath}/js/password-spoiler.js"></script>
     </jsp:attribute>
     <jsp:body>
-        <h3>Groupes</h3>
+        <h3>Mes groupes</h3>
         <ul class="list-group">
             <c:forEach var="group" items="${groups}">
                 <li class="list-group-item title">

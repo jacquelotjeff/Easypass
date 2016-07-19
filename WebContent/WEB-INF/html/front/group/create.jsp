@@ -1,4 +1,5 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="fr.easypass.servlets.front.FrontGroupServlet" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -25,9 +26,7 @@
                     </div>
                     <div class='form-group ${not empty errors.get("description")?"has-error":""}'>
                         <label for="description">Description du groupe : </label> 
-                        <textarea name="description" class="form-control">
-                            ${group.getDescription()}
-                        </textarea>
+                        <textarea name="description" class="form-control">${group.getDescription()}</textarea>
                         <c:if test="${not empty errors.get('description')}">
                             <small class="help-block">${errors.get("description")}</small>
                         </c:if>
@@ -44,9 +43,9 @@
                                 </c:forEach>
                         </select> 
                     </div>
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        <a class="btn btn-success" href="${pageContext.request.contextPath}${FrontGroupServlet.URL_BASE}">Retour</a>
+                    <div class="form-group">
+                        <a class="btn btn-default" href="${pageContext.request.contextPath}${FrontGroupServlet.URL_BASE}">Retour</a>
+                        <button type="submit" class="btn btn-primary pull-right">Enregistrer</button>
                     </div>
                 </form>
             </div>

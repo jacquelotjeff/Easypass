@@ -21,7 +21,10 @@
         
         <div class="col-sm-6">
             <ul class="list-group">
-                <li class="list-group-item title">Membres</li>
+                <li class="list-group-item title">
+                    <i class="fa fa-users"></i>
+                    Membres
+                </li>
                 <c:forEach var="user" items="${groupUsers.values()}">
                  <li class="list-group-item text-left">
                     <img class="img-thumbnail"
@@ -39,6 +42,10 @@
         </div>
         <div class="col-sm-6">
             <ul class="list-group">
+                <li class="list-group-item title">
+                    <i class="fa fa-key"></i>
+                    Mots de passes
+                </li>
                 <c:forEach var="password" items="${passwords.values()}">
                         <li class="list-group-item title">
                             <span class="col-sm-2">
@@ -46,7 +53,7 @@
                                         value="${categories.get(password.getCategory())}" />
                                 <img class="thumbnail"
                                     alt="Logo de la catégorie ${category.getName()}"
-                                    src="${pageContext.servletContext.contextPath}/fichier?nom=User.png">
+                                    src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
                             </span>
                             <div class="col-sm-6">
                                 <h4 class="list-group-item-heading">${password.getTitle()}</h4>

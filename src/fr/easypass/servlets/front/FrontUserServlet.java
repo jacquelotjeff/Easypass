@@ -116,12 +116,12 @@ public class FrontUserServlet extends BaseServlet {
             User user = this.createUserFromParam(request);
             
             user.setUsername(LoginServlet.getCurrentUser(request).getUsername());
-            errors = user.isValid();
+            errors = user.isValidWithoutPassword();
             
 
             if (errors.isEmpty()) {
 
-                final Integer success = this.userManager.editUser(userId, user);
+                final Integer success = this.userManager.editUserWithoutPassword(userId, user);
 
                 if (success == 1) {
                     session.setAttribute("alertClass", "alert-success");

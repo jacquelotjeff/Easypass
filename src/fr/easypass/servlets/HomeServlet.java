@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.easypass.model.User;
+import fr.easypass.servlets.front.FrontUserServlet;
+
 /**
  * Servlet implementation class HelloServlet
  */
@@ -45,8 +48,15 @@ public class HomeServlet extends BaseServlet {
     }
 
     private void home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        //User test = this.getCurrentUser(request);
-        request.getRequestDispatcher("/WEB-INF/html/front/home.jsp").forward(request, response);
+    	
+    	User user = LoginServlet.getCurrentUser(request);
+    	
+    	if (user != null) {
+    		response.sendRedirect(this.getServletContext().getContextPath() + FrontUserServlet.URL_BASE);
+    	} else {
+    		request.getRequestDispatcher("/WEB-INF/html/front/home.jsp").forward(request, response);
+    	}
+        
 
         return;
     }

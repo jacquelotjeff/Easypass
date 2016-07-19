@@ -140,8 +140,12 @@ public class FrontPasswordServlet extends BaseServlet {
                     session.setAttribute("alertClass", "alert-danger");
                     session.setAttribute("alertMessage", "Le mot de passe n'a pas pu être ajouté.");
                 }
-
-                response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+                
+                if (ownerType.equals(Password.OWNER_TYPE_GROUP)) {
+                	response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/voir?groupId=" + ownerId);
+                } else {
+                	response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+                }
 
                 return;
 
@@ -221,8 +225,14 @@ public class FrontPasswordServlet extends BaseServlet {
                 request.setAttribute("errors", errors);
             }
         }
-
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+        
+        Map<String, String> owner = passwordManager.getPasswordOwner(passwordId);
+        
+        if (owner.get("type").equals(Password.OWNER_TYPE_GROUP)) {
+        	response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/voir?groupId=" + owner.get("ownerId"));
+        } else {
+        	response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+        }
 
         return;
     }
@@ -251,7 +261,13 @@ public class FrontPasswordServlet extends BaseServlet {
             session.setAttribute("alertMessage", "Accès interdit");
         }
 
-        response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+        Map<String, String> owner = passwordManager.getPasswordOwner(passwordId);
+        
+        if (owner.get("type").equals(Password.OWNER_TYPE_GROUP)) {
+        	response.sendRedirect(this.getServletContext().getContextPath() + FrontGroupServlet.URL_BASE + "/voir?groupId=" + owner.get("ownerId"));
+        } else {
+        	response.sendRedirect(this.getServletContext().getContextPath() + FrontPasswordServlet.URL_BASE);
+        }
 
         return;
     }

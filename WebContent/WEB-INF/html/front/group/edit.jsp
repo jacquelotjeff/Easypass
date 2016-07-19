@@ -1,5 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="fr.easypass.model.Password" %>
+<%@ page import="fr.easypass.servlets.front.FrontPasswordServlet" %>
+<%@ page import="fr.easypass.servlets.front.FrontGroupServlet" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -27,9 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Description du groupe : </label> 
-                        <textarea name="description" class="form-control">
-                            ${group.getDescription()}
-                        </textarea>
+                        <textarea name="description" class="form-control">${group.getDescription()}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="logo">Logo du groupe : </label>
@@ -51,7 +51,7 @@
                     <li class="list-group-item title">
                         <span class="col-sm-2">
                             <c:set var="category" value="${categories.get(password.getCategory())}"/>
-                            <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${category.getLogo()}">
+                            <img class="thumbnail" alt="Logo de la catégorie ${category.getName()}" src="${pageContext.servletContext.contextPath}/fichier?nom=${category.getLogo()}">
                         </span>
                         <div class="col-sm-10">
                             <h4 class="list-group-item-heading">${password.getTitle()}</h4>
@@ -60,18 +60,28 @@
                             </p>
                         </div>
                         <div class="col-sm-12">
-                            <div class="input-group">
-                                <input type="password" class="form-control password-field" value="${password.getPassword()}">
-                                <div class="input-group-addon show-password">
-                                    <span class="fa fa-eye"></span>
+                            <c:url value="${FrontPasswordServlet.URL_BASE}/supprimer" var="deleteURL">
+                                <c:param name="passwordId"   value="${password.getId()}" />
+                            </c:url>
+                            <form action="${deleteURL}" method="POST">
+                                <div class="input-group">
+                                    <input type="password" class="form-control password-field" value="${password.getPassword()}">
+                                    <div class="input-group-btn show-password">
+                                        <a class="btn btn-default">
+                                            <span class="fa fa-eye"></span>
+                                        </a>
+                                        <c:url value="/utilisateur/mots-de-passes/editer" var="editPasswordURL">
+                                            <c:param name="passwordId" value="${password.getId()}"/>
+                                        </c:url>
+                                        <a href="${editPasswordURL}" class="btn btn-primary">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <button id="btn-delete-password" type="submit" class="btn btn-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <c:url value="/utilisateur/mots-de-passes/editer" var="editPasswordURL">
-                                    <c:param name="passwordId" value="${password.getId()}"/>
-                                </c:url>
-                                <a href="${editPasswordURL}" class="input-group-addon">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                            </div>
+                            </form>
                         </div>
                         <div class="clearfix"></div>
                     </li>
